@@ -1,0 +1,16 @@
+{
+  "name": "contracts",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/contracts/src",
+  "projectType": "application",
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/contracts",
+        "command": "forge test --ffi"
+      }
+    }
+  },
+  "tags": []
+}
