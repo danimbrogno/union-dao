@@ -18,8 +18,8 @@ contract TestUnionFacet is AppHarness {
     function testCreateUnion() public {
         IUnionFacet sut = IUnionFacet(address(_diamond));
 
-        LibUnion.UnionData memory res = sut.createUnion("My Union");
+        uint256 res = sut.createUnion("My Union");
 
-        assertEq(res.name, "My Union");
+        assertEq(res, 0);
     }
 }

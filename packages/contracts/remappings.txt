@@ -1,3 +1,6 @@
 forge-std/=../../node_modules/forge-std/src/
 openzeppelin/=../../node_modules/@openzeppelin/contracts/
+openzeppelin-upgradeable/=../../node_modules/@openzeppelin/contracts-upgradeable/
 solidity-stringutils/=../../node_modules/solidity-stringutils/src/
+zk-merkle-tree/=../../node_modules/zk-merkle-tree/contracts/
+hardhat/=../../node_modules/hardhat/
