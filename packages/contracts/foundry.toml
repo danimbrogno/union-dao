@@ -4,4 +4,5 @@ out = "out"
 libs = ["lib"]
 solc = "0.8.17"
 allow_paths = ["../../node_modules"]
+fs_permissions = [{ access = "read", path = "./src/compiled/Hasher.json"}]
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config

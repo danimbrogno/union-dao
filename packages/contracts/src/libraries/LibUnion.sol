@@ -29,6 +29,8 @@ library LibUnion {
     struct UnionStorage {
         mapping(uint256 => UnionData) unions;
         CountersUpgradeable.Counter index;
+        address hasher;
+        address verifier;
     }
 
     struct Proposal {

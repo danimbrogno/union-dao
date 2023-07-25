@@ -14,10 +14,7 @@ contract ProposalFacet {
         return ds.unions[_union].proposals[_index];
     }
 
-    function initializeProposal(uint256 _union, IHasher _hasher, IVerifier _verifier, uint256 _numOptions)
-        external
-        returns (uint256)
-    {
+    function initializeProposal(uint256 _union, uint256 _numOptions) external returns (uint256) {
         uint32 _levels = 20; // Must be 20 for default verified
         LibUnion.UnionStorage storage ds = LibUnion.unionStorage();
         uint256 _index = ds.unions[_union].proposalIndex.current();
@@ -25,7 +22,7 @@ contract ProposalFacet {
 
         LibUnion.Proposal storage nextProposal = getProposal(_union, _index);
 
-        nextProposal.tree = new ProposalZKTree(_levels, _hasher, _verifier);
+        nextProposal.tree = new ProposalZKTree(_levels, IHasher(ds.hasher), IVerifier(ds.verifier));
         // nextProposal.owner = "";
         nextProposal.config.numOptions = _numOptions;
 

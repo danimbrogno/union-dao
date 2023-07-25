@@ -17,6 +17,13 @@
         "cwd": "packages/contracts",
         "command": "forge compile"
       }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/contracts",
+        "command": "anvil --fork-url https://mainnet.infura.io/v3/$NX_INFURA_API_KEY"
+      }
     }
   },
   "tags": []
