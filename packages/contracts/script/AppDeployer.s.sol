@@ -29,8 +29,12 @@ contract AppDeployer is DeployHelper {
 
     string[] _facetNames;
     address[] _facetAddressList;
+    // TEST PRIVATE KEY BELOW
+    uint256 constant ACCOUNT_A_PRIVATE = 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80;
+    address constant ACCOUNT_A_PUBLIC = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
 
     function run() public {
+        vm.startBroadcast(ACCOUNT_A_PRIVATE);
         //deploy facets
         _dCutFacet = new DiamondCutFacet();
         _dLoupe = new DiamondLoupeFacet();
@@ -48,7 +52,7 @@ contract AppDeployer is DeployHelper {
 
         // diamod arguments
         DiamondArgs memory _args = DiamondArgs({
-            owner: address(this),
+            owner: address(ACCOUNT_A_PUBLIC),
             init: address(0),
             initCalldata: abi.encodeWithSignature(
                 "init(address hasherAddress, address verifierAddress)", hasherAddress, address(_verifierC)
@@ -125,5 +129,7 @@ contract AppDeployer is DeployHelper {
         // // Returns deployment address on L2
         // deployer.deployFromL1("src/Counter.sol", new bytes(0), bytes32(uint256(1337)));
         // vm.broadcast();
+
+        vm.stopBroadcast();
     }
 }
