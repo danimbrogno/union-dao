@@ -18,6 +18,8 @@ library LibUnion {
 
     struct UnionData {
         bytes32 name;
+        mapping(address => bool) admins;
+        mapping(address => bool) members;
         mapping(uint256 => Proposal) proposals;
         CountersUpgradeable.Counter proposalIndex;
     }
@@ -47,13 +49,5 @@ library LibUnion {
         assembly {
             ds.slot := position
         }
-    }
-
-    function createUnion(bytes32 name) external returns (uint256) {
-        UnionStorage storage ds = unionStorage();
-        uint256 _index = ds.index.current();
-        ds.unions[_index].name = name;
-        ds.index.increment();
-        return _index;
     }
 }

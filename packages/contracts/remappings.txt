@@ -4,3 +4,4 @@ openzeppelin-upgradeable/=../../node_modules/@openzeppelin/contracts-upgradeable
 solidity-stringutils/=../../node_modules/solidity-stringutils/src/
 zk-merkle-tree/=../../node_modules/zk-merkle-tree/contracts/
 hardhat/=../../node_modules/hardhat/
+setup/=../../tools/setup/contracts/

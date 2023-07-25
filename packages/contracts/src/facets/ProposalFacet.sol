@@ -14,16 +14,16 @@ contract ProposalFacet {
         return ds.unions[_union].proposals[_index];
     }
 
-    function initializeProposal(
-        uint256 _union,
-        uint32 _levels,
-        IHasher _hasher,
-        IVerifier _verifier,
-        uint256 _numOptions
-    ) external {
+    function initializeProposal(uint256 _union, IHasher _hasher, IVerifier _verifier, uint256 _numOptions)
+        external
+        returns (uint256)
+    {
+        uint32 _levels = 20; // Must be 20 for default verified
         LibUnion.UnionStorage storage ds = LibUnion.unionStorage();
+        uint256 _index = ds.unions[_union].proposalIndex.current();
         ds.unions[_union].proposalIndex.increment();
-        LibUnion.Proposal storage nextProposal = getProposal(_union, ds.unions[_union].proposalIndex.current());
+
+        LibUnion.Proposal storage nextProposal = getProposal(_union, _index);
 
         nextProposal.tree = new ProposalZKTree(_levels, _hasher, _verifier);
         // nextProposal.owner = "";
@@ -32,6 +32,8 @@ contract ProposalFacet {
         for (uint256 i = 0; i <= nextProposal.config.numOptions; i++) {
             nextProposal.config.optionCounter[i] = 0;
         }
+
+        return _index;
     }
 
     function registerValidator(uint256 _union, uint256 _index, address _validator) external {
