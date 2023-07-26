@@ -12,6 +12,4 @@ docs/
 
 # Dotenv file
 .env
-
-addresses.json
 broadcast
