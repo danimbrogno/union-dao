@@ -25,6 +25,7 @@ contract TestUnionFacet is AppHarness {
     function testCreateUnion() public {
         UnionFacet sut = UnionFacet(address(_diamond));
         uint256 unionId = sut.createUnion("My Union");
+        uint256 unionId2 = sut.createUnion("My Second Union");
         bytes32 name = sut.getUnionName(unionId);
         bool isMember = sut.isMember(unionId, address(this));
         bool isAdmin = sut.isAdmin(unionId, address(this));
@@ -33,6 +34,7 @@ contract TestUnionFacet is AppHarness {
         assertEq(isAdmin, true);
         assertEq(unionId, 0);
         assertEq(name, "My Union");
+        assertEq(unionId2, 1);
     }
 
     function testAddMember() public {
