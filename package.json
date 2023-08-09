@@ -63,12 +63,14 @@
     "@web3modal/ethereum": "^2.7.0",
     "@web3modal/html": "^2.7.0",
     "forge-std": "github:foundry-rs/forge-std",
+    "formik": "^2.4.3",
     "hardhat": "^2.17.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "6.11.2",
     "solidity-stringutils": "github:LayerZero-Labs/solidity-stringutils",
     "tslib": "^2.3.0",
+    "usehooks-ts": "^2.9.1",
     "zk-merkle-tree": "^1.0.4"
   }
 }

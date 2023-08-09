@@ -12,7 +12,7 @@ import {
 import { publicProvider } from 'wagmi/providers/public';
 import { InjectedConnector } from '@wagmi/core';
 import { Connect } from './components/Connect';
-import { Example } from './components/Example';
+import { Create } from './routes/Create';
 
 const localhost: Chain = {
   ...mainnet,
@@ -28,7 +28,7 @@ const localhost: Chain = {
   },
 };
 
-const { chains, publicClient, webSocketPublicClient } = configureChains(
+const { chains, publicClient } = configureChains(
   [localhost],
   [publicProvider()]
 );
@@ -49,7 +49,6 @@ export function App() {
       <Config>
         <WagmiConfig config={config}>
           <Connect />
-          <Example />
           {/* <NxWelcome title="frontend" />
 
         {/* START: routes */}
@@ -61,12 +60,13 @@ export function App() {
           <div role="navigation">
             <ul>
               <li>
-                <Link to="/">Home</Link>
+                <Link to="/create">Create Union</Link>
               </li>
             </ul>
           </div>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/create" element={<Create />} />
           </Routes>
         </WagmiConfig>
       </Config>
