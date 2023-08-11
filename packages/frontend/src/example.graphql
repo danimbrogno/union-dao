@@ -1,4 +1,16 @@
-query AllUnions @live {
+query WatchAllUnions @live {
+  unions(first: 50) {
+    id
+    name
+  }
+  _meta {
+    block {
+      hash
+    }
+  }
+}
+
+query FetchAllUnions {
   unions(first: 50) {
     id
     name

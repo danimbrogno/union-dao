@@ -13,12 +13,7 @@ import { publicProvider } from 'wagmi/providers/public';
 import { InjectedConnector } from '@wagmi/core';
 import { Connect } from './components/Connect';
 import { Create } from './routes/Create';
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  gql,
-} from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 const client = new ApolloClient({
   uri: 'http://localhost:8000/subgraphs/name/3VLINC/union-dao/graphql',

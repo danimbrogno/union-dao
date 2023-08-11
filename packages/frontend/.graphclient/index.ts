@@ -487,11 +487,17 @@ const merger = new(BareMerger as any)({
     get documents() {
       return [
       {
-        document: AllUnionsDocument,
+        document: WatchAllUnionsDocument,
         get rawSDL() {
-          return printWithCache(AllUnionsDocument);
+          return printWithCache(WatchAllUnionsDocument);
         },
-        location: 'AllUnionsDocument.graphql'
+        location: 'WatchAllUnionsDocument.graphql'
+      },{
+        document: FetchAllUnionsDocument,
+        get rawSDL() {
+          return printWithCache(FetchAllUnionsDocument);
+        },
+        location: 'FetchAllUnionsDocument.graphql'
       }
     ];
     },
@@ -530,14 +536,19 @@ export function getBuiltGraphSDK<TGlobalContext = any, TOperationContext = any>(
   const sdkRequester$ = getBuiltGraphClient().then(({ sdkRequesterFactory }) => sdkRequesterFactory(globalContext));
   return getSdk<TOperationContext, TGlobalContext>((...args) => sdkRequester$.then(sdkRequester => sdkRequester(...args)));
 }
-export type AllUnionsQueryVariables = Exact<{ [key: string]: never; }>;
+export type WatchAllUnionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllUnionsQuery = { unions: Array<Pick<Union, 'id' | 'name'>>, _meta?: Maybe<{ block: Pick<_Block_, 'hash'> }> };
+export type WatchAllUnionsQuery = { unions: Array<Pick<Union, 'id' | 'name'>>, _meta?: Maybe<{ block: Pick<_Block_, 'hash'> }> };
+
+export type FetchAllUnionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export const AllUnionsDocument = gql`
-    query AllUnions @live {
+export type FetchAllUnionsQuery = { unions: Array<Pick<Union, 'id' | 'name'>>, _meta?: Maybe<{ block: Pick<_Block_, 'hash'> }> };
+
+
+export const WatchAllUnionsDocument = gql`
+    query WatchAllUnions @live {
   unions(first: 50) {
     id
     name
@@ -548,14 +559,31 @@ export const AllUnionsDocument = gql`
     }
   }
 }
-    ` as unknown as DocumentNode<AllUnionsQuery, AllUnionsQueryVariables>;
+    ` as unknown as DocumentNode<WatchAllUnionsQuery, WatchAllUnionsQueryVariables>;
+export const FetchAllUnionsDocument = gql`
+    query FetchAllUnions {
+  unions(first: 50) {
+    id
+    name
+  }
+  _meta {
+    block {
+      hash
+    }
+  }
+}
+    ` as unknown as DocumentNode<FetchAllUnionsQuery, FetchAllUnionsQueryVariables>;
+
 
 
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
-    AllUnions(variables?: AllUnionsQueryVariables, options?: C): AsyncIterable<AllUnionsQuery> {
-      return requester<AllUnionsQuery, AllUnionsQueryVariables>(AllUnionsDocument, variables, options) as AsyncIterable<AllUnionsQuery>;
+    WatchAllUnions(variables?: WatchAllUnionsQueryVariables, options?: C): AsyncIterable<WatchAllUnionsQuery> {
+      return requester<WatchAllUnionsQuery, WatchAllUnionsQueryVariables>(WatchAllUnionsDocument, variables, options) as AsyncIterable<WatchAllUnionsQuery>;
+    },
+    FetchAllUnions(variables?: FetchAllUnionsQueryVariables, options?: C): Promise<FetchAllUnionsQuery> {
+      return requester<FetchAllUnionsQuery, FetchAllUnionsQueryVariables>(FetchAllUnionsDocument, variables, options) as Promise<FetchAllUnionsQuery>;
     }
   };
 }

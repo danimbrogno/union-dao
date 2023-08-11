@@ -1,11 +1,3 @@
-import {
-  Field,
-  Formik,
-  FormikHelpers,
-  FormikProps,
-  useFormik,
-  useFormikContext,
-} from 'formik';
 import { getAddress, stringToHex } from 'viem';
 import {
   useContractWrite,
@@ -14,9 +6,7 @@ import {
 } from 'wagmi';
 import { useConfig } from '../shared/Config';
 import { unionFacetABI } from 'shared';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Interpolation, Theme } from '@emotion/react';
-import { useDebounce } from 'usehooks-ts';
+import { useCallback, useEffect, useState } from 'react';
 import {
   AllUnionsQuery,
   AllUnionsDocument,
@@ -25,11 +15,18 @@ import {
 import { ExecutionResult } from 'graphql';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
-interface Values {
+type Inputs = {
   name: string;
-}
+};
+
 export const Create = () => {
-  const formikRef = useRef<null | FormikProps<Values>>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm<Inputs>();
+  const name = watch('name', '');
 
   const [allUnionsQuery, setAllUnionsQuery] = useState<AllUnionsQuery>();
 
@@ -49,49 +46,6 @@ export const Create = () => {
     getUnions();
   }, [getUnions]);
 
-  const handleSubmit = (
-    values: Values,
-    { resetForm }: FormikHelpers<Values>
-  ) => {};
-
-  return (
-    <>
-      <ul>
-        {allUnionsQuery?.unions.map((union) => (
-          <li key={union.id}>
-            {union.id}:{union.name}
-          </li>
-        ))}
-      </ul>
-      <Formik<Values>
-        innerRef={(ref) => (formikRef.current = ref)}
-        onSubmit={handleSubmit}
-        initialValues={{ name: '' }}
-      >
-        <WagmiForm />
-      </Formik>
-    </>
-  );
-};
-
-export const WagmiForm = (
-  props: React.ClassAttributes<HTMLFormElement> &
-    React.FormHTMLAttributes<HTMLFormElement> & {
-      css?: Interpolation<Theme>;
-    }
-) => {
-  const {
-    handleReset,
-    handleSubmit: _handleSubmit,
-    values,
-    isValid,
-    isSubmitting,
-    resetForm,
-    setSubmitting,
-  } = useFormikContext<Values>();
-
-  const debouncedValues = useDebounce(values, 1000);
-
   const {
     addresses: { diamond },
   } = useConfig();
@@ -104,8 +58,8 @@ export const WagmiForm = (
     address: getAddress(diamond),
     abi: unionFacetABI,
     functionName: 'createUnion',
-    args: [stringToHex(debouncedValues.name || '', { size: 32 })],
-    enabled: isValid ? true : false,
+    args: [stringToHex(name, { size: 32 })],
+    enabled: name !== '' ? true : false,
   });
 
   const { write, data } = useContractWrite(config);
@@ -115,39 +69,34 @@ export const WagmiForm = (
     confirmations: 1,
   });
 
-  useEffect(() => {
-    if (isSuccess === true) {
-      setSubmitting(false);
-      resetForm();
-    }
-  }, [isSuccess, setSubmitting, resetForm]);
-
-  useEffect(() => {
-    if (isError === true) {
-      setSubmitting(false);
-    }
-  }, [isSuccess, isError, setSubmitting, resetForm]);
-
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
+  const onSubmit: SubmitHandler<Inputs> = async () => {
     write?.();
   };
 
   return (
-    <form onReset={handleReset} onSubmit={handleSubmit}>
-      <Field
-        disabled={isSubmitting}
-        type="input"
-        name="name"
-        placeholder="Name"
-      />
-      <button disabled={isSubmitting || !isValid} type="submit">
-        Submit
-      </button>
-      {isSuccess && <p>Success!</p>}
-      {isPrepareError && <p>{prepareError?.message}</p>}
-      {isError && <p>{error?.message}</p>}
-    </form>
+    <>
+      <ul>
+        {allUnionsQuery?.unions.map((union) => (
+          <li key={union.id}>
+            {union.id}:{union.name}
+          </li>
+        ))}
+      </ul>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input
+          type="input"
+          placeholder="Name"
+          {...register('name', { required: true })}
+        />
+        <input
+          disabled={!isValid || isSubmitting}
+          type="submit"
+          value="Submit"
+        />
+        {isSuccess && <p>Success!</p>}
+        {isPrepareError && <p>{prepareError?.message}</p>}
+        {isError && <p>{error?.message}</p>}
+      </form>
+    </>
   );
 };
