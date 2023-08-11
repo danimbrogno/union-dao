@@ -16,6 +16,7 @@ import {
 } from '../../../.graphclient';
 import { ExecutionResult } from 'graphql';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 
 type Inputs = {
   name: string;
@@ -101,7 +102,9 @@ export const Create = () => {
       <ul>
         {allUnionsQuery?.unions.map((union) => (
           <li key={union.id}>
-            {union.id}:{union.name}
+            <Link to={`/union/${union.id}`}>
+              {union.id}:{union.name}
+            </Link>
           </li>
         ))}
       </ul>

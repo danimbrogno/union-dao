@@ -498,6 +498,12 @@ const merger = new(BareMerger as any)({
           return printWithCache(FetchAllUnionsDocument);
         },
         location: 'FetchAllUnionsDocument.graphql'
+      },{
+        document: UnionDetailsDocument,
+        get rawSDL() {
+          return printWithCache(UnionDetailsDocument);
+        },
+        location: 'UnionDetailsDocument.graphql'
       }
     ];
     },
@@ -546,6 +552,13 @@ export type FetchAllUnionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type FetchAllUnionsQuery = { unions: Array<Pick<Union, 'id' | 'name'>>, _meta?: Maybe<{ block: Pick<_Block_, 'hash'> }> };
 
+export type UnionDetailsQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnionDetailsQuery = { union?: Maybe<Pick<Union, 'id' | 'name'>> };
+
 
 export const WatchAllUnionsDocument = gql`
     query WatchAllUnions @live {
@@ -573,6 +586,15 @@ export const FetchAllUnionsDocument = gql`
   }
 }
     ` as unknown as DocumentNode<FetchAllUnionsQuery, FetchAllUnionsQueryVariables>;
+export const UnionDetailsDocument = gql`
+    query UnionDetails($id: ID!) {
+  union(id: $id) {
+    id
+    name
+  }
+}
+    ` as unknown as DocumentNode<UnionDetailsQuery, UnionDetailsQueryVariables>;
+
 
 
 
@@ -584,6 +606,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     FetchAllUnions(variables?: FetchAllUnionsQueryVariables, options?: C): Promise<FetchAllUnionsQuery> {
       return requester<FetchAllUnionsQuery, FetchAllUnionsQueryVariables>(FetchAllUnionsDocument, variables, options) as Promise<FetchAllUnionsQuery>;
+    },
+    UnionDetails(variables: UnionDetailsQueryVariables, options?: C): Promise<UnionDetailsQuery> {
+      return requester<UnionDetailsQuery, UnionDetailsQueryVariables>(UnionDetailsDocument, variables, options) as Promise<UnionDetailsQuery>;
     }
   };
 }

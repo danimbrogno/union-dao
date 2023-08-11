@@ -14,6 +14,7 @@ import { InjectedConnector } from '@wagmi/core';
 import { Connect } from './components/Connect';
 import { Create } from './routes/Create';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { Union } from './routes/Union/Union';
 
 const client = new ApolloClient({
   uri: 'http://localhost:8000/subgraphs/name/3VLINC/union-dao/graphql',
@@ -74,6 +75,7 @@ export function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/create" element={<Create />} />
+              <Route path="/union/:id" element={<Union />} />
             </Routes>
           </WagmiConfig>
         </ApolloProvider>

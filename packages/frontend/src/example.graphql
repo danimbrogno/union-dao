@@ -21,3 +21,10 @@ query FetchAllUnions {
     }
   }
 }
+
+query UnionDetails($id: ID!) {
+  union(id: $id) {
+    id
+    name
+  }
+}
