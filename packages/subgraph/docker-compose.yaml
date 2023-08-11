@@ -24,6 +24,9 @@ services:
   ipfs:
     image: ipfs/go-ipfs:v0.10.0
     ports:
+      - '4001:4001'
+      - '8080:8080'
+      - '8081:8081'
       - '5001:5001'
     volumes:
       - ./data/ipfs:/data/ipfs

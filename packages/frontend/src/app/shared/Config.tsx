@@ -5,11 +5,19 @@ interface ConfigContext {
   addresses: {
     diamond: string;
   };
+  ipfs: {
+    nodeAddress: string;
+    gatewayAddress: string;
+  };
 }
 
 const Context = createContext<ConfigContext>({
   addresses: {
     diamond: '',
+  },
+  ipfs: {
+    nodeAddress: '',
+    gatewayAddress: '',
   },
 });
 
@@ -27,6 +35,10 @@ export const Config = ({ children }: PropsWithChildren) => {
       value={{
         addresses: {
           diamond: environment.addresses.diamond,
+        },
+        ipfs: {
+          nodeAddress: environment.ipfs.nodeAddress,
+          gatewayAddress: environment.ipfs.gatewayAddress,
         },
       }}
     >

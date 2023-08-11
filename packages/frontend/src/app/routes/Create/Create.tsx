@@ -4,7 +4,7 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
-import { useConfig } from '../shared/Config';
+import { useConfig } from '../../shared/Config';
 import { unionFacetABI } from 'shared';
 import { useCallback, useEffect, useState } from 'react';
 import {
@@ -13,14 +13,16 @@ import {
   FetchAllUnionsQuery,
   WatchAllUnionsDocument,
   WatchAllUnionsQuery,
-} from '../../../.graphclient';
+} from '../../../../.graphclient';
 import { ExecutionResult } from 'graphql';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import { useIPFS } from '../shared/IPFS';
+import { useIPFS } from '../../shared/IPFS';
+import { useDropzone } from 'react-dropzone';
 
 type Inputs = {
   name: string;
+  imageCID: string;
 };
 
 export const Create = () => {
@@ -29,22 +31,26 @@ export const Create = () => {
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { isValid, isSubmitting },
   } = useForm<Inputs>();
   const name = watch('name', '');
-  const { ipfs } = useIPFS();
+  const imageCID = watch('imageCID', '');
 
-  useEffect(() => {
-    const func = async () => {
-      try {
-        const { cid } = await ipfs.add('testing');
-        console.log(cid);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    func();
-  });
+  const { ipfs, gatewayUrl } = useIPFS();
+
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      console.log('uploading files');
+      const buffer = await acceptedFiles[0].arrayBuffer();
+      const result = await ipfs.add(buffer);
+      await ipfs.pin.add(result.cid);
+      setValue('imageCID', result.cid.toString());
+    },
+    [ipfs, setValue]
+  );
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const [allUnionsQuery, setAllUnionsQuery] = useState<FetchAllUnionsQuery>();
 
@@ -123,6 +129,25 @@ export const Create = () => {
         ))}
       </ul>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <div
+          style={{ height: 400, width: '100%', border: '1px solid black' }}
+          {...getRootProps()}
+        >
+          <input {...getInputProps()} />
+          {isDragActive ? (
+            <p>Drop the files here ...</p>
+          ) : (
+            <p>Drag 'n' drop some files here, or click to select files</p>
+          )}
+        </div>
+        {imageCID && (
+          <img
+            height="400"
+            width="auto"
+            src={gatewayUrl(imageCID)}
+            alt="logo"
+          />
+        )}
         <input
           type="input"
           placeholder="Name"

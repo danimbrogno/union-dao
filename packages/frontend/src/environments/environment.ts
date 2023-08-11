@@ -10,4 +10,8 @@ export const environment = {
       (tx) => tx.contractName === 'Diamond' && tx.transactionType === 'CREATE'
     )?.contractAddress,
   },
+  ipfs: {
+    nodeAddress: 'http://localhost:5001/api/v0',
+    gatewayAddress: 'http://localhost:8080/ipfs',
+  },
 };
