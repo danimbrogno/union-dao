@@ -1,0 +1,28 @@
+specVersion: 0.0.4
+description: Union
+repository: https://github.com/danimbrogno/union-dao
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: UnionFacet
+    network: base-testnet
+    source:
+      abi: UnionFacet
+      address: "0x71089Ba41e478702e1904692385Be3972B2cBf9e"
+      startBlock: 8164209
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - MeeemorEvent
+      abis:
+        - name: Diamond
+          file: ../contracts/out/Diamond.sol/Diamond.json
+        - name: UnionFacet
+          file: ../contracts/out/UnionFacet.sol/UnionFacet.json
+      eventHandlers:
+        - event: UnionCreated(indexed uint256,indexed bytes32)
+          handler: handleUnionCreated
+      file: ./src/mapping.ts

@@ -13,6 +13,17 @@ import { publicProvider } from 'wagmi/providers/public';
 import { InjectedConnector } from '@wagmi/core';
 import { Connect } from './components/Connect';
 import { Create } from './routes/Create';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  gql,
+} from '@apollo/client';
+
+const client = new ApolloClient({
+  uri: 'http://localhost:8000/subgraphs/name/3VLINC/union-dao/graphql',
+  cache: new InMemoryCache(),
+});
 
 const localhost: Chain = {
   ...mainnet,
@@ -47,28 +58,30 @@ export function App() {
   return (
     <StyledApp>
       <Config>
-        <WagmiConfig config={config}>
-          <Connect />
-          {/* <NxWelcome title="frontend" />
+        <ApolloProvider client={client}>
+          <WagmiConfig config={config}>
+            <Connect />
+            {/* <NxWelcome title="frontend" />
 
-        {/* START: routes */}
-          {/* These routes and navigation have been generated for you */}
-          {/* Feel free to move and update them to fit your needs */}
-          <br />
-          <hr />
-          <br />
-          <div role="navigation">
-            <ul>
-              <li>
-                <Link to="/create">Create Union</Link>
-              </li>
-            </ul>
-          </div>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/create" element={<Create />} />
-          </Routes>
-        </WagmiConfig>
+          {/* START: routes */}
+            {/* These routes and navigation have been generated for you */}
+            {/* Feel free to move and update them to fit your needs */}
+            <br />
+            <hr />
+            <br />
+            <div role="navigation">
+              <ul>
+                <li>
+                  <Link to="/create">Create Union</Link>
+                </li>
+              </ul>
+            </div>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/create" element={<Create />} />
+            </Routes>
+          </WagmiConfig>
+        </ApolloProvider>
       </Config>
       {/* END: routes */}
     </StyledApp>

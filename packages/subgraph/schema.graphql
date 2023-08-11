@@ -1,0 +1,4 @@
+type Union @entity {
+  id: ID!
+  name: String!
+}

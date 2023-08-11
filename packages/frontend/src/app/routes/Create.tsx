@@ -8,16 +8,22 @@ import {
 } from 'formik';
 import { getAddress, stringToHex } from 'viem';
 import {
-  useContractRead,
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from 'wagmi';
 import { useConfig } from '../shared/Config';
 import { unionFacetABI } from 'shared';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Interpolation, Theme } from '@emotion/react';
 import { useDebounce } from 'usehooks-ts';
+import {
+  AllUnionsQuery,
+  AllUnionsDocument,
+  execute,
+} from '../../../.graphclient';
+import { ExecutionResult } from 'graphql';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 interface Values {
   name: string;
@@ -25,31 +31,46 @@ interface Values {
 export const Create = () => {
   const formikRef = useRef<null | FormikProps<Values>>();
 
-  const {
-    addresses: { diamond },
-  } = useConfig();
-  const { data, isLoading } = useContractRead({
-    address: getAddress(diamond),
-    abi: unionFacetABI,
-    functionName: 'getUnionName',
-    args: [0n],
-  });
+  const [allUnionsQuery, setAllUnionsQuery] = useState<AllUnionsQuery>();
+
+  const getUnions = useCallback(async () => {
+    const repeater = (await execute(AllUnionsDocument, {})) as AsyncIterable<
+      ExecutionResult<AllUnionsQuery>
+    >;
+
+    for await (const result of repeater) {
+      if (result.data) {
+        setAllUnionsQuery(result.data);
+      }
+    }
+  }, [setAllUnionsQuery]);
+
+  useEffect(() => {
+    getUnions();
+  }, [getUnions]);
 
   const handleSubmit = (
     values: Values,
     { resetForm }: FormikHelpers<Values>
-  ) => {
-    // resetForm();
-  };
+  ) => {};
 
   return (
-    <Formik<Values>
-      innerRef={(ref) => (formikRef.current = ref)}
-      onSubmit={handleSubmit}
-      initialValues={{ name: '' }}
-    >
-      <WagmiForm />
-    </Formik>
+    <>
+      <ul>
+        {allUnionsQuery?.unions.map((union) => (
+          <li key={union.id}>
+            {union.id}:{union.name}
+          </li>
+        ))}
+      </ul>
+      <Formik<Values>
+        innerRef={(ref) => (formikRef.current = ref)}
+        onSubmit={handleSubmit}
+        initialValues={{ name: '' }}
+      >
+        <WagmiForm />
+      </Formik>
+    </>
   );
 };
 
@@ -91,6 +112,7 @@ export const WagmiForm = (
 
   const { isSuccess, isError, error } = useWaitForTransaction({
     hash: data?.hash,
+    confirmations: 1,
   });
 
   useEffect(() => {

@@ -1,6 +1,4 @@
-import LastBroadcast from '../../../../broadcast/AppDeployer.s.sol/31337/run-latest.json';
-// TODO: from this variable we should be able to get the contract address of our deployed diamond
-console.log(LastBroadcast);
+import LastBroadcast from '../../../../broadcast/AppDeployer.s.sol/84531/run-latest.json';
 
 // This file can be replaced during build by using the `fileReplacements` array.
 // When building for production, this file is replaced with `environment.prod.ts`.

@@ -9,6 +9,8 @@ import {CountersUpgradeable} from "openzeppelin-upgradeable/utils/CountersUpgrad
 contract UnionFacet is IUnionFacet {
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
+    event UnionCreated(uint256 indexed index, bytes32 indexed name);
+
     function createUnion(bytes32 name) external returns (uint256) {
         LibUnion.UnionStorage storage ds = LibUnion.unionStorage();
         uint256 _index = ds.index.current();
@@ -16,6 +18,7 @@ contract UnionFacet is IUnionFacet {
         ds.unions[_index].admins[msg.sender] = true;
         ds.unions[_index].members[msg.sender] = true;
         ds.index.increment();
+        emit UnionCreated(_index, name);
         return _index;
     }
 

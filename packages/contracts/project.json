@@ -8,13 +8,6 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/contracts",
-        "command": "forge test --ffi"
-      }
-    },
-    "test:base": {
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "packages/contracts",
         "command": "forge test --fork-url https://goerli.base.org --ffi"
       }
     },
@@ -29,23 +22,15 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/contracts",
-        "command": "anvil --chain-id 31337 --fork-url https://mainnet.infura.io/v3/$NX_ANVIL_INFURA_API_KEY --fork-block-number $NX_ANVIL_FORK_BLOCK_NUMBER"
-      }
-    },
-    "serve:base": {
-      "executor": "nx:run-commands",
-      "options": {
-        "cwd": "packages/contracts",
-        "command": "anvil --chain-id 31337 --fork-url https://goerli.base.org --fork-block-number $NX_ANVIL_BASE_FORK_BLOCK_NUMBER"
+        "command": "anvil --chain-id 84531 --fork-url https://goerli.base.org --fork-block-number $NX_ANVIL_BASE_FORK_BLOCK_NUMBER"
       }
     },
     "deploy": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/contracts",
-        "command": "forge script script/AppDeployer.s.sol:AppDeployer --fork-url http://localhost:8545 --broadcast --ffi"
+        "command": "forge script --chain-id 84531 script/AppDeployer.s.sol:AppDeployer --fork-url http://localhost:8545 --broadcast --ffi"
       },
-
       "configurations": {}
     }
   },
