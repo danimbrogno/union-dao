@@ -13,17 +13,13 @@ import { publicProvider } from 'wagmi/providers/public';
 import { InjectedConnector } from '@wagmi/core';
 import { Connect } from './components/Connect';
 import { Create } from './routes/Create';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { Union } from './routes/Union/Union';
-
-const client = new ApolloClient({
-  uri: 'http://localhost:8000/subgraphs/name/3VLINC/union-dao/graphql',
-  cache: new InMemoryCache(),
-});
+import { createHelia } from 'helia';
+import { IPFS } from './shared/IPFS';
 
 const localhost: Chain = {
   ...mainnet,
-  id: 31337,
+  id: 84531,
   name: 'localhost',
   rpcUrls: {
     public: {
@@ -54,7 +50,7 @@ export function App() {
   return (
     <StyledApp>
       <Config>
-        <ApolloProvider client={client}>
+        <IPFS>
           <WagmiConfig config={config}>
             <Connect />
             {/* <NxWelcome title="frontend" />
@@ -78,7 +74,7 @@ export function App() {
               <Route path="/union/:id" element={<Union />} />
             </Routes>
           </WagmiConfig>
-        </ApolloProvider>
+        </IPFS>
       </Config>
       {/* END: routes */}
     </StyledApp>

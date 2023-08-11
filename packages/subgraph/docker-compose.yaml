@@ -27,6 +27,10 @@ services:
       - '5001:5001'
     volumes:
       - ./data/ipfs:/data/ipfs
+      - ./etc/ipfs/cors.sh:/cors.sh
+      - ./etc/ipfs/start_ipfs.sh:/start_ipfs.sh
+    entrypoint: /bin/sh
+    command: /start_ipfs.sh
   postgres:
     image: postgres:14
     ports:

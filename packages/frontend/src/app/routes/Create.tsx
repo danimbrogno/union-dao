@@ -17,6 +17,7 @@ import {
 import { ExecutionResult } from 'graphql';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { useIPFS } from '../shared/IPFS';
 
 type Inputs = {
   name: string;
@@ -31,6 +32,19 @@ export const Create = () => {
     formState: { isValid, isSubmitting },
   } = useForm<Inputs>();
   const name = watch('name', '');
+  const { ipfs } = useIPFS();
+
+  useEffect(() => {
+    const func = async () => {
+      try {
+        const { cid } = await ipfs.add('testing');
+        console.log(cid);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    func();
+  });
 
   const [allUnionsQuery, setAllUnionsQuery] = useState<FetchAllUnionsQuery>();
 
