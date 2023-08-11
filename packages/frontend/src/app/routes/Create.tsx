@@ -8,9 +8,11 @@ import { useConfig } from '../shared/Config';
 import { unionFacetABI } from 'shared';
 import { useCallback, useEffect, useState } from 'react';
 import {
-  AllUnionsQuery,
-  AllUnionsDocument,
   execute,
+  FetchAllUnionsDocument,
+  FetchAllUnionsQuery,
+  WatchAllUnionsDocument,
+  WatchAllUnionsQuery,
 } from '../../../.graphclient';
 import { ExecutionResult } from 'graphql';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -24,27 +26,44 @@ export const Create = () => {
     register,
     handleSubmit,
     watch,
-    formState: { errors, isValid, isSubmitting },
+    reset,
+    formState: { isValid, isSubmitting },
   } = useForm<Inputs>();
   const name = watch('name', '');
 
-  const [allUnionsQuery, setAllUnionsQuery] = useState<AllUnionsQuery>();
+  const [allUnionsQuery, setAllUnionsQuery] = useState<FetchAllUnionsQuery>();
 
-  const getUnions = useCallback(async () => {
-    const repeater = (await execute(AllUnionsDocument, {})) as AsyncIterable<
-      ExecutionResult<AllUnionsQuery>
-    >;
-
-    for await (const result of repeater) {
-      if (result.data) {
-        setAllUnionsQuery(result.data);
-      }
+  const fetchUnions = useCallback(async () => {
+    const result = await execute(FetchAllUnionsDocument, {});
+    if (result.data) {
+      setAllUnionsQuery(result.data);
     }
-  }, [setAllUnionsQuery]);
+  }, []);
+
+  const watchUntilBlockHash = useCallback(
+    async (blockHash: string) => {
+      const repeater = (await execute(
+        WatchAllUnionsDocument,
+        {}
+      )) as AsyncIterable<ExecutionResult<WatchAllUnionsQuery>>;
+
+      for await (const result of repeater) {
+        console.log('watching...');
+        if (result.data) {
+          setAllUnionsQuery(result.data);
+        }
+        if (result.data?._meta?.block.hash === blockHash) {
+          console.log('done.');
+          break;
+        }
+      }
+    },
+    [setAllUnionsQuery]
+  );
 
   useEffect(() => {
-    getUnions();
-  }, [getUnions]);
+    fetchUnions();
+  }, [fetchUnions]);
 
   const {
     addresses: { diamond },
@@ -67,6 +86,10 @@ export const Create = () => {
   const { isSuccess, isError, error } = useWaitForTransaction({
     hash: data?.hash,
     confirmations: 1,
+    onSuccess(data) {
+      reset();
+      watchUntilBlockHash(data.blockHash);
+    },
   });
 
   const onSubmit: SubmitHandler<Inputs> = async () => {
