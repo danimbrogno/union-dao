@@ -16,7 +16,6 @@ const StyledApp = styled.div`
 export function App() {
   return (
     <StyledApp>
-
       <Routes>
         <Route path="/" element={<Splash/>}  />
         <Route path="/admin-onboard" element={<AdminOnboard />}/>
