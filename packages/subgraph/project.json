@@ -18,24 +18,43 @@
         "cwd": "./packages/subgraph"
       }
     },
-    "deploy": {
+    "codegen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx graph codegen ./subgraph.yaml --output-dir ./generated",
+        "cwd": "./packages/subgraph"
+      }
+    },
+    "getContractAddresses": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx ts-node -P ./tsconfig.tools.json ./etc/getContractAddresses.ts networks.json",
+        "cwd": "./packages/subgraph"
+      }
+    },
+    "build": {
       "executor": "nx:run-commands",
       "options": {
         "parallel": false,
-        "commands": [
-          {
-            "command": "npx ts-node -P ./tsconfig.tools.json ./etc/getContractAddresses.ts networks.json"
-          },
-          {
-            "command": "npx graph codegen ./subgraph.yaml --output-dir ./generated"
-          },
-          {
-            "command": "npx graph build ./subgraph.yaml"
-          },
-          {
-            "command": "npx graph deploy 3VLINC/union-dao ./subgraph.yaml --ipfs http://localhost:5001 --node http://localhost:8020 --version-label 0.2.3"
-          }
-        ],
+        "command": "npx graph build ./subgraph.yaml",
+        "cwd": "./packages/subgraph"
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["getContractAddresses", "codegen"],
+      "options": {
+        "parallel": false,
+        "command": "npx graph deploy 3VLINC/union-dao ./subgraph.yaml --ipfs http://localhost:5001 --node http://localhost:8020 --version-label 0.2.3 --network base-testnet",
+        "cwd": "./packages/subgraph"
+      }
+    },
+    "remove": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["getContractAddresses", "codegen"],
+      "options": {
+        "parallel": false,
+        "command": "npx graph remove 3VLINC/union-dao --node http://localhost:8020",
         "cwd": "./packages/subgraph"
       }
     }

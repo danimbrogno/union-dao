@@ -9,8 +9,8 @@ dataSources:
     network: base-testnet
     source:
       abi: UnionFacet
-      address: "0x71089Ba41e478702e1904692385Be3972B2cBf9e"
-      startBlock: 8164209
+      address: "0x38A70c040CA5F5439ad52d0e821063b0EC0B52b6"
+      startBlock: 8164215
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -23,6 +23,14 @@ dataSources:
         - name: UnionFacet
           file: ../contracts/out/UnionFacet.sol/UnionFacet.json
       eventHandlers:
-        - event: UnionCreated(indexed uint256,indexed bytes32)
+        - event: UnionCreated(indexed bytes32,indexed bytes32,string,string)
           handler: handleUnionCreated
+        - event: MemberAdded(indexed bytes32,indexed address)
+          handler: handleMemberAdded
+        - event: MemberRemoved(indexed bytes32,indexed address)
+          handler: handleMemberRemoved
+        - event: AdminAdded(indexed bytes32,indexed address)
+          handler: handleAdminAdded
+        - event: AdminRemoved(indexed bytes32,indexed address)
+          handler: handleAdminRemoved
       file: ./src/mapping.ts

@@ -1,4 +1,21 @@
 type Union @entity {
-  id: ID!
+  id: Bytes!
   name: String!
+  logo: String!
+  description: String!
+  users: [UserRole!]! @derivedFrom(field: "union")
+}
+
+type UserRole @entity {
+  id: Bytes!
+  union: Union!
+  user: User!
+  isMember: Boolean!
+  isAdmin: Boolean!
+}
+
+type User @entity {
+  id: Bytes!
+  name: String!
+  roles: [UserRole!]! @derivedFrom(field: "user")
 }

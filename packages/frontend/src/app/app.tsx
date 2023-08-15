@@ -14,7 +14,6 @@ import { InjectedConnector } from '@wagmi/core';
 import { Connect } from './components/Connect';
 import { Create } from './routes/Create/Create';
 import { Union } from './routes/Union/Union';
-import { createHelia } from 'helia';
 import { IPFS } from './shared/IPFS';
 
 const localhost: Chain = {

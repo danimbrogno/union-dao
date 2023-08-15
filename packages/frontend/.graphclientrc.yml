@@ -5,7 +5,7 @@ sources:
       graphql:
         endpoint: http://localhost:8000/subgraphs/name/3VLINC/union-dao
 documents:
-  - ./src/example.graphql
+  - ./src/queries.graphql
 plugins:
   - pollingLive:
       defaultInterval: 1000

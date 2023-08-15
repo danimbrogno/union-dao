@@ -5,6 +5,7 @@ import {
 } from '../../../../.graphclient';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { hexToBigInt, hexToString } from 'viem';
 
 export const Union = () => {
   const params = useParams();
@@ -26,7 +27,12 @@ export const Union = () => {
   if (unionDetailQuery?.union) {
     return (
       <div>
-        {unionDetailQuery.union.id}: {unionDetailQuery.union.name}
+        <h1>
+          {hexToBigInt(unionDetailQuery.union.id).toString()}:{' '}
+          {unionDetailQuery.union.name}
+        </h1>
+        <p>{unionDetailQuery.union.logo}</p>
+        <p>{unionDetailQuery.union.description}</p>
       </div>
     );
   }

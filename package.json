@@ -2,7 +2,9 @@
   "name": "union-dao-2",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "graphclient": "graphclient --dir packages/frontend"
+  },
   "private": true,
   "devDependencies": {
     "@babel/preset-react": "^7.14.5",

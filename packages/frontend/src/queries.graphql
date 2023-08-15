@@ -2,6 +2,8 @@ query WatchAllUnions @live {
   unions(first: 50) {
     id
     name
+    description
+    logo
   }
   _meta {
     block {
@@ -14,6 +16,8 @@ query FetchAllUnions {
   unions(first: 50) {
     id
     name
+    description
+    logo
   }
   _meta {
     block {
@@ -26,5 +30,7 @@ query UnionDetails($id: ID!) {
   union(id: $id) {
     id
     name
+    description
+    logo
   }
 }

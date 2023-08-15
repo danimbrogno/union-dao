@@ -62,6 +62,10 @@ export type OrderDirection =
 export type Query = {
   union?: Maybe<Union>;
   unions: Array<Union>;
+  userRole?: Maybe<UserRole>;
+  userRoles: Array<UserRole>;
+  user?: Maybe<User>;
+  users: Array<User>;
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
 };
@@ -85,6 +89,42 @@ export type QueryunionsArgs = {
 };
 
 
+export type QueryuserRoleArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryuserRolesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<UserRole_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<UserRole_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryuserArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryusersArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<User_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<User_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
 export type Query_metaArgs = {
   block?: InputMaybe<Block_height>;
 };
@@ -92,6 +132,10 @@ export type Query_metaArgs = {
 export type Subscription = {
   union?: Maybe<Union>;
   unions: Array<Union>;
+  userRole?: Maybe<UserRole>;
+  userRoles: Array<UserRole>;
+  user?: Maybe<User>;
+  users: Array<User>;
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
 };
@@ -115,24 +159,74 @@ export type SubscriptionunionsArgs = {
 };
 
 
+export type SubscriptionuserRoleArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionuserRolesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<UserRole_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<UserRole_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionuserArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionusersArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<User_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<User_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
 export type Subscription_metaArgs = {
   block?: InputMaybe<Block_height>;
 };
 
 export type Union = {
-  id: Scalars['ID'];
+  id: Scalars['Bytes'];
   name: Scalars['String'];
+  logo: Scalars['String'];
+  description: Scalars['String'];
+  users: Array<UserRole>;
+};
+
+
+export type UnionusersArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<UserRole_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<UserRole_filter>;
 };
 
 export type Union_filter = {
-  id?: InputMaybe<Scalars['ID']>;
-  id_not?: InputMaybe<Scalars['ID']>;
-  id_gt?: InputMaybe<Scalars['ID']>;
-  id_lt?: InputMaybe<Scalars['ID']>;
-  id_gte?: InputMaybe<Scalars['ID']>;
-  id_lte?: InputMaybe<Scalars['ID']>;
-  id_in?: InputMaybe<Array<Scalars['ID']>>;
-  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  id?: InputMaybe<Scalars['Bytes']>;
+  id_not?: InputMaybe<Scalars['Bytes']>;
+  id_gt?: InputMaybe<Scalars['Bytes']>;
+  id_lt?: InputMaybe<Scalars['Bytes']>;
+  id_gte?: InputMaybe<Scalars['Bytes']>;
+  id_lte?: InputMaybe<Scalars['Bytes']>;
+  id_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  id_contains?: InputMaybe<Scalars['Bytes']>;
+  id_not_contains?: InputMaybe<Scalars['Bytes']>;
   name?: InputMaybe<Scalars['String']>;
   name_not?: InputMaybe<Scalars['String']>;
   name_gt?: InputMaybe<Scalars['String']>;
@@ -153,6 +247,47 @@ export type Union_filter = {
   name_ends_with_nocase?: InputMaybe<Scalars['String']>;
   name_not_ends_with?: InputMaybe<Scalars['String']>;
   name_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  logo?: InputMaybe<Scalars['String']>;
+  logo_not?: InputMaybe<Scalars['String']>;
+  logo_gt?: InputMaybe<Scalars['String']>;
+  logo_lt?: InputMaybe<Scalars['String']>;
+  logo_gte?: InputMaybe<Scalars['String']>;
+  logo_lte?: InputMaybe<Scalars['String']>;
+  logo_in?: InputMaybe<Array<Scalars['String']>>;
+  logo_not_in?: InputMaybe<Array<Scalars['String']>>;
+  logo_contains?: InputMaybe<Scalars['String']>;
+  logo_contains_nocase?: InputMaybe<Scalars['String']>;
+  logo_not_contains?: InputMaybe<Scalars['String']>;
+  logo_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  logo_starts_with?: InputMaybe<Scalars['String']>;
+  logo_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  logo_not_starts_with?: InputMaybe<Scalars['String']>;
+  logo_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  logo_ends_with?: InputMaybe<Scalars['String']>;
+  logo_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  logo_not_ends_with?: InputMaybe<Scalars['String']>;
+  logo_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  description_not?: InputMaybe<Scalars['String']>;
+  description_gt?: InputMaybe<Scalars['String']>;
+  description_lt?: InputMaybe<Scalars['String']>;
+  description_gte?: InputMaybe<Scalars['String']>;
+  description_lte?: InputMaybe<Scalars['String']>;
+  description_in?: InputMaybe<Array<Scalars['String']>>;
+  description_not_in?: InputMaybe<Array<Scalars['String']>>;
+  description_contains?: InputMaybe<Scalars['String']>;
+  description_contains_nocase?: InputMaybe<Scalars['String']>;
+  description_not_contains?: InputMaybe<Scalars['String']>;
+  description_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  description_starts_with?: InputMaybe<Scalars['String']>;
+  description_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  description_not_starts_with?: InputMaybe<Scalars['String']>;
+  description_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  description_ends_with?: InputMaybe<Scalars['String']>;
+  description_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  description_not_ends_with?: InputMaybe<Scalars['String']>;
+  description_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  users_?: InputMaybe<UserRole_filter>;
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Union_filter>>>;
@@ -161,7 +296,156 @@ export type Union_filter = {
 
 export type Union_orderBy =
   | 'id'
-  | 'name';
+  | 'name'
+  | 'logo'
+  | 'description'
+  | 'users';
+
+export type User = {
+  id: Scalars['Bytes'];
+  name: Scalars['String'];
+  roles: Array<UserRole>;
+};
+
+
+export type UserrolesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<UserRole_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<UserRole_filter>;
+};
+
+export type UserRole = {
+  id: Scalars['Bytes'];
+  union: Union;
+  user: User;
+  isMember: Scalars['Boolean'];
+  isAdmin: Scalars['Boolean'];
+};
+
+export type UserRole_filter = {
+  id?: InputMaybe<Scalars['Bytes']>;
+  id_not?: InputMaybe<Scalars['Bytes']>;
+  id_gt?: InputMaybe<Scalars['Bytes']>;
+  id_lt?: InputMaybe<Scalars['Bytes']>;
+  id_gte?: InputMaybe<Scalars['Bytes']>;
+  id_lte?: InputMaybe<Scalars['Bytes']>;
+  id_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  id_contains?: InputMaybe<Scalars['Bytes']>;
+  id_not_contains?: InputMaybe<Scalars['Bytes']>;
+  union?: InputMaybe<Scalars['String']>;
+  union_not?: InputMaybe<Scalars['String']>;
+  union_gt?: InputMaybe<Scalars['String']>;
+  union_lt?: InputMaybe<Scalars['String']>;
+  union_gte?: InputMaybe<Scalars['String']>;
+  union_lte?: InputMaybe<Scalars['String']>;
+  union_in?: InputMaybe<Array<Scalars['String']>>;
+  union_not_in?: InputMaybe<Array<Scalars['String']>>;
+  union_contains?: InputMaybe<Scalars['String']>;
+  union_contains_nocase?: InputMaybe<Scalars['String']>;
+  union_not_contains?: InputMaybe<Scalars['String']>;
+  union_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  union_starts_with?: InputMaybe<Scalars['String']>;
+  union_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  union_not_starts_with?: InputMaybe<Scalars['String']>;
+  union_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  union_ends_with?: InputMaybe<Scalars['String']>;
+  union_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  union_not_ends_with?: InputMaybe<Scalars['String']>;
+  union_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  union_?: InputMaybe<Union_filter>;
+  user?: InputMaybe<Scalars['String']>;
+  user_not?: InputMaybe<Scalars['String']>;
+  user_gt?: InputMaybe<Scalars['String']>;
+  user_lt?: InputMaybe<Scalars['String']>;
+  user_gte?: InputMaybe<Scalars['String']>;
+  user_lte?: InputMaybe<Scalars['String']>;
+  user_in?: InputMaybe<Array<Scalars['String']>>;
+  user_not_in?: InputMaybe<Array<Scalars['String']>>;
+  user_contains?: InputMaybe<Scalars['String']>;
+  user_contains_nocase?: InputMaybe<Scalars['String']>;
+  user_not_contains?: InputMaybe<Scalars['String']>;
+  user_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  user_starts_with?: InputMaybe<Scalars['String']>;
+  user_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  user_not_starts_with?: InputMaybe<Scalars['String']>;
+  user_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  user_ends_with?: InputMaybe<Scalars['String']>;
+  user_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  user_not_ends_with?: InputMaybe<Scalars['String']>;
+  user_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  user_?: InputMaybe<User_filter>;
+  isMember?: InputMaybe<Scalars['Boolean']>;
+  isMember_not?: InputMaybe<Scalars['Boolean']>;
+  isMember_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  isMember_not_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  isAdmin?: InputMaybe<Scalars['Boolean']>;
+  isAdmin_not?: InputMaybe<Scalars['Boolean']>;
+  isAdmin_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  isAdmin_not_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<UserRole_filter>>>;
+  or?: InputMaybe<Array<InputMaybe<UserRole_filter>>>;
+};
+
+export type UserRole_orderBy =
+  | 'id'
+  | 'union'
+  | 'union__id'
+  | 'union__name'
+  | 'union__logo'
+  | 'union__description'
+  | 'user'
+  | 'user__id'
+  | 'user__name'
+  | 'isMember'
+  | 'isAdmin';
+
+export type User_filter = {
+  id?: InputMaybe<Scalars['Bytes']>;
+  id_not?: InputMaybe<Scalars['Bytes']>;
+  id_gt?: InputMaybe<Scalars['Bytes']>;
+  id_lt?: InputMaybe<Scalars['Bytes']>;
+  id_gte?: InputMaybe<Scalars['Bytes']>;
+  id_lte?: InputMaybe<Scalars['Bytes']>;
+  id_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  id_contains?: InputMaybe<Scalars['Bytes']>;
+  id_not_contains?: InputMaybe<Scalars['Bytes']>;
+  name?: InputMaybe<Scalars['String']>;
+  name_not?: InputMaybe<Scalars['String']>;
+  name_gt?: InputMaybe<Scalars['String']>;
+  name_lt?: InputMaybe<Scalars['String']>;
+  name_gte?: InputMaybe<Scalars['String']>;
+  name_lte?: InputMaybe<Scalars['String']>;
+  name_in?: InputMaybe<Array<Scalars['String']>>;
+  name_not_in?: InputMaybe<Array<Scalars['String']>>;
+  name_contains?: InputMaybe<Scalars['String']>;
+  name_contains_nocase?: InputMaybe<Scalars['String']>;
+  name_not_contains?: InputMaybe<Scalars['String']>;
+  name_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  name_starts_with?: InputMaybe<Scalars['String']>;
+  name_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  name_not_starts_with?: InputMaybe<Scalars['String']>;
+  name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  name_ends_with?: InputMaybe<Scalars['String']>;
+  name_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  name_not_ends_with?: InputMaybe<Scalars['String']>;
+  name_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  roles_?: InputMaybe<UserRole_filter>;
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<User_filter>>>;
+  or?: InputMaybe<Array<InputMaybe<User_filter>>>;
+};
+
+export type User_orderBy =
+  | 'id'
+  | 'name'
+  | 'roles';
 
 export type _Block_ = {
   /** The hash of the block */
@@ -296,6 +580,12 @@ export type ResolversTypes = ResolversObject<{
   Union: ResolverTypeWrapper<Union>;
   Union_filter: Union_filter;
   Union_orderBy: Union_orderBy;
+  User: ResolverTypeWrapper<User>;
+  UserRole: ResolverTypeWrapper<UserRole>;
+  UserRole_filter: UserRole_filter;
+  UserRole_orderBy: UserRole_orderBy;
+  User_filter: User_filter;
+  User_orderBy: User_orderBy;
   _Block_: ResolverTypeWrapper<_Block_>;
   _Meta_: ResolverTypeWrapper<_Meta_>;
   _SubgraphErrorPolicy_: _SubgraphErrorPolicy_;
@@ -317,6 +607,10 @@ export type ResolversParentTypes = ResolversObject<{
   Subscription: {};
   Union: Union;
   Union_filter: Union_filter;
+  User: User;
+  UserRole: UserRole;
+  UserRole_filter: UserRole_filter;
+  User_filter: User_filter;
   _Block_: _Block_;
   _Meta_: _Meta_;
 }>;
@@ -352,18 +646,45 @@ export interface BytesScalarConfig extends GraphQLScalarTypeConfig<ResolversType
 export type QueryResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   union?: Resolver<Maybe<ResolversTypes['Union']>, ParentType, ContextType, RequireFields<QueryunionArgs, 'id' | 'subgraphError'>>;
   unions?: Resolver<Array<ResolversTypes['Union']>, ParentType, ContextType, RequireFields<QueryunionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  userRole?: Resolver<Maybe<ResolversTypes['UserRole']>, ParentType, ContextType, RequireFields<QueryuserRoleArgs, 'id' | 'subgraphError'>>;
+  userRoles?: Resolver<Array<ResolversTypes['UserRole']>, ParentType, ContextType, RequireFields<QueryuserRolesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryuserArgs, 'id' | 'subgraphError'>>;
+  users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryusersArgs, 'skip' | 'first' | 'subgraphError'>>;
   _meta?: Resolver<Maybe<ResolversTypes['_Meta_']>, ParentType, ContextType, Partial<Query_metaArgs>>;
 }>;
 
 export type SubscriptionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   union?: SubscriptionResolver<Maybe<ResolversTypes['Union']>, "union", ParentType, ContextType, RequireFields<SubscriptionunionArgs, 'id' | 'subgraphError'>>;
   unions?: SubscriptionResolver<Array<ResolversTypes['Union']>, "unions", ParentType, ContextType, RequireFields<SubscriptionunionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  userRole?: SubscriptionResolver<Maybe<ResolversTypes['UserRole']>, "userRole", ParentType, ContextType, RequireFields<SubscriptionuserRoleArgs, 'id' | 'subgraphError'>>;
+  userRoles?: SubscriptionResolver<Array<ResolversTypes['UserRole']>, "userRoles", ParentType, ContextType, RequireFields<SubscriptionuserRolesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  user?: SubscriptionResolver<Maybe<ResolversTypes['User']>, "user", ParentType, ContextType, RequireFields<SubscriptionuserArgs, 'id' | 'subgraphError'>>;
+  users?: SubscriptionResolver<Array<ResolversTypes['User']>, "users", ParentType, ContextType, RequireFields<SubscriptionusersArgs, 'skip' | 'first' | 'subgraphError'>>;
   _meta?: SubscriptionResolver<Maybe<ResolversTypes['_Meta_']>, "_meta", ParentType, ContextType, Partial<Subscription_metaArgs>>;
 }>;
 
 export type UnionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Union'] = ResolversParentTypes['Union']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  logo?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  users?: Resolver<Array<ResolversTypes['UserRole']>, ParentType, ContextType, RequireFields<UnionusersArgs, 'skip' | 'first'>>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type UserResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  roles?: Resolver<Array<ResolversTypes['UserRole']>, ParentType, ContextType, RequireFields<UserrolesArgs, 'skip' | 'first'>>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type UserRoleResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['UserRole'] = ResolversParentTypes['UserRole']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  union?: Resolver<ResolversTypes['Union'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  isMember?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isAdmin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -388,6 +709,8 @@ export type Resolvers<ContextType = MeshContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Union?: UnionResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
+  UserRole?: UserRoleResolvers<ContextType>;
   _Block_?: _Block_Resolvers<ContextType>;
   _Meta_?: _Meta_Resolvers<ContextType>;
 }>;
@@ -545,19 +868,19 @@ export function getBuiltGraphSDK<TGlobalContext = any, TOperationContext = any>(
 export type WatchAllUnionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type WatchAllUnionsQuery = { unions: Array<Pick<Union, 'id' | 'name'>>, _meta?: Maybe<{ block: Pick<_Block_, 'hash'> }> };
+export type WatchAllUnionsQuery = { unions: Array<Pick<Union, 'id' | 'name' | 'description' | 'logo'>>, _meta?: Maybe<{ block: Pick<_Block_, 'hash'> }> };
 
 export type FetchAllUnionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchAllUnionsQuery = { unions: Array<Pick<Union, 'id' | 'name'>>, _meta?: Maybe<{ block: Pick<_Block_, 'hash'> }> };
+export type FetchAllUnionsQuery = { unions: Array<Pick<Union, 'id' | 'name' | 'description' | 'logo'>>, _meta?: Maybe<{ block: Pick<_Block_, 'hash'> }> };
 
 export type UnionDetailsQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type UnionDetailsQuery = { union?: Maybe<Pick<Union, 'id' | 'name'>> };
+export type UnionDetailsQuery = { union?: Maybe<Pick<Union, 'id' | 'name' | 'description' | 'logo'>> };
 
 
 export const WatchAllUnionsDocument = gql`
@@ -565,6 +888,8 @@ export const WatchAllUnionsDocument = gql`
   unions(first: 50) {
     id
     name
+    description
+    logo
   }
   _meta {
     block {
@@ -578,6 +903,8 @@ export const FetchAllUnionsDocument = gql`
   unions(first: 50) {
     id
     name
+    description
+    logo
   }
   _meta {
     block {
@@ -591,6 +918,8 @@ export const UnionDetailsDocument = gql`
   union(id: $id) {
     id
     name
+    description
+    logo
   }
 }
     ` as unknown as DocumentNode<UnionDetailsQuery, UnionDetailsQueryVariables>;

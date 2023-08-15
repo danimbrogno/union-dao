@@ -24,8 +24,8 @@ contract TestUnionFacet is AppHarness {
 
     function testCreateUnion() public {
         UnionFacet sut = UnionFacet(address(_diamond));
-        uint256 unionId = sut.createUnion("My Union");
-        uint256 unionId2 = sut.createUnion("My Second Union");
+        uint256 unionId = sut.createUnion("My Union", "", "");
+        uint256 unionId2 = sut.createUnion("My Second Union", "", "");
         bytes32 name = sut.getUnionName(unionId);
         bool isMember = sut.isMember(unionId, address(this));
         bool isAdmin = sut.isAdmin(unionId, address(this));
@@ -40,7 +40,7 @@ contract TestUnionFacet is AppHarness {
     function testAddMember() public {
         UnionFacet sut = UnionFacet(address(_diamond));
 
-        uint256 unionId = sut.createUnion("My Union");
+        uint256 unionId = sut.createUnion("My Union", "", "");
         sut.addMember(unionId, users[0]);
         bool isMember = sut.isMember(unionId, users[0]);
         bool isNotMember = sut.isMember(unionId, users[1]);
@@ -51,7 +51,7 @@ contract TestUnionFacet is AppHarness {
     function testAddAdmin() public {
         UnionFacet sut = UnionFacet(address(_diamond));
 
-        uint256 unionId = sut.createUnion("My Union");
+        uint256 unionId = sut.createUnion("My Union", "", "");
         sut.addAdmin(unionId, users[0]);
         bool isAdmin = sut.isAdmin(unionId, users[0]);
         bool isNotAdmin = sut.isAdmin(unionId, users[1]);

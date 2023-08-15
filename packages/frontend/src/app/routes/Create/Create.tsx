@@ -1,4 +1,10 @@
-import { getAddress, stringToHex } from 'viem';
+import {
+  bytesToNumber,
+  getAddress,
+  hexToBigInt,
+  hexToString,
+  stringToHex,
+} from 'viem';
 import {
   useContractWrite,
   usePrepareContractWrite,
@@ -36,6 +42,7 @@ export const Create = () => {
   } = useForm<Inputs>();
   const name = watch('name', '');
   const imageCID = watch('imageCID', '');
+  const description = '';
 
   const { ipfs, gatewayUrl } = useIPFS();
 
@@ -89,7 +96,7 @@ export const Create = () => {
   const {
     addresses: { diamond },
   } = useConfig();
-
+  console.log(diamond, 'address;');
   const {
     config,
     isError: isPrepareError,
@@ -98,7 +105,7 @@ export const Create = () => {
     address: getAddress(diamond),
     abi: unionFacetABI,
     functionName: 'createUnion',
-    args: [stringToHex(name, { size: 32 })],
+    args: [stringToHex(name, { size: 32 }), imageCID, description],
     enabled: name !== '' ? true : false,
   });
 
@@ -123,7 +130,7 @@ export const Create = () => {
         {allUnionsQuery?.unions.map((union) => (
           <li key={union.id}>
             <Link to={`/union/${union.id}`}>
-              {union.id}:{union.name}
+              {hexToBigInt(union.id).toString()}:{union.name}
             </Link>
           </li>
         ))}
