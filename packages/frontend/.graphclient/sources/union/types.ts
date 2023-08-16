@@ -36,6 +36,89 @@ export type OrderDirection =
   | 'asc'
   | 'desc';
 
+export type Proposal = {
+  id: Scalars['Bytes'];
+  union: Union;
+  numOptions: Scalars['Int'];
+  metadata: Scalars['String'];
+};
+
+export type Proposal_filter = {
+  id?: InputMaybe<Scalars['Bytes']>;
+  id_not?: InputMaybe<Scalars['Bytes']>;
+  id_gt?: InputMaybe<Scalars['Bytes']>;
+  id_lt?: InputMaybe<Scalars['Bytes']>;
+  id_gte?: InputMaybe<Scalars['Bytes']>;
+  id_lte?: InputMaybe<Scalars['Bytes']>;
+  id_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  id_contains?: InputMaybe<Scalars['Bytes']>;
+  id_not_contains?: InputMaybe<Scalars['Bytes']>;
+  union?: InputMaybe<Scalars['String']>;
+  union_not?: InputMaybe<Scalars['String']>;
+  union_gt?: InputMaybe<Scalars['String']>;
+  union_lt?: InputMaybe<Scalars['String']>;
+  union_gte?: InputMaybe<Scalars['String']>;
+  union_lte?: InputMaybe<Scalars['String']>;
+  union_in?: InputMaybe<Array<Scalars['String']>>;
+  union_not_in?: InputMaybe<Array<Scalars['String']>>;
+  union_contains?: InputMaybe<Scalars['String']>;
+  union_contains_nocase?: InputMaybe<Scalars['String']>;
+  union_not_contains?: InputMaybe<Scalars['String']>;
+  union_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  union_starts_with?: InputMaybe<Scalars['String']>;
+  union_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  union_not_starts_with?: InputMaybe<Scalars['String']>;
+  union_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  union_ends_with?: InputMaybe<Scalars['String']>;
+  union_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  union_not_ends_with?: InputMaybe<Scalars['String']>;
+  union_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  union_?: InputMaybe<Union_filter>;
+  numOptions?: InputMaybe<Scalars['Int']>;
+  numOptions_not?: InputMaybe<Scalars['Int']>;
+  numOptions_gt?: InputMaybe<Scalars['Int']>;
+  numOptions_lt?: InputMaybe<Scalars['Int']>;
+  numOptions_gte?: InputMaybe<Scalars['Int']>;
+  numOptions_lte?: InputMaybe<Scalars['Int']>;
+  numOptions_in?: InputMaybe<Array<Scalars['Int']>>;
+  numOptions_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  metadata?: InputMaybe<Scalars['String']>;
+  metadata_not?: InputMaybe<Scalars['String']>;
+  metadata_gt?: InputMaybe<Scalars['String']>;
+  metadata_lt?: InputMaybe<Scalars['String']>;
+  metadata_gte?: InputMaybe<Scalars['String']>;
+  metadata_lte?: InputMaybe<Scalars['String']>;
+  metadata_in?: InputMaybe<Array<Scalars['String']>>;
+  metadata_not_in?: InputMaybe<Array<Scalars['String']>>;
+  metadata_contains?: InputMaybe<Scalars['String']>;
+  metadata_contains_nocase?: InputMaybe<Scalars['String']>;
+  metadata_not_contains?: InputMaybe<Scalars['String']>;
+  metadata_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  metadata_starts_with?: InputMaybe<Scalars['String']>;
+  metadata_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata_not_starts_with?: InputMaybe<Scalars['String']>;
+  metadata_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata_ends_with?: InputMaybe<Scalars['String']>;
+  metadata_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata_not_ends_with?: InputMaybe<Scalars['String']>;
+  metadata_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<Proposal_filter>>>;
+  or?: InputMaybe<Array<InputMaybe<Proposal_filter>>>;
+};
+
+export type Proposal_orderBy =
+  | 'id'
+  | 'union'
+  | 'union__id'
+  | 'union__name'
+  | 'union__logo'
+  | 'union__description'
+  | 'numOptions'
+  | 'metadata';
+
 export type Query = {
   union?: Maybe<Union>;
   unions: Array<Union>;
@@ -43,6 +126,8 @@ export type Query = {
   userRoles: Array<UserRole>;
   user?: Maybe<User>;
   users: Array<User>;
+  proposal?: Maybe<Proposal>;
+  proposals: Array<Proposal>;
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
 };
@@ -102,6 +187,24 @@ export type QueryusersArgs = {
 };
 
 
+export type QueryproposalArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryproposalsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Proposal_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Proposal_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
 export type Query_metaArgs = {
   block?: InputMaybe<Block_height>;
 };
@@ -113,6 +216,8 @@ export type Subscription = {
   userRoles: Array<UserRole>;
   user?: Maybe<User>;
   users: Array<User>;
+  proposal?: Maybe<Proposal>;
+  proposals: Array<Proposal>;
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
 };
@@ -172,6 +277,24 @@ export type SubscriptionusersArgs = {
 };
 
 
+export type SubscriptionproposalArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionproposalsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Proposal_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Proposal_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
 export type Subscription_metaArgs = {
   block?: InputMaybe<Block_height>;
 };
@@ -182,6 +305,7 @@ export type Union = {
   logo: Scalars['String'];
   description: Scalars['String'];
   users: Array<UserRole>;
+  proposals: Array<Proposal>;
 };
 
 
@@ -191,6 +315,15 @@ export type UnionusersArgs = {
   orderBy?: InputMaybe<UserRole_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   where?: InputMaybe<UserRole_filter>;
+};
+
+
+export type UnionproposalsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Proposal_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Proposal_filter>;
 };
 
 export type Union_filter = {
@@ -265,6 +398,7 @@ export type Union_filter = {
   description_not_ends_with?: InputMaybe<Scalars['String']>;
   description_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   users_?: InputMaybe<UserRole_filter>;
+  proposals_?: InputMaybe<Proposal_filter>;
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Union_filter>>>;
@@ -276,7 +410,8 @@ export type Union_orderBy =
   | 'name'
   | 'logo'
   | 'description'
-  | 'users';
+  | 'users'
+  | 'proposals';
 
 export type User = {
   id: Scalars['Bytes'];
@@ -468,6 +603,10 @@ export type _SubgraphErrorPolicy_ =
   user: InContextSdkMethod<Query['user'], QueryuserArgs, MeshContext>,
   /** null **/
   users: InContextSdkMethod<Query['users'], QueryusersArgs, MeshContext>,
+  /** null **/
+  proposal: InContextSdkMethod<Query['proposal'], QueryproposalArgs, MeshContext>,
+  /** null **/
+  proposals: InContextSdkMethod<Query['proposals'], QueryproposalsArgs, MeshContext>,
   /** Access to subgraph metadata **/
   _meta: InContextSdkMethod<Query['_meta'], Query_metaArgs, MeshContext>
   };
@@ -489,6 +628,10 @@ export type _SubgraphErrorPolicy_ =
   user: InContextSdkMethod<Subscription['user'], SubscriptionuserArgs, MeshContext>,
   /** null **/
   users: InContextSdkMethod<Subscription['users'], SubscriptionusersArgs, MeshContext>,
+  /** null **/
+  proposal: InContextSdkMethod<Subscription['proposal'], SubscriptionproposalArgs, MeshContext>,
+  /** null **/
+  proposals: InContextSdkMethod<Subscription['proposals'], SubscriptionproposalsArgs, MeshContext>,
   /** Access to subgraph metadata **/
   _meta: InContextSdkMethod<Subscription['_meta'], Subscription_metaArgs, MeshContext>
   };

@@ -42,7 +42,7 @@ library LibUnion {
         address owner;
         mapping(address => bool) validators;
         mapping(uint256 => bool) uniqueHashes;
-        uint256 numOptions;
+        uint16 numOptions;
         mapping(uint256 => uint256) optionCounter;
     }
 

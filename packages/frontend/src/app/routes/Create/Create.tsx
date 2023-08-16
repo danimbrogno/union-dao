@@ -1,10 +1,4 @@
-import {
-  bytesToNumber,
-  getAddress,
-  hexToBigInt,
-  hexToString,
-  stringToHex,
-} from 'viem';
+import { getAddress, hexToBigInt, stringToHex } from 'viem';
 import {
   useContractWrite,
   usePrepareContractWrite,
@@ -96,7 +90,7 @@ export const Create = () => {
   const {
     addresses: { diamond },
   } = useConfig();
-  console.log(diamond, 'address;');
+
   const {
     config,
     isError: isPrepareError,

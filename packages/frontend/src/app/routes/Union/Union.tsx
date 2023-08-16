@@ -4,8 +4,8 @@ import {
   execute,
 } from '../../../../.graphclient';
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { hexToBigInt, hexToString } from 'viem';
+import { Link, useParams } from 'react-router-dom';
+import { hexToBigInt } from 'viem';
 
 export const Union = () => {
   const params = useParams();
@@ -33,6 +33,17 @@ export const Union = () => {
         </h1>
         <p>{unionDetailQuery.union.logo}</p>
         <p>{unionDetailQuery.union.description}</p>
+        <h2>Proposals</h2>
+        <ul>
+          {unionDetailQuery.union.proposals.map((proposal) => (
+            <li key={proposal.id}>
+              <Link to={`/union/${params.id}/proposal/${proposal.id}`}>
+                Proposal: {proposal.id}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <Link to="./proposal/create">Create a Proposal</Link>
       </div>
     );
   }

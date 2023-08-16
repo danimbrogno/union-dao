@@ -13,8 +13,10 @@ import { publicProvider } from 'wagmi/providers/public';
 import { InjectedConnector } from '@wagmi/core';
 import { Connect } from './components/Connect';
 import { Create } from './routes/Create/Create';
+import { Create as ProposalCreate } from './routes/Union/routes/Proposals/Create';
 import { Union } from './routes/Union/Union';
 import { IPFS } from './shared/IPFS';
+import { Proposal } from './routes/Union/routes/Proposals/Proposal';
 
 const localhost: Chain = {
   ...mainnet,
@@ -71,6 +73,14 @@ export function App() {
               <Route path="/" element={<Home />} />
               <Route path="/create" element={<Create />} />
               <Route path="/union/:id" element={<Union />} />
+              <Route
+                path="/union/:id/proposal/create"
+                element={<ProposalCreate />}
+              />
+              <Route
+                path="/union/:id/proposal/:proposalId"
+                element={<Proposal />}
+              />
             </Routes>
           </WagmiConfig>
         </IPFS>

@@ -21,7 +21,7 @@ contract TestProposalFacet is AppHarness {
         ProposalFacet sut2 = ProposalFacet(address(_diamond));
 
         uint256 unionId = sut1.createUnion("My Union", "", "");
-        uint256 proposalId = sut2.initializeProposal(unionId, 2);
+        uint256 proposalId = sut2.initializeProposal(unionId, 2, "");
         assertEq(proposalId, 0);
     }
 }

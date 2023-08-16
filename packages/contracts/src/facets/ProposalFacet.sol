@@ -9,12 +9,17 @@ import {CountersUpgradeable} from "openzeppelin-upgradeable/utils/CountersUpgrad
 contract ProposalFacet {
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
+    event ProposalCreated(bytes32 indexed union, bytes32 indexed index, uint16 numOptions, string metadataCID);
+
     function getProposal(uint256 _union, uint256 _index) internal view returns (LibUnion.Proposal storage) {
         LibUnion.UnionStorage storage ds = LibUnion.unionStorage();
         return ds.unions[_union].proposals[_index];
     }
 
-    function initializeProposal(uint256 _union, uint256 _numOptions) external returns (uint256) {
+    function initializeProposal(uint256 _union, uint16 _numOptions, string calldata _metadata)
+        external
+        returns (uint256)
+    {
         uint32 _levels = 20; // Must be 20 for default verified
         LibUnion.UnionStorage storage ds = LibUnion.unionStorage();
         uint256 _index = ds.unions[_union].proposalIndex.current();
@@ -29,6 +34,8 @@ contract ProposalFacet {
         for (uint256 i = 0; i <= nextProposal.config.numOptions; i++) {
             nextProposal.config.optionCounter[i] = 0;
         }
+
+        emit ProposalCreated(bytes32(_union), bytes32(_index), _numOptions, _metadata);
 
         return _index;
     }

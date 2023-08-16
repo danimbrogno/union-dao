@@ -4,6 +4,7 @@ type Union @entity {
   logo: String!
   description: String!
   users: [UserRole!]! @derivedFrom(field: "union")
+  proposals: [Proposal!]! @derivedFrom(field: "union")
 }
 
 type UserRole @entity {
@@ -18,4 +19,11 @@ type User @entity {
   id: Bytes!
   name: String!
   roles: [UserRole!]! @derivedFrom(field: "user")
+}
+
+type Proposal @entity {
+  id: Bytes!
+  union: Union!
+  numOptions: Int!
+  metadata: String!
 }

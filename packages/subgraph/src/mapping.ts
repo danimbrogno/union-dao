@@ -6,9 +6,8 @@ import {
   UnionCreated,
 } from '../generated/UnionFacet/UnionFacet';
 import { ProposalCreated } from '../generated/ProposalFacet/ProposalFacet';
-import { AssetStored } from '../generated/IPFSFacet/IPFSFacet';
-import { Asset, Proposal, Union, User, UserRole } from '../generated/schema';
-import { log, Bytes, ipfs } from '@graphprotocol/graph-ts';
+import { Proposal, Union, User, UserRole } from '../generated/schema';
+import { log, Bytes } from '@graphprotocol/graph-ts';
 
 export function handleUnionCreated(ev: UnionCreated): void {
   log.info('Enters handleUnionCreated handler', []);
@@ -16,16 +15,11 @@ export function handleUnionCreated(ev: UnionCreated): void {
   const unionId = ev.params.index;
   let union = Union.load(unionId);
 
-  const metadata = Asset.load(ev.params.metadataAssetId);
-
-  if (!union && metadata) {
+  if (!union) {
     log.info('handleUnionCreated: union not found', []);
     log.info('handleUnionCreated: creating new union', []);
     union = new Union(unionId);
-    ev.params.metadataAssetId;
-    metadata?.hashFunction;
 
-    const i = Bytes.from(metadata.digest);
     union.name = ev.params.name.toString();
     union.description = ev.params.description.toString();
     union.logo = ev.params.logo.toString();
@@ -131,7 +125,8 @@ export function handleProposalCreated(ev: ProposalCreated): void {
     log.info('handleProposalCreated: creating new proposal', []);
     proposal = new Proposal(proposalId);
     proposal.union = ev.params.union;
-
+    proposal.numOptions = ev.params.numOptions;
+    proposal.metadata = ev.params.metadataCID;
     proposal.save();
     log.info('handleProposalCreated: proposal saved', []);
   }
