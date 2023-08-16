@@ -63,8 +63,157 @@ export type Proposal = {
   id: Scalars['Bytes'];
   union: Union;
   numOptions: Scalars['Int'];
-  metadata: Scalars['String'];
+  metadata?: Maybe<ProposalMetadata>;
 };
+
+export type ProposalMetadata = {
+  id: Scalars['String'];
+  description: Scalars['String'];
+  options: Array<ProposalMetadataOption>;
+};
+
+
+export type ProposalMetadataoptionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<ProposalMetadataOption_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<ProposalMetadataOption_filter>;
+};
+
+export type ProposalMetadataOption = {
+  id: Scalars['String'];
+  proposal: ProposalMetadata;
+  description: Scalars['String'];
+};
+
+export type ProposalMetadataOption_filter = {
+  id?: InputMaybe<Scalars['String']>;
+  id_not?: InputMaybe<Scalars['String']>;
+  id_gt?: InputMaybe<Scalars['String']>;
+  id_lt?: InputMaybe<Scalars['String']>;
+  id_gte?: InputMaybe<Scalars['String']>;
+  id_lte?: InputMaybe<Scalars['String']>;
+  id_in?: InputMaybe<Array<Scalars['String']>>;
+  id_not_in?: InputMaybe<Array<Scalars['String']>>;
+  id_contains?: InputMaybe<Scalars['String']>;
+  id_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_not_contains?: InputMaybe<Scalars['String']>;
+  id_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_starts_with?: InputMaybe<Scalars['String']>;
+  id_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_starts_with?: InputMaybe<Scalars['String']>;
+  id_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_ends_with?: InputMaybe<Scalars['String']>;
+  id_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']>;
+  id_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  proposal?: InputMaybe<Scalars['String']>;
+  proposal_not?: InputMaybe<Scalars['String']>;
+  proposal_gt?: InputMaybe<Scalars['String']>;
+  proposal_lt?: InputMaybe<Scalars['String']>;
+  proposal_gte?: InputMaybe<Scalars['String']>;
+  proposal_lte?: InputMaybe<Scalars['String']>;
+  proposal_in?: InputMaybe<Array<Scalars['String']>>;
+  proposal_not_in?: InputMaybe<Array<Scalars['String']>>;
+  proposal_contains?: InputMaybe<Scalars['String']>;
+  proposal_contains_nocase?: InputMaybe<Scalars['String']>;
+  proposal_not_contains?: InputMaybe<Scalars['String']>;
+  proposal_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  proposal_starts_with?: InputMaybe<Scalars['String']>;
+  proposal_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  proposal_not_starts_with?: InputMaybe<Scalars['String']>;
+  proposal_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  proposal_ends_with?: InputMaybe<Scalars['String']>;
+  proposal_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  proposal_not_ends_with?: InputMaybe<Scalars['String']>;
+  proposal_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  proposal_?: InputMaybe<ProposalMetadata_filter>;
+  description?: InputMaybe<Scalars['String']>;
+  description_not?: InputMaybe<Scalars['String']>;
+  description_gt?: InputMaybe<Scalars['String']>;
+  description_lt?: InputMaybe<Scalars['String']>;
+  description_gte?: InputMaybe<Scalars['String']>;
+  description_lte?: InputMaybe<Scalars['String']>;
+  description_in?: InputMaybe<Array<Scalars['String']>>;
+  description_not_in?: InputMaybe<Array<Scalars['String']>>;
+  description_contains?: InputMaybe<Scalars['String']>;
+  description_contains_nocase?: InputMaybe<Scalars['String']>;
+  description_not_contains?: InputMaybe<Scalars['String']>;
+  description_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  description_starts_with?: InputMaybe<Scalars['String']>;
+  description_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  description_not_starts_with?: InputMaybe<Scalars['String']>;
+  description_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  description_ends_with?: InputMaybe<Scalars['String']>;
+  description_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  description_not_ends_with?: InputMaybe<Scalars['String']>;
+  description_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<ProposalMetadataOption_filter>>>;
+  or?: InputMaybe<Array<InputMaybe<ProposalMetadataOption_filter>>>;
+};
+
+export type ProposalMetadataOption_orderBy =
+  | 'id'
+  | 'proposal'
+  | 'proposal__id'
+  | 'proposal__description'
+  | 'description';
+
+export type ProposalMetadata_filter = {
+  id?: InputMaybe<Scalars['String']>;
+  id_not?: InputMaybe<Scalars['String']>;
+  id_gt?: InputMaybe<Scalars['String']>;
+  id_lt?: InputMaybe<Scalars['String']>;
+  id_gte?: InputMaybe<Scalars['String']>;
+  id_lte?: InputMaybe<Scalars['String']>;
+  id_in?: InputMaybe<Array<Scalars['String']>>;
+  id_not_in?: InputMaybe<Array<Scalars['String']>>;
+  id_contains?: InputMaybe<Scalars['String']>;
+  id_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_not_contains?: InputMaybe<Scalars['String']>;
+  id_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_starts_with?: InputMaybe<Scalars['String']>;
+  id_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_starts_with?: InputMaybe<Scalars['String']>;
+  id_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_ends_with?: InputMaybe<Scalars['String']>;
+  id_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']>;
+  id_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  description_not?: InputMaybe<Scalars['String']>;
+  description_gt?: InputMaybe<Scalars['String']>;
+  description_lt?: InputMaybe<Scalars['String']>;
+  description_gte?: InputMaybe<Scalars['String']>;
+  description_lte?: InputMaybe<Scalars['String']>;
+  description_in?: InputMaybe<Array<Scalars['String']>>;
+  description_not_in?: InputMaybe<Array<Scalars['String']>>;
+  description_contains?: InputMaybe<Scalars['String']>;
+  description_contains_nocase?: InputMaybe<Scalars['String']>;
+  description_not_contains?: InputMaybe<Scalars['String']>;
+  description_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  description_starts_with?: InputMaybe<Scalars['String']>;
+  description_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  description_not_starts_with?: InputMaybe<Scalars['String']>;
+  description_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  description_ends_with?: InputMaybe<Scalars['String']>;
+  description_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  description_not_ends_with?: InputMaybe<Scalars['String']>;
+  description_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  options_?: InputMaybe<ProposalMetadataOption_filter>;
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<ProposalMetadata_filter>>>;
+  or?: InputMaybe<Array<InputMaybe<ProposalMetadata_filter>>>;
+};
+
+export type ProposalMetadata_orderBy =
+  | 'id'
+  | 'description'
+  | 'options';
 
 export type Proposal_filter = {
   id?: InputMaybe<Scalars['Bytes']>;
@@ -126,6 +275,7 @@ export type Proposal_filter = {
   metadata_ends_with_nocase?: InputMaybe<Scalars['String']>;
   metadata_not_ends_with?: InputMaybe<Scalars['String']>;
   metadata_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata_?: InputMaybe<ProposalMetadata_filter>;
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Proposal_filter>>>;
@@ -140,7 +290,9 @@ export type Proposal_orderBy =
   | 'union__logo'
   | 'union__description'
   | 'numOptions'
-  | 'metadata';
+  | 'metadata'
+  | 'metadata__id'
+  | 'metadata__description';
 
 export type Query = {
   union?: Maybe<Union>;
@@ -151,6 +303,9 @@ export type Query = {
   users: Array<User>;
   proposal?: Maybe<Proposal>;
   proposals: Array<Proposal>;
+  proposalMetadata: Array<ProposalMetadata>;
+  proposalMetadataOption?: Maybe<ProposalMetadataOption>;
+  proposalMetadataOptions: Array<ProposalMetadataOption>;
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
 };
@@ -228,6 +383,35 @@ export type QueryproposalsArgs = {
 };
 
 
+export type QueryproposalMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<ProposalMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<ProposalMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryproposalMetadataOptionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryproposalMetadataOptionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<ProposalMetadataOption_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<ProposalMetadataOption_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
 export type Query_metaArgs = {
   block?: InputMaybe<Block_height>;
 };
@@ -241,6 +425,9 @@ export type Subscription = {
   users: Array<User>;
   proposal?: Maybe<Proposal>;
   proposals: Array<Proposal>;
+  proposalMetadata: Array<ProposalMetadata>;
+  proposalMetadataOption?: Maybe<ProposalMetadataOption>;
+  proposalMetadataOptions: Array<ProposalMetadataOption>;
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
 };
@@ -313,6 +500,35 @@ export type SubscriptionproposalsArgs = {
   orderBy?: InputMaybe<Proposal_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   where?: InputMaybe<Proposal_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionproposalMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<ProposalMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<ProposalMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionproposalMetadataOptionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionproposalMetadataOptionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<ProposalMetadataOption_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<ProposalMetadataOption_filter>;
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
@@ -710,6 +926,12 @@ export type ResolversTypes = ResolversObject<{
   Int: ResolverTypeWrapper<Scalars['Int']>;
   OrderDirection: OrderDirection;
   Proposal: ResolverTypeWrapper<Proposal>;
+  ProposalMetadata: ResolverTypeWrapper<ProposalMetadata>;
+  ProposalMetadataOption: ResolverTypeWrapper<ProposalMetadataOption>;
+  ProposalMetadataOption_filter: ProposalMetadataOption_filter;
+  ProposalMetadataOption_orderBy: ProposalMetadataOption_orderBy;
+  ProposalMetadata_filter: ProposalMetadata_filter;
+  ProposalMetadata_orderBy: ProposalMetadata_orderBy;
   Proposal_filter: Proposal_filter;
   Proposal_orderBy: Proposal_orderBy;
   Query: ResolverTypeWrapper<{}>;
@@ -741,6 +963,10 @@ export type ResolversParentTypes = ResolversObject<{
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   Proposal: Proposal;
+  ProposalMetadata: ProposalMetadata;
+  ProposalMetadataOption: ProposalMetadataOption;
+  ProposalMetadataOption_filter: ProposalMetadataOption_filter;
+  ProposalMetadata_filter: ProposalMetadata_filter;
   Proposal_filter: Proposal_filter;
   Query: {};
   String: Scalars['String'];
@@ -787,7 +1013,21 @@ export type ProposalResolvers<ContextType = MeshContext, ParentType extends Reso
   id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   union?: Resolver<ResolversTypes['Union'], ParentType, ContextType>;
   numOptions?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  metadata?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['ProposalMetadata']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ProposalMetadataResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['ProposalMetadata'] = ResolversParentTypes['ProposalMetadata']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  options?: Resolver<Array<ResolversTypes['ProposalMetadataOption']>, ParentType, ContextType, RequireFields<ProposalMetadataoptionsArgs, 'skip' | 'first'>>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ProposalMetadataOptionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['ProposalMetadataOption'] = ResolversParentTypes['ProposalMetadataOption']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  proposal?: Resolver<ResolversTypes['ProposalMetadata'], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -800,6 +1040,9 @@ export type QueryResolvers<ContextType = MeshContext, ParentType extends Resolve
   users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryusersArgs, 'skip' | 'first' | 'subgraphError'>>;
   proposal?: Resolver<Maybe<ResolversTypes['Proposal']>, ParentType, ContextType, RequireFields<QueryproposalArgs, 'id' | 'subgraphError'>>;
   proposals?: Resolver<Array<ResolversTypes['Proposal']>, ParentType, ContextType, RequireFields<QueryproposalsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  proposalMetadata?: Resolver<Array<ResolversTypes['ProposalMetadata']>, ParentType, ContextType, RequireFields<QueryproposalMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  proposalMetadataOption?: Resolver<Maybe<ResolversTypes['ProposalMetadataOption']>, ParentType, ContextType, RequireFields<QueryproposalMetadataOptionArgs, 'id' | 'subgraphError'>>;
+  proposalMetadataOptions?: Resolver<Array<ResolversTypes['ProposalMetadataOption']>, ParentType, ContextType, RequireFields<QueryproposalMetadataOptionsArgs, 'skip' | 'first' | 'subgraphError'>>;
   _meta?: Resolver<Maybe<ResolversTypes['_Meta_']>, ParentType, ContextType, Partial<Query_metaArgs>>;
 }>;
 
@@ -812,6 +1055,9 @@ export type SubscriptionResolvers<ContextType = MeshContext, ParentType extends 
   users?: SubscriptionResolver<Array<ResolversTypes['User']>, "users", ParentType, ContextType, RequireFields<SubscriptionusersArgs, 'skip' | 'first' | 'subgraphError'>>;
   proposal?: SubscriptionResolver<Maybe<ResolversTypes['Proposal']>, "proposal", ParentType, ContextType, RequireFields<SubscriptionproposalArgs, 'id' | 'subgraphError'>>;
   proposals?: SubscriptionResolver<Array<ResolversTypes['Proposal']>, "proposals", ParentType, ContextType, RequireFields<SubscriptionproposalsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  proposalMetadata?: SubscriptionResolver<Array<ResolversTypes['ProposalMetadata']>, "proposalMetadata", ParentType, ContextType, RequireFields<SubscriptionproposalMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  proposalMetadataOption?: SubscriptionResolver<Maybe<ResolversTypes['ProposalMetadataOption']>, "proposalMetadataOption", ParentType, ContextType, RequireFields<SubscriptionproposalMetadataOptionArgs, 'id' | 'subgraphError'>>;
+  proposalMetadataOptions?: SubscriptionResolver<Array<ResolversTypes['ProposalMetadataOption']>, "proposalMetadataOptions", ParentType, ContextType, RequireFields<SubscriptionproposalMetadataOptionsArgs, 'skip' | 'first' | 'subgraphError'>>;
   _meta?: SubscriptionResolver<Maybe<ResolversTypes['_Meta_']>, "_meta", ParentType, ContextType, Partial<Subscription_metaArgs>>;
 }>;
 
@@ -860,6 +1106,8 @@ export type Resolvers<ContextType = MeshContext> = ResolversObject<{
   BigInt?: GraphQLScalarType;
   Bytes?: GraphQLScalarType;
   Proposal?: ProposalResolvers<ContextType>;
+  ProposalMetadata?: ProposalMetadataResolvers<ContextType>;
+  ProposalMetadataOption?: ProposalMetadataOptionResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Union?: UnionResolvers<ContextType>;
@@ -981,6 +1229,12 @@ const merger = new(BareMerger as any)({
           return printWithCache(UnionDetailsDocument);
         },
         location: 'UnionDetailsDocument.graphql'
+      },{
+        document: ProposalDetailsDocument,
+        get rawSDL() {
+          return printWithCache(ProposalDetailsDocument);
+        },
+        location: 'ProposalDetailsDocument.graphql'
       }
     ];
     },
@@ -1036,7 +1290,23 @@ export type UnionDetailsQueryVariables = Exact<{
 
 export type UnionDetailsQuery = { union?: Maybe<(
     Pick<Union, 'id' | 'name' | 'description' | 'logo'>
-    & { proposals: Array<Pick<Proposal, 'id' | 'numOptions' | 'metadata'>> }
+    & { proposals: Array<(
+      Pick<Proposal, 'id' | 'numOptions'>
+      & { metadata?: Maybe<Pick<ProposalMetadata, 'id' | 'description'>> }
+    )> }
+  )> };
+
+export type ProposalDetailsQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type ProposalDetailsQuery = { proposal?: Maybe<(
+    Pick<Proposal, 'id' | 'numOptions'>
+    & { metadata?: Maybe<(
+      Pick<ProposalMetadata, 'id' | 'description'>
+      & { options: Array<Pick<ProposalMetadataOption, 'id' | 'description'>> }
+    )> }
   )> };
 
 
@@ -1080,11 +1350,31 @@ export const UnionDetailsDocument = gql`
     proposals {
       id
       numOptions
-      metadata
+      metadata {
+        id
+        description
+      }
     }
   }
 }
     ` as unknown as DocumentNode<UnionDetailsQuery, UnionDetailsQueryVariables>;
+export const ProposalDetailsDocument = gql`
+    query ProposalDetails($id: ID!) {
+  proposal(id: $id) {
+    id
+    numOptions
+    metadata {
+      id
+      description
+      options {
+        id
+        description
+      }
+    }
+  }
+}
+    ` as unknown as DocumentNode<ProposalDetailsQuery, ProposalDetailsQueryVariables>;
+
 
 
 
@@ -1100,6 +1390,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     UnionDetails(variables: UnionDetailsQueryVariables, options?: C): Promise<UnionDetailsQuery> {
       return requester<UnionDetailsQuery, UnionDetailsQueryVariables>(UnionDetailsDocument, variables, options) as Promise<UnionDetailsQuery>;
+    },
+    ProposalDetails(variables: ProposalDetailsQueryVariables, options?: C): Promise<ProposalDetailsQuery> {
+      return requester<ProposalDetailsQuery, ProposalDetailsQueryVariables>(ProposalDetailsDocument, variables, options) as Promise<ProposalDetailsQuery>;
     }
   };
 }

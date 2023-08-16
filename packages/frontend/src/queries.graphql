@@ -35,7 +35,25 @@ query UnionDetails($id: ID!) {
     proposals {
       id
       numOptions
-      metadata
+      metadata {
+        id
+        description
+      }
+    }
+  }
+}
+
+query ProposalDetails($id: ID!) {
+  proposal(id: $id) {
+    id
+    numOptions
+    metadata {
+      id
+      description
+      options {
+        id
+        description
+      }
     }
   }
 }
