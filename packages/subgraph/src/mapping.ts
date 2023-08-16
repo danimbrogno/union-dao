@@ -6,8 +6,23 @@ import {
   UnionCreated,
 } from '../generated/UnionFacet/UnionFacet';
 import { ProposalCreated } from '../generated/ProposalFacet/ProposalFacet';
-import { Proposal, Union, User, UserRole } from '../generated/schema';
-import { log, Bytes } from '@graphprotocol/graph-ts';
+import {
+  Proposal,
+  ProposalMetadata,
+  ProposalMetadataOption,
+  Union,
+  User,
+  UserRole,
+} from '../generated/schema';
+import { ProposalMetadata as ProposalMetadataTemplate } from '../generated/templates';
+
+import {
+  log,
+  Bytes,
+  dataSource,
+  json,
+  JSONValueKind,
+} from '@graphprotocol/graph-ts';
 
 export function handleUnionCreated(ev: UnionCreated): void {
   log.info('Enters handleUnionCreated handler', []);
@@ -127,27 +142,50 @@ export function handleProposalCreated(ev: ProposalCreated): void {
     proposal.union = ev.params.union;
     proposal.numOptions = ev.params.numOptions;
     proposal.metadata = ev.params.metadataCID;
+    ProposalMetadataTemplate.create(ev.params.metadataCID);
     proposal.save();
     log.info('handleProposalCreated: proposal saved', []);
   }
   log.info('handleProposalCreated: proposal already exists', []);
 }
 
-// export function handleAssetStored(ev: AssetStored): void {
-//   log.info('Enters handleAssetStored handler', []);
-//   log.info('handleAssetStored: {}', [ev.params.digest.toString()]);
-//   const assetId = ev.params.digest;
-//   let asset = Asset.load(assetId);
+export function handleProposalMetadata(content: Bytes): void {
+  log.info('Enters handleProposalMetadata handler', []);
+  const proposalId = dataSource.stringParam();
+  const value = json.fromBytes(content).toObject();
+  log.info('got data', []);
+  if (value) {
+    const options = value.get('options');
+    if (options && options.kind === JSONValueKind.ARRAY) {
+      log.info('got options, is array', []);
+      const opts = options.toArray();
 
-//   if (!asset) {
-//     log.info('handleAssetStored: proposal not found', []);
-//     log.info('handleAssetStored: creating new proposal', []);
-//     asset = new Asset(assetId);
-//     asset.digest = ev.params.digest;
-//     asset.hashFunction = ev.params.hashFunction;
-//     asset.size = ev.params.size;
-//     asset.save();
-//     log.info('handleAssetStored: proposal saved', []);
-//   }
-//   log.info('handleAssetStored: proposal already exists', []);
-// }
+      let k = 0;
+      for (let k = 0; k < opts.length; k++) {
+        const opt = opts[k];
+        log.info('got option', []);
+        if (opt.kind === JSONValueKind.OBJECT) {
+          const valueObj = opt.toObject();
+          const optionId = proposalId + '-' + k.toString();
+          const optDescription = valueObj.get('description');
+
+          if (optDescription) {
+            log.info('got option as object with description', []);
+            const option = new ProposalMetadataOption(optionId);
+            option.description = optDescription.toString();
+            option.proposal = proposalId;
+            option.save();
+          }
+        }
+      }
+    }
+
+    const description = value.get('description');
+
+    if (description) {
+      const proposalMetadata = new ProposalMetadata(proposalId);
+      proposalMetadata.description = description.toString() || '';
+      proposalMetadata.save();
+    }
+  }
+}

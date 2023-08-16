@@ -60,3 +60,18 @@ dataSources:
         - event: ProposalCreated(indexed bytes32,indexed bytes32,uint16,string)
           handler: handleProposalCreated
       file: ./src/mapping.ts
+templates:
+  - name: ProposalMetadata
+    kind: file/ipfs
+    mapping:
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/mapping.ts
+      handler: handleProposalMetadata
+      entities:
+        - ProposalMetadata
+        - ProposalMetadataOption
+      abis:
+        - name: Diamond
+          file: ../contracts/out/Diamond.sol/Diamond.json
+    network: base-testnet
