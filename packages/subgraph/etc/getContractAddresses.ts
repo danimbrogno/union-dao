@@ -21,7 +21,13 @@ function myFunc() {
 
   fs.writeFileSync(
     output,
-    JSON.stringify({ 'base-testnet': { UnionFacet: { address, startBlock } } })
+    JSON.stringify({
+      'base-testnet': {
+        UnionFacet: { address, startBlock },
+        ProposalFacet: { address, startBlock },
+        // IPFSFacet: { address, startBlock },
+      },
+    })
   );
 }
 

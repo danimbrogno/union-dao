@@ -1,6 +1,8 @@
 specVersion: 0.0.4
 description: Union
 repository: https://github.com/danimbrogno/union-dao
+features:
+  - ipfsOnEthereumContracts
 schema:
   file: ./schema.graphql
 dataSources:
@@ -16,14 +18,16 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - MeeemorEvent
+        - Union
+        - UserRole
+        - User
       abis:
         - name: Diamond
           file: ../contracts/out/Diamond.sol/Diamond.json
         - name: UnionFacet
           file: ../contracts/out/UnionFacet.sol/UnionFacet.json
       eventHandlers:
-        - event: UnionCreated(indexed bytes32,indexed bytes32,string,string)
+        - event: UnionCreated(indexed bytes32,bytes32)
           handler: handleUnionCreated
         - event: MemberAdded(indexed bytes32,indexed address)
           handler: handleMemberAdded
@@ -33,4 +37,26 @@ dataSources:
           handler: handleAdminAdded
         - event: AdminRemoved(indexed bytes32,indexed address)
           handler: handleAdminRemoved
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: ProposalFacet
+    network: base-testnet
+    source:
+      abi: ProposalFacet
+      address: "0x38A70c040CA5F5439ad52d0e821063b0EC0B52b6"
+      startBlock: 8164215
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Proposal
+      abis:
+        - name: Diamond
+          file: ../contracts/out/Diamond.sol/Diamond.json
+        - name: ProposalFacet
+          file: ../contracts/out/ProposalFacet.sol/ProposalFacet.json
+      eventHandlers:
+        - event: ProposalCreated(indexed bytes32,indexed bytes32,bytes32,bytes32)
+          handler: handleProposalCreated
       file: ./src/mapping.ts

@@ -8,7 +8,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/contracts",
-        "command": "forge test --fork-url https://goerli.base.org --ffi"
+        "command": "forge test --fork-url https://goerli.base.org --ffi -vv"
       }
     },
     "compile": {
@@ -22,7 +22,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "packages/contracts",
-        "command": "anvil --chain-id 84531 --fork-url https://goerli.base.org --fork-block-number $NX_ANVIL_BASE_FORK_BLOCK_NUMBER"
+        "command": "anvil --chain-id 84531 --fork-url https://goerli.base.org --fork-block-number $NX_ANVIL_BASE_FORK_BLOCK_NUMBER --state ./.anvil"
       }
     },
     "deploy": {

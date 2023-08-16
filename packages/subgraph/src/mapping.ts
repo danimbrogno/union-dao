@@ -5,26 +5,34 @@ import {
   MemberRemoved,
   UnionCreated,
 } from '../generated/UnionFacet/UnionFacet';
-import { Union, User, UserRole } from '../generated/schema';
-import { log, Bytes } from '@graphprotocol/graph-ts';
+import { ProposalCreated } from '../generated/ProposalFacet/ProposalFacet';
+import { AssetStored } from '../generated/IPFSFacet/IPFSFacet';
+import { Asset, Proposal, Union, User, UserRole } from '../generated/schema';
+import { log, Bytes, ipfs } from '@graphprotocol/graph-ts';
 
 export function handleUnionCreated(ev: UnionCreated): void {
   log.info('Enters handleUnionCreated handler', []);
-  log.info('handleUnionCreated: {}', [ev.params.name.toString()]);
+  log.info('handleUnionCreated: {}', [ev.params.index.toString()]);
   const unionId = ev.params.index;
   let union = Union.load(unionId);
 
-  if (!union) {
-    log.info('handleUnionCreated: event not found', []);
-    log.info('handleUnionCreated: creating new event', []);
+  const metadata = Asset.load(ev.params.metadataAssetId);
+
+  if (!union && metadata) {
+    log.info('handleUnionCreated: union not found', []);
+    log.info('handleUnionCreated: creating new union', []);
     union = new Union(unionId);
+    ev.params.metadataAssetId;
+    metadata?.hashFunction;
+
+    const i = Bytes.from(metadata.digest);
     union.name = ev.params.name.toString();
     union.description = ev.params.description.toString();
     union.logo = ev.params.logo.toString();
     union.save();
-    log.info('handleUnionCreated: event saved', []);
+    log.info('handleUnionCreated: union saved', []);
   }
-  log.info('handleUnionCreated: event already exists', []);
+  log.info('handleUnionCreated: union already exists', []);
 }
 
 export function handleMemberAdded(ev: MemberAdded): void {
@@ -111,3 +119,40 @@ export function handleAdminRemoved(ev: AdminRemoved): void {
     role.save();
   }
 }
+
+export function handleProposalCreated(ev: ProposalCreated): void {
+  log.info('Enters handleProposalCreated handler', []);
+  log.info('handleProposalCreated: {}', [ev.params.index.toString()]);
+  const proposalId = ev.params.index;
+  let proposal = Proposal.load(proposalId);
+
+  if (!proposal) {
+    log.info('handleProposalCreated: proposal not found', []);
+    log.info('handleProposalCreated: creating new proposal', []);
+    proposal = new Proposal(proposalId);
+    proposal.union = ev.params.union;
+
+    proposal.save();
+    log.info('handleProposalCreated: proposal saved', []);
+  }
+  log.info('handleProposalCreated: proposal already exists', []);
+}
+
+// export function handleAssetStored(ev: AssetStored): void {
+//   log.info('Enters handleAssetStored handler', []);
+//   log.info('handleAssetStored: {}', [ev.params.digest.toString()]);
+//   const assetId = ev.params.digest;
+//   let asset = Asset.load(assetId);
+
+//   if (!asset) {
+//     log.info('handleAssetStored: proposal not found', []);
+//     log.info('handleAssetStored: creating new proposal', []);
+//     asset = new Asset(assetId);
+//     asset.digest = ev.params.digest;
+//     asset.hashFunction = ev.params.hashFunction;
+//     asset.size = ev.params.size;
+//     asset.save();
+//     log.info('handleAssetStored: proposal saved', []);
+//   }
+//   log.info('handleAssetStored: proposal already exists', []);
+// }
