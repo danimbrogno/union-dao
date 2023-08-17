@@ -44,16 +44,6 @@ export const Create = () => {
     control,
     name: 'options',
   });
-  //     config,
-  //     isError: isPrepareError,
-  //     error: prepareError,
-  //   } = usePrepareContractWrite({
-  //     address: getAddress(diamond),
-  //     abi: proposalFacetABI,
-  //     functionName: 'initializeProposal',
-  //     args: [unionId, numOptions.length, metadataCID],
-  //     enabled: params.id && numOptions.length > 0 ? true : false,
-  //   });
 
   const { write, isSuccess, isError, error } = useContractWrite({
     address: getAddress(diamond),

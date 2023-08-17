@@ -16,7 +16,7 @@ import { Create } from './routes/Create/Create';
 import { Create as ProposalCreate } from './routes/Union/routes/Proposals/Create';
 import { Union } from './routes/Union/Union';
 import { IPFS } from './shared/IPFS';
-import { Proposal } from './routes/Union/routes/Proposals/Proposal';
+import { Proposal } from './routes/Union/routes/Proposals/Proposal/Proposal';
 import { Identity } from './shared/Identity';
 
 //

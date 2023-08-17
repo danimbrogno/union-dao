@@ -43,17 +43,11 @@ contract ProposalFacet {
             _voting.addVoter(_index, ds.unions[_union].identities[j]);
         }
 
+        _voting.startPoll(_index, 0);
+
         emit ProposalCreated(bytes32(_union), bytes32(_index), _numOptions, _metadata);
 
         return _index;
-    }
-
-    function registerValidator(uint256 _union, uint256 _index, uint256 _commitment) external {
-        LibUnion.Proposal storage theProposal = getProposal(_union, _index);
-        // require(msg.sender == config[_index].owner, "Only owner can add validator!");
-        theProposal.config.validators[_commitment] = true;
-        ISemaphoreVoting _voting = LibUnion.getVoting(_union);
-        _voting.addVoter(_index, _commitment);
     }
 
     function vote(uint256 _union, uint256 _index, uint256 _vote, uint256 _nullifier, uint256[8] calldata _proof)

@@ -21,29 +21,42 @@ export const Proposal = () => {
     if (result.data) {
       setProposalDetailQuery(result.data);
     }
-  }, [params.id]);
+  }, [params.id, params.proposalId]);
 
   useEffect(() => {
     fetchProposalDetail();
   }, [fetchProposalDetail]);
 
-  if (proposalDetailQuery?.proposal) {
+  const doVote = useCallback(async (optionId: number) => {
+    console.log(optionId);
+  }, []);
+
+  const proposal = proposalDetailQuery?.proposal;
+  if (proposal) {
+    const options = Array.from(
+      { length: proposal.numOptions },
+      (_, index) => index
+    );
+
     return (
       <div>
         <h1>
-          {hexToBigInt(proposalDetailQuery.proposal.id).toString()}:{' '}
-          {proposalDetailQuery.proposal.metadata?.description}
+          {hexToBigInt(proposal.id).toString()}:{' '}
+          {proposal.metadata?.description}
         </h1>
 
         <h2>Options</h2>
         <ul>
-          {(proposalDetailQuery.proposal.metadata?.options || []).map(
-            (option) => (
-              <li key={option.id}>
-                <p>{option.description}</p>
-              </li>
-            )
-          )}
+          {options.map((option, index) => (
+            <li key={index}>
+              <p>
+                {index}:{' '}
+                {proposal.metadata?.options[index].description ||
+                  'Loading Option...'}
+              </p>
+              <button onClick={() => doVote(index)}>Vote!</button>
+            </li>
+          ))}
         </ul>
       </div>
     );

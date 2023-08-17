@@ -43,6 +43,23 @@ query UnionDetails($id: ID!) {
   }
 }
 
+query WatchUnionDetails($id: ID!) @live {
+  union(id: $id) {
+    id
+    name
+    description
+    logo
+    proposals {
+      id
+      numOptions
+      metadata {
+        id
+        description
+      }
+    }
+  }
+}
+
 query ProposalDetails($id: ID!) {
   proposal(id: $id) {
     id
