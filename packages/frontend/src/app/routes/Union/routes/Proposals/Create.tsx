@@ -1,7 +1,7 @@
 import { useConfig } from 'packages/frontend/src/app/shared/Config';
 import { useIPFS } from 'packages/frontend/src/app/shared/IPFS';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
-import { redirect, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { proposalFacetABI } from 'shared';
 import { Hex, getAddress, hexToBigInt } from 'viem';
 import { useContractWrite } from 'wagmi';
@@ -80,7 +80,10 @@ export const Create = () => {
       );
   };
 
-  const handleAddOption = () => append({ description: '' });
+  const handleAddOption: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    append({ description: '' });
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

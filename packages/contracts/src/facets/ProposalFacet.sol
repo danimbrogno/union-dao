@@ -25,8 +25,7 @@ contract ProposalFacet {
 
         uint256 _index = ds.unions[_union].proposalIndex.current();
 
-        // TODO: should it be msg.sender or diamond?
-        _voting.createPoll(_index, msg.sender, _levels);
+        _voting.createPoll(_index, address(this), _levels);
 
         ds.unions[_union].proposalIndex.increment();
 
