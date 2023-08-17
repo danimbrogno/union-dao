@@ -1,5 +1,13 @@
 import { Identity as ID } from '@semaphore-protocol/identity';
-import { PropsWithChildren, createContext, useEffect, useState } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useLocalStorage } from 'usehooks-ts';
 import { getAddress } from 'viem';
@@ -58,4 +66,14 @@ export const Identity = ({ children }: PropsWithChildren) => {
   }
 
   return <Context.Provider value={{ identity }}>{children}</Context.Provider>;
+};
+
+export const useIdentity = () => {
+  const { identity } = useContext(Context);
+
+  const val = useMemo(() => {
+    return new ID(identity);
+  }, [identity]);
+
+  return val;
 };

@@ -15,7 +15,6 @@ import "../src/facets/DiamondLoupeFacet.sol";
 import "../src/facets/OwnershipFacet.sol";
 import "../src/facets/UnionFacet.sol";
 import {DiamondInit} from "../src/upgradeInitializers/DiamondInit.sol";
-import {Verifier} from "../src/helpers/Verifier.sol";
 import {ProposalFacet} from "../src/facets/ProposalFacet.sol";
 import "../src/Diamond.sol";
 import "forge-std/test.sol";

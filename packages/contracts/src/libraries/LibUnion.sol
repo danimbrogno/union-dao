@@ -20,8 +20,11 @@ library LibUnion {
         bytes32 name;
         mapping(address => bool) admins;
         mapping(address => bool) members;
+        mapping(uint256 => uint256) identities;
+        mapping(address => uint256) identityIndexMap;
         mapping(uint256 => Proposal) proposals;
         CountersUpgradeable.Counter proposalIndex;
+        CountersUpgradeable.Counter identityIndex;
         address voting;
     }
 

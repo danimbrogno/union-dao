@@ -6,7 +6,6 @@ import "../src/facets/DiamondLoupeFacet.sol";
 import "../src/facets/OwnershipFacet.sol";
 import "../src/facets/UnionFacet.sol";
 import {DiamondInit} from "../src/upgradeInitializers/DiamondInit.sol";
-import {Verifier} from "../src/helpers/Verifier.sol";
 import {ProposalFacet} from "../src/facets/ProposalFacet.sol";
 import "forge-std/test.sol";
 import {DeployHelper} from "./DeployHelper.sol";
@@ -21,7 +20,6 @@ contract AppDeployer is DeployHelper {
     UnionFacet _unionF;
     ProposalFacet _proposalF;
     DiamondInit _diamondInitC;
-    Verifier _verifierC;
 
     //interfaces with Facet ABI connected to _diamond address
     IDiamondLoupe _iLoupe;
@@ -42,7 +40,6 @@ contract AppDeployer is DeployHelper {
         _unionF = new UnionFacet();
         _proposalF = new ProposalFacet();
         _diamondInitC = new DiamondInit();
-        _verifierC = new Verifier();
 
         string memory semaphoreAddresses = vm.readFile("./src/addresses/semaphore.json");
 

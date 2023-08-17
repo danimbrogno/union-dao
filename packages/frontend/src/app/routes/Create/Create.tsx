@@ -19,6 +19,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { useIPFS } from '../../shared/IPFS';
 import { useDropzone } from 'react-dropzone';
+import { useIdentity } from '../../shared/Identity';
 
 type Inputs = {
   name: string;
@@ -34,6 +35,7 @@ export const Create = () => {
     setValue,
     formState: { isValid, isSubmitting },
   } = useForm<Inputs>();
+  const identity = useIdentity();
   const name = watch('name', '');
   const imageCID = watch('imageCID', '');
   const description = '';
@@ -99,7 +101,12 @@ export const Create = () => {
     address: getAddress(diamond),
     abi: unionFacetABI,
     functionName: 'createUnion',
-    args: [stringToHex(name, { size: 32 }), imageCID, description],
+    args: [
+      stringToHex(name, { size: 32 }),
+      imageCID,
+      description,
+      identity.getCommitment(),
+    ],
     enabled: name !== '' ? true : false,
   });
 
