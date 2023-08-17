@@ -17,7 +17,9 @@ import { Create as ProposalCreate } from './routes/Union/routes/Proposals/Create
 import { Union } from './routes/Union/Union';
 import { IPFS } from './shared/IPFS';
 import { Proposal } from './routes/Union/routes/Proposals/Proposal';
+import { Identity } from './shared/Identity';
 
+//
 const localhost: Chain = {
   ...mainnet,
   id: 84531,
@@ -54,34 +56,36 @@ export function App() {
         <IPFS>
           <WagmiConfig config={config}>
             <Connect />
-            {/* <NxWelcome title="frontend" />
+            <Identity>
+              {/* <NxWelcome title="frontend" />
 
-          {/* START: routes */}
-            {/* These routes and navigation have been generated for you */}
-            {/* Feel free to move and update them to fit your needs */}
-            <br />
-            <hr />
-            <br />
-            <div role="navigation">
-              <ul>
-                <li>
-                  <Link to="/create">Create Union</Link>
-                </li>
-              </ul>
-            </div>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/create" element={<Create />} />
-              <Route path="/union/:id" element={<Union />} />
-              <Route
-                path="/union/:id/proposal/create"
-                element={<ProposalCreate />}
-              />
-              <Route
-                path="/union/:id/proposal/:proposalId"
-                element={<Proposal />}
-              />
-            </Routes>
+            {/* START: routes */}
+              {/* These routes and navigation have been generated for you */}
+              {/* Feel free to move and update them to fit your needs */}
+              <br />
+              <hr />
+              <br />
+              <div role="navigation">
+                <ul>
+                  <li>
+                    <Link to="/create">Create Union</Link>
+                  </li>
+                </ul>
+              </div>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/create" element={<Create />} />
+                <Route path="/union/:id" element={<Union />} />
+                <Route
+                  path="/union/:id/proposal/create"
+                  element={<ProposalCreate />}
+                />
+                <Route
+                  path="/union/:id/proposal/:proposalId"
+                  element={<Proposal />}
+                />
+              </Routes>
+            </Identity>
           </WagmiConfig>
         </IPFS>
       </Config>
