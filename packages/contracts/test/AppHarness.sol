@@ -18,111 +18,13 @@ import {DiamondInit} from "../src/upgradeInitializers/DiamondInit.sol";
 import {Verifier} from "../src/helpers/Verifier.sol";
 import {ProposalFacet} from "../src/facets/ProposalFacet.sol";
 import "../src/Diamond.sol";
-import {HelperContract} from "./HelperContract.sol";
-import {DSTest} from "ds-test/test.sol";
+import "forge-std/test.sol";
 import {Vm} from "forge-std/Vm.sol";
+import {AppDeployer} from "../script/AppDeployer.s.sol";
 
-abstract contract AppHarness is HelperContract {
-    //contract types of facets to be deployed
-    Diamond _diamond;
-    DiamondCutFacet _dCutFacet;
-    DiamondLoupeFacet _dLoupe;
-    OwnershipFacet _ownerF;
-    UnionFacet _unionF;
-    ProposalFacet _proposalF;
-    DiamondInit _diamondInitC;
-    Verifier _verifierC;
-
-    //interfaces with Facet ABI connected to _diamond address
-    IDiamondLoupe _iLoupe;
-    IDiamondCut _iCut;
-
-    string[] _facetNames;
-    address[] _facetAddressList;
-
-    // deploys _diamond and connects facets
+abstract contract AppHarness is AppDeployer, Test {
     function setUp() public virtual {
-        //deploy facets
-        _dCutFacet = new DiamondCutFacet();
-        _dLoupe = new DiamondLoupeFacet();
-        _ownerF = new OwnershipFacet();
-        _unionF = new UnionFacet();
-        _proposalF = new ProposalFacet();
-        _diamondInitC = new DiamondInit();
-        _verifierC = new Verifier();
-
-        string memory hasherJson = vm.readFile("./src/compiled/Hasher.json");
-        bytes memory hasherBytecode = vm.parseJson(hasherJson, "$.bytecode");
-        address hasherAddress = deploy(hasherBytecode);
-
-        _facetNames = ["DiamondCutFacet", "DiamondLoupeFacet", "OwnershipFacet", "UnionFacet", "ProposalFacet"];
-
-        // diamod arguments
-        DiamondArgs memory _args = DiamondArgs({
-            owner: address(this),
-            init: address(0),
-            initCalldata: abi.encodeWithSignature(
-                "init(address hasherAddress, address verifierAddress)", hasherAddress, address(_verifierC)
-                )
-        });
-
-        // FacetCut with CutFacet for initialisation
-        FacetCut[] memory cut0 = new FacetCut[](1);
-        cut0[0] = FacetCut({
-            facetAddress: address(_dCutFacet),
-            action: IDiamond.FacetCutAction.Add,
-            functionSelectors: generateSelectors("DiamondCutFacet")
-        });
-
-        // deploy _diamond
-        _diamond = new Diamond(cut0, _args);
-
-        //upgrade _diamond with facets
-
-        //build cut struct
-        FacetCut[] memory cut = new FacetCut[](4);
-
-        cut[0] = (
-            FacetCut({
-                facetAddress: address(_dLoupe),
-                action: FacetCutAction.Add,
-                functionSelectors: generateSelectors("DiamondLoupeFacet")
-            })
-        );
-
-        cut[1] = (
-            FacetCut({
-                facetAddress: address(_ownerF),
-                action: FacetCutAction.Add,
-                functionSelectors: generateSelectors("OwnershipFacet")
-            })
-        );
-
-        cut[2] = (
-            FacetCut({
-                facetAddress: address(_unionF),
-                action: FacetCutAction.Add,
-                functionSelectors: generateSelectors("UnionFacet")
-            })
-        );
-
-        cut[3] = (
-            FacetCut({
-                facetAddress: address(_proposalF),
-                action: FacetCutAction.Add,
-                functionSelectors: generateSelectors("ProposalFacet")
-            })
-        );
-
-        // initialise interfaces
-        _iLoupe = IDiamondLoupe(address(_diamond));
-        _iCut = IDiamondCut(address(_diamond));
-
-        //upgrade _diamond
-        _iCut.diamondCut(cut, address(0x0), "");
-
-        // get all addresses
-        _facetAddressList = _iLoupe.facetAddresses();
+        run();
     }
 
     bytes32 internal nextUser = keccak256(abi.encodePacked("user address"));
@@ -143,13 +45,5 @@ abstract contract AppHarness is HelperContract {
             users[i] = user;
         }
         return users;
-    }
-
-    function deploy(bytes memory _data) public returns (address pointer) {
-        bytes memory code = abi.encodePacked(hex"63", uint32(_data.length), hex"80600E6000396000F3", _data);
-
-        assembly {
-            pointer := create(0, add(code, 32), mload(code))
-        }
     }
 }

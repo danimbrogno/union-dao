@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.4;
 
 import "solidity-stringutils/strings.sol";
 import "../src/interfaces/IDiamond.sol";
@@ -17,6 +17,12 @@ contract DeployHelper is IDiamond, IDiamondLoupe, Script {
         }
     }
     // return array of function selectors for given facet name
+
+    function bytesToAddress(bytes memory bys) public pure returns (address addr) {
+        assembly {
+            addr := mload(add(bys, 20))
+        }
+    }
 
     function generateSelectors(string memory _facetName) internal returns (bytes4[] memory selectors) {
         //get string of contract methods
@@ -130,8 +136,13 @@ contract DeployHelper is IDiamond, IDiamondLoupe, Script {
 
     // implement dummy override functions
     function diamondCut(FacetCut[] calldata _diamondCut, address _init, bytes calldata _calldata) external {}
-    function facetAddress(bytes4 _functionSelector) external view returns (address facetAddress_) {}
-    function facetAddresses() external view returns (address[] memory facetAddresses_) {}
-    function facetFunctionSelectors(address _facet) external view returns (bytes4[] memory facetFunctionSelectors_) {}
-    function facets() external view returns (Facet[] memory facets_) {}
+    function facetAddress(bytes4 _functionSelector) external view override returns (address facetAddress_) {}
+    function facetAddresses() external view override returns (address[] memory facetAddresses_) {}
+    function facetFunctionSelectors(address _facet)
+        external
+        view
+        override
+        returns (bytes4[] memory facetFunctionSelectors_)
+    {}
+    function facets() external view override returns (Facet[] memory facets_) {}
 }

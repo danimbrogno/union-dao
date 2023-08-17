@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.4;
 
-import "zk-merkle-tree/ZKTree.sol";
 import {LibUnion} from "../libraries/LibUnion.sol";
-import {ProposalZKTree} from "../helpers/ProposalZKTree.sol";
 import {CountersUpgradeable} from "openzeppelin-upgradeable/utils/CountersUpgradeable.sol";
+import {ISemaphoreVoting} from "semaphore/interfaces/ISemaphoreVoting.sol";
 
 contract ProposalFacet {
     using CountersUpgradeable for CountersUpgradeable.Counter;
@@ -22,12 +21,16 @@ contract ProposalFacet {
     {
         uint32 _levels = 20; // Must be 20 for default verified
         LibUnion.UnionStorage storage ds = LibUnion.unionStorage();
+        ISemaphoreVoting _voting = LibUnion.getVoting(_union);
+
         uint256 _index = ds.unions[_union].proposalIndex.current();
+
+        _voting.createPoll(_index, msg.sender, _levels);
+
         ds.unions[_union].proposalIndex.increment();
 
         LibUnion.Proposal storage nextProposal = getProposal(_union, _index);
 
-        nextProposal.tree = new ProposalZKTree(_levels, IHasher(ds.hasher), IVerifier(ds.verifier));
         // nextProposal.owner = "";
         nextProposal.config.numOptions = _numOptions;
 
@@ -40,34 +43,22 @@ contract ProposalFacet {
         return _index;
     }
 
-    function registerValidator(uint256 _union, uint256 _index, address _validator) external {
+    function registerValidator(uint256 _union, uint256 _index, uint256 _commitment) external {
         LibUnion.Proposal storage theProposal = getProposal(_union, _index);
         // require(msg.sender == config[_index].owner, "Only owner can add validator!");
-        theProposal.config.validators[_validator] = true;
+        theProposal.config.validators[_commitment] = true;
+        ISemaphoreVoting _voting = LibUnion.getVoting(_union);
+        _voting.addVoter(_index, _commitment);
     }
 
-    function registerCommitment(uint256 _union, uint256 _index, uint256 _uniqueHash, uint256 _commitment) external {
-        // require(config[_index].validators[msg.sender], "Only validator can commit!");
-        // require(!config[_index].uniqueHashes[_uniqueHash], "This unique hash is already used!");
+    function vote(uint256 _union, uint256 _index, uint256 _vote, uint256 _nullifier, uint256[8] calldata _proof)
+        external
+    {
         LibUnion.Proposal storage theProposal = getProposal(_union, _index);
-        theProposal.tree.commit(bytes32(_commitment));
-        theProposal.config.uniqueHashes[_uniqueHash] = true;
-    }
-
-    function vote(
-        uint256 _union,
-        uint256 _index,
-        uint256 _option,
-        uint256 _nullifier,
-        uint256 _root,
-        uint256[2] memory _proof_a,
-        uint256[2][2] memory _proof_b,
-        uint256[2] memory _proof_c
-    ) external {
-        LibUnion.Proposal storage theProposal = getProposal(_union, _index);
-        require(_option <= theProposal.config.numOptions, "Invalid option!");
-        theProposal.tree.nullify(bytes32(_nullifier), bytes32(_root), _proof_a, _proof_b, _proof_c);
-        theProposal.config.optionCounter[_option] = theProposal.config.optionCounter[_option] + 1;
+        require(_vote <= theProposal.config.numOptions, "Invalid option!");
+        ISemaphoreVoting _voting = LibUnion.getVoting(_union);
+        _voting.castVote(_vote, _nullifier, _index, _proof);
+        theProposal.config.optionCounter[_vote] = theProposal.config.optionCounter[_vote] + 1;
     }
 
     function getOptionCounter(uint256 _union, uint256 _index, uint256 _option) external view returns (uint256) {

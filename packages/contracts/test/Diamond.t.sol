@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.4;
 
 import "forge-std/Test.sol";
 import {Diamond, DiamondArgs} from "../src/Diamond.sol";
@@ -9,9 +9,9 @@ import {DiamondInit} from "../src/upgradeInitializers/DiamondInit.sol";
 import {DiamondCutFacet} from "../src/facets/DiamondCutFacet.sol";
 import {DiamondLoupeFacet} from "../src/facets/DiamondLoupeFacet.sol";
 import {OwnershipFacet} from "../src/facets/OwnershipFacet.sol";
-import {HelperContract} from "./HelperContract.sol";
+import {AppDeployer} from "../script/AppDeployer.s.sol";
 
-contract DiamondTest is HelperContract {
+contract DiamondTest is AppDeployer, Test {
     Diamond diamond;
 
     function setUp() public {

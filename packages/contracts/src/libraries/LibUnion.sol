@@ -8,7 +8,7 @@
 pragma solidity ^0.8.0;
 
 import {CountersUpgradeable} from "openzeppelin-upgradeable/utils/CountersUpgradeable.sol";
-import {ProposalZKTree} from "../helpers/ProposalZKTree.sol";
+import {ISemaphoreVoting} from "semaphore/interfaces/ISemaphoreVoting.sol";
 
 // Remember to add the loupe functions from DiamondLoupeFacet to the diamond.
 // The loupe functions are required by the EIP2535 Diamonds standard
@@ -22,6 +22,7 @@ library LibUnion {
         mapping(address => bool) members;
         mapping(uint256 => Proposal) proposals;
         CountersUpgradeable.Counter proposalIndex;
+        address voting;
     }
 
     bytes32 constant _DIAMOND_STORAGE_POSITION = keccak256("diamond.standard.UnionDao.LibUnion");
@@ -29,18 +30,17 @@ library LibUnion {
     struct UnionStorage {
         mapping(uint256 => UnionData) unions;
         CountersUpgradeable.Counter index;
-        address hasher;
         address verifier;
     }
 
     struct Proposal {
-        ProposalZKTree tree;
+        // ProposalZKTree tree;
         ProposalConfig config;
     }
 
     struct ProposalConfig {
         address owner;
-        mapping(address => bool) validators;
+        mapping(uint256 => bool) validators;
         mapping(uint256 => bool) uniqueHashes;
         uint16 numOptions;
         mapping(uint256 => uint256) optionCounter;
@@ -51,5 +51,9 @@ library LibUnion {
         assembly {
             ds.slot := position
         }
+    }
+
+    function getVoting(uint256 _union) public view returns (ISemaphoreVoting) {
+        return ISemaphoreVoting(unionStorage().unions[_union].voting);
     }
 }

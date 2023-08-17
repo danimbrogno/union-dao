@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.4;
 
 import "../src/facets/DiamondCutFacet.sol";
 import "../src/facets/DiamondLoupeFacet.sol";
@@ -8,7 +8,7 @@ import "../src/facets/UnionFacet.sol";
 import {DiamondInit} from "../src/upgradeInitializers/DiamondInit.sol";
 import {Verifier} from "../src/helpers/Verifier.sol";
 import {ProposalFacet} from "../src/facets/ProposalFacet.sol";
-import {DSTest} from "ds-test/test.sol";
+import "forge-std/test.sol";
 import {DeployHelper} from "./DeployHelper.sol";
 import {Diamond, DiamondArgs} from "../src/Diamond.sol";
 
@@ -44,9 +44,9 @@ contract AppDeployer is DeployHelper {
         _diamondInitC = new DiamondInit();
         _verifierC = new Verifier();
 
-        string memory hasherJson = vm.readFile("./src/compiled/Hasher.json");
-        bytes memory hasherBytecode = vm.parseJson(hasherJson, "$.bytecode");
-        address hasherAddress = deploy(hasherBytecode);
+        string memory semaphoreAddresses = vm.readFile("./src/addresses/semaphore.json");
+
+        address semaphoreVerifier = bytesToAddress(vm.parseJson(semaphoreAddresses, "$.semaphoreVerifier"));
 
         _facetNames = ["DiamondCutFacet", "DiamondLoupeFacet", "OwnershipFacet", "UnionFacet", "ProposalFacet"];
 
@@ -54,9 +54,7 @@ contract AppDeployer is DeployHelper {
         DiamondArgs memory _args = DiamondArgs({
             owner: address(ACCOUNT_A_PUBLIC),
             init: address(0),
-            initCalldata: abi.encodeWithSignature(
-                "init(address hasherAddress, address verifierAddress)", hasherAddress, address(_verifierC)
-                )
+            initCalldata: abi.encodeWithSignature("init(address verifierAddress)", semaphoreVerifier)
         });
 
         // FacetCut with CutFacet for initialisation

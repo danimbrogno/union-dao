@@ -1,7 +1,11 @@
 forge-std/=../../node_modules/forge-std/src/
+ds-test/=../../node_modules/ds-test/src/
 openzeppelin/=../../node_modules/@openzeppelin/contracts/
+@openzeppelin/contracts/=../../node_modules/@openzeppelin/contracts/
 openzeppelin-upgradeable/=../../node_modules/@openzeppelin/contracts-upgradeable/
 solidity-stringutils/=../../node_modules/solidity-stringutils/src/
-zk-merkle-tree/=../../node_modules/zk-merkle-tree/contracts/
 hardhat/=../../node_modules/hardhat/
 setup/=../../tools/setup/contracts/
+semaphore/=../../node_modules/@semaphore-protocol/contracts/
+@zk-kit/incremental-merkle-tree.sol=../../node_modules/@zk-kit/incremental-merkle-tree.sol/
+poseidon-solidity/=../../node_modules/poseidon-solidity/

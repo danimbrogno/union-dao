@@ -5,6 +5,8 @@ import {LibUnion} from "../libraries/LibUnion.sol";
 import {Counters} from "openzeppelin/utils/Counters.sol";
 import {IUnionFacet} from "../interfaces/IUnionFacet.sol";
 import {CountersUpgradeable} from "openzeppelin-upgradeable/utils/CountersUpgradeable.sol";
+import {SemaphoreVoting} from "semaphore/extensions/SemaphoreVoting.sol";
+import {ISemaphoreVerifier} from "semaphore/interfaces/ISemaphoreVerifier.sol";
 
 contract UnionFacet is IUnionFacet {
     using CountersUpgradeable for CountersUpgradeable.Counter;
@@ -15,12 +17,17 @@ contract UnionFacet is IUnionFacet {
     event AdminAdded(bytes32 indexed index, address indexed admin);
     event AdminRemoved(bytes32 indexed index, address indexed admin);
 
-    function createUnion(bytes32 name, string calldata logo, string calldata description) external returns (uint256) {
+    function createUnion(bytes32 name, string calldata logo, string calldata description)
+        external
+        override
+        returns (uint256)
+    {
         LibUnion.UnionStorage storage ds = LibUnion.unionStorage();
         uint256 _index = ds.index.current();
         ds.unions[_index].name = name;
         ds.unions[_index].admins[msg.sender] = true;
         ds.unions[_index].members[msg.sender] = true;
+        ds.unions[_index].voting = address(new SemaphoreVoting(ISemaphoreVerifier(ds.verifier)));
         ds.index.increment();
         emit MemberAdded(bytes32(_index), msg.sender);
         emit AdminAdded(bytes32(_index), msg.sender);
@@ -56,7 +63,7 @@ contract UnionFacet is IUnionFacet {
         emit MemberRemoved(bytes32(_index), msg.sender);
     }
 
-    function getUnionName(uint256 _index) external view returns (bytes32) {
+    function getUnionName(uint256 _index) external view override returns (bytes32) {
         return LibUnion.unionStorage().unions[_index].name;
     }
 }

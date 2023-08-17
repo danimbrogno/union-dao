@@ -2,8 +2,9 @@
 src = "src"
 out = "out"
 libs = ["lib"]
-solc = "0.8.17"
-allow_paths = ["../../node_modules"]
+solc = "0.8.4"
+optimizer_details.yul = false
+allow_paths = ["../../node_modules", "../semaphore"]
 broadcast = "../../broadcast"
-fs_permissions = [{ access = "read", path = "./src/compiled/Hasher.json"}]
+fs_permissions = [{ access = "read", path = "./src/compiled/Hasher.json"}, { access = "read", path = "./src/addresses/semaphore.json"}]
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
