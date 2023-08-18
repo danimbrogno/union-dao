@@ -38,22 +38,17 @@ type Proposal {
   id: Bytes!
   union: Union!
   numOptions: Int!
-  metadata: ProposalMetadata
+  metadata: String!
+  options(skip: Int = 0, first: Int = 100, orderBy: ProposalOption_orderBy, orderDirection: OrderDirection, where: ProposalOption_filter): [ProposalOption!]!
 }
 
-type ProposalMetadata {
+type ProposalOption {
   id: String!
-  description: String!
-  options(skip: Int = 0, first: Int = 100, orderBy: ProposalMetadataOption_orderBy, orderDirection: OrderDirection, where: ProposalMetadataOption_filter): [ProposalMetadataOption!]!
+  proposal: Proposal!
+  votes: Int!
 }
 
-type ProposalMetadataOption {
-  id: String!
-  proposal: ProposalMetadata!
-  description: String!
-}
-
-input ProposalMetadataOption_filter {
+input ProposalOption_filter {
   id: String
   id_not: String
   id_gt: String
@@ -94,93 +89,28 @@ input ProposalMetadataOption_filter {
   proposal_ends_with_nocase: String
   proposal_not_ends_with: String
   proposal_not_ends_with_nocase: String
-  proposal_: ProposalMetadata_filter
-  description: String
-  description_not: String
-  description_gt: String
-  description_lt: String
-  description_gte: String
-  description_lte: String
-  description_in: [String!]
-  description_not_in: [String!]
-  description_contains: String
-  description_contains_nocase: String
-  description_not_contains: String
-  description_not_contains_nocase: String
-  description_starts_with: String
-  description_starts_with_nocase: String
-  description_not_starts_with: String
-  description_not_starts_with_nocase: String
-  description_ends_with: String
-  description_ends_with_nocase: String
-  description_not_ends_with: String
-  description_not_ends_with_nocase: String
+  proposal_: Proposal_filter
+  votes: Int
+  votes_not: Int
+  votes_gt: Int
+  votes_lt: Int
+  votes_gte: Int
+  votes_lte: Int
+  votes_in: [Int!]
+  votes_not_in: [Int!]
   """Filter for the block changed event."""
   _change_block: BlockChangedFilter
-  and: [ProposalMetadataOption_filter]
-  or: [ProposalMetadataOption_filter]
+  and: [ProposalOption_filter]
+  or: [ProposalOption_filter]
 }
 
-enum ProposalMetadataOption_orderBy {
+enum ProposalOption_orderBy {
   id
   proposal
   proposal__id
-  proposal__description
-  description
-}
-
-input ProposalMetadata_filter {
-  id: String
-  id_not: String
-  id_gt: String
-  id_lt: String
-  id_gte: String
-  id_lte: String
-  id_in: [String!]
-  id_not_in: [String!]
-  id_contains: String
-  id_contains_nocase: String
-  id_not_contains: String
-  id_not_contains_nocase: String
-  id_starts_with: String
-  id_starts_with_nocase: String
-  id_not_starts_with: String
-  id_not_starts_with_nocase: String
-  id_ends_with: String
-  id_ends_with_nocase: String
-  id_not_ends_with: String
-  id_not_ends_with_nocase: String
-  description: String
-  description_not: String
-  description_gt: String
-  description_lt: String
-  description_gte: String
-  description_lte: String
-  description_in: [String!]
-  description_not_in: [String!]
-  description_contains: String
-  description_contains_nocase: String
-  description_not_contains: String
-  description_not_contains_nocase: String
-  description_starts_with: String
-  description_starts_with_nocase: String
-  description_not_starts_with: String
-  description_not_starts_with_nocase: String
-  description_ends_with: String
-  description_ends_with_nocase: String
-  description_not_ends_with: String
-  description_not_ends_with_nocase: String
-  options_: ProposalMetadataOption_filter
-  """Filter for the block changed event."""
-  _change_block: BlockChangedFilter
-  and: [ProposalMetadata_filter]
-  or: [ProposalMetadata_filter]
-}
-
-enum ProposalMetadata_orderBy {
-  id
-  description
-  options
+  proposal__numOptions
+  proposal__metadata
+  votes
 }
 
 input Proposal_filter {
@@ -243,7 +173,7 @@ input Proposal_filter {
   metadata_ends_with_nocase: String
   metadata_not_ends_with: String
   metadata_not_ends_with_nocase: String
-  metadata_: ProposalMetadata_filter
+  options_: ProposalOption_filter
   """Filter for the block changed event."""
   _change_block: BlockChangedFilter
   and: [Proposal_filter]
@@ -260,8 +190,7 @@ enum Proposal_orderBy {
   union__votingAddress
   numOptions
   metadata
-  metadata__id
-  metadata__description
+  options
 }
 
 type Query {
@@ -369,22 +298,7 @@ type Query {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Proposal!]!
-  proposalMetadata(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: ProposalMetadata_orderBy
-    orderDirection: OrderDirection
-    where: ProposalMetadata_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [ProposalMetadata!]!
-  proposalMetadataOption(
+  proposalOption(
     id: ID!
     """
     The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
@@ -394,13 +308,13 @@ type Query {
     Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
-  ): ProposalMetadataOption
-  proposalMetadataOptions(
+  ): ProposalOption
+  proposalOptions(
     skip: Int = 0
     first: Int = 100
-    orderBy: ProposalMetadataOption_orderBy
+    orderBy: ProposalOption_orderBy
     orderDirection: OrderDirection
-    where: ProposalMetadataOption_filter
+    where: ProposalOption_filter
     """
     The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
     """
@@ -409,7 +323,7 @@ type Query {
     Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [ProposalMetadataOption!]!
+  ): [ProposalOption!]!
   """Access to subgraph metadata"""
   _meta(block: Block_height): _Meta_
 }
@@ -519,22 +433,7 @@ type Subscription {
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
   ): [Proposal!]!
-  proposalMetadata(
-    skip: Int = 0
-    first: Int = 100
-    orderBy: ProposalMetadata_orderBy
-    orderDirection: OrderDirection
-    where: ProposalMetadata_filter
-    """
-    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
-    """
-    block: Block_height
-    """
-    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
-    """
-    subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [ProposalMetadata!]!
-  proposalMetadataOption(
+  proposalOption(
     id: ID!
     """
     The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
@@ -544,13 +443,13 @@ type Subscription {
     Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
-  ): ProposalMetadataOption
-  proposalMetadataOptions(
+  ): ProposalOption
+  proposalOptions(
     skip: Int = 0
     first: Int = 100
-    orderBy: ProposalMetadataOption_orderBy
+    orderBy: ProposalOption_orderBy
     orderDirection: OrderDirection
-    where: ProposalMetadataOption_filter
+    where: ProposalOption_filter
     """
     The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
     """
@@ -559,7 +458,7 @@ type Subscription {
     Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
     """
     subgraphError: _SubgraphErrorPolicy_! = deny
-  ): [ProposalMetadataOption!]!
+  ): [ProposalOption!]!
   """Access to subgraph metadata"""
   _meta(block: Block_height): _Meta_
 }

@@ -28,9 +28,9 @@ export const Proposal = () => {
   const contractAddress = proposalDetailQuery?.proposal?.union.votingAddress;
   const { refreshGroup, group } = useSemaphore(contractAddress);
   const { write, error, data } = useContractWrite({
-    address: contractAddress, //getAddress(diamond),
-    abi: semaphoreVotingABI, //proposalFacetABI,
-    functionName: 'castVote', //'vote',
+    address: getAddress(diamond),
+    abi: proposalFacetABI,
+    functionName: 'vote',
     onError: (error) => {
       console.log('err', error);
     },
@@ -84,9 +84,10 @@ export const Proposal = () => {
       generateProof(identity, group, pollId, bigVote).then((fullProof) => {
         write({
           args: [
+            unionId,
+            pollId,
             bigVote,
             identity.nullifier,
-            pollId,
             [
               BigInt(fullProof.proof[0]),
               BigInt(fullProof.proof[1]),
@@ -115,7 +116,7 @@ export const Proposal = () => {
       <div>
         <h1>
           {hexToBigInt(proposal.id).toString()}:{' '}
-          {proposal.metadata?.description}
+          {/* {proposal.metadata?.description} */}
         </h1>
 
         <h2>Options</h2>
@@ -123,9 +124,7 @@ export const Proposal = () => {
           {options.map((option, index) => (
             <li key={index}>
               <p>
-                {index}:{' '}
-                {proposal.metadata?.options[index].description ||
-                  'Loading Option...'}
+                {index}: Votes: {proposal.options[index].votes}
               </p>
               <button disabled={!group} onClick={() => doVote(index)}>
                 Vote!

@@ -5,16 +5,17 @@ import {
   MemberRemoved,
   UnionCreated,
 } from '../generated/UnionFacet/UnionFacet';
-import { ProposalCreated } from '../generated/ProposalFacet/ProposalFacet';
+import {
+  ProposalCreated,
+  VoteCast,
+} from '../generated/ProposalFacet/ProposalFacet';
 import {
   Proposal,
-  ProposalMetadata,
-  ProposalMetadataOption,
+  ProposalOption,
   Union,
   User,
   UserRole,
 } from '../generated/schema';
-import { ProposalMetadata as ProposalMetadataTemplate } from '../generated/templates';
 
 import {
   log,
@@ -143,50 +144,45 @@ export function handleProposalCreated(ev: ProposalCreated): void {
     proposal.union = ev.params.union;
     proposal.numOptions = ev.params.numOptions;
     proposal.metadata = ev.params.metadataCID;
-    ProposalMetadataTemplate.create(ev.params.metadataCID);
+
+    for (let i = 0; i < ev.params.numOptions; i++) {
+      const optionId =
+        ev.params.union.toString() +
+        '-' +
+        ev.params.index.toString() +
+        '-' +
+        i.toString();
+
+      const option = new ProposalOption(optionId);
+      option.votes = 0;
+      option.proposal = proposalId;
+      option.save();
+    }
+
     proposal.save();
     log.info('handleProposalCreated: proposal saved', []);
   }
   log.info('handleProposalCreated: proposal already exists', []);
 }
 
-export function handleProposalMetadata(content: Bytes): void {
-  log.info('Enters handleProposalMetadata handler', []);
-  const proposalId = dataSource.stringParam();
-  const value = json.fromBytes(content).toObject();
-  log.info('got data', []);
-  if (value) {
-    const options = value.get('options');
-    if (options && options.kind === JSONValueKind.ARRAY) {
-      log.info('got options, is array', []);
-      const opts = options.toArray();
+export function handleVoteCast(ev: VoteCast): void {
+  log.info('Enters handleVoteCast handler', []);
+  log.info('handleVoteCast: {}', [ev.params.index.toString()]);
 
-      let k = 0;
-      for (let k = 0; k < opts.length; k++) {
-        const opt = opts[k];
-        log.info('got option', []);
-        if (opt.kind === JSONValueKind.OBJECT) {
-          const valueObj = opt.toObject();
-          const optionId = proposalId + '-' + k.toString();
-          const optDescription = valueObj.get('description');
+  const optionId =
+    ev.params.union.toString() +
+    '-' +
+    ev.params.index.toString() +
+    '-' +
+    ev.params.option.toString();
 
-          if (optDescription) {
-            log.info('got option as object with description', []);
-            const option = new ProposalMetadataOption(optionId);
-            option.description = optDescription.toString();
-            option.proposal = proposalId;
-            option.save();
-          }
-        }
-      }
-    }
+  let option = ProposalOption.load(optionId);
 
-    const description = value.get('description');
-
-    if (description) {
-      const proposalMetadata = new ProposalMetadata(proposalId);
-      proposalMetadata.description = description.toString() || '';
-      proposalMetadata.save();
-    }
+  if (option) {
+    log.info('handleVoteCast: proposal option found', []);
+    log.info('handleVoteCast: updating proposal vote count', []);
+    option.votes = ev.params.numVotes.toI32();
+    option.save();
+    log.info('handleVoteCast: proposal option saved', []);
   }
 }

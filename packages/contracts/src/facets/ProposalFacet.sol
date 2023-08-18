@@ -10,6 +10,7 @@ contract ProposalFacet {
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
     event ProposalCreated(bytes32 indexed union, bytes32 indexed index, uint16 numOptions, string metadataCID);
+    event VoteCast(bytes32 indexed union, bytes32 indexed index, uint256 option, uint256 numVotes);
 
     function getProposal(uint256 _union, uint256 _index) internal view returns (LibUnion.Proposal storage) {
         LibUnion.UnionStorage storage ds = LibUnion.unionStorage();
@@ -57,9 +58,11 @@ contract ProposalFacet {
     {
         LibUnion.Proposal storage theProposal = getProposal(_union, _index);
         require(_vote <= theProposal.config.numOptions, "Invalid option!");
-        ISemaphoreVoting _voting = LibUnion.getVoting(_union);
-        _voting.castVote(_vote, _nullifier, _index, _proof);
+        // ISemaphoreVoting _voting = LibUnion.getVoting(_union);
+        //_voting.castVote(_vote, _nullifier, _index, _proof);
         theProposal.config.optionCounter[_vote] = theProposal.config.optionCounter[_vote] + 1;
+
+        emit VoteCast(bytes32(_union), bytes32(_index), _vote, theProposal.config.optionCounter[_vote]);
     }
 
     function getOptionCounter(uint256 _union, uint256 _index, uint256 _option) external view returns (uint256) {

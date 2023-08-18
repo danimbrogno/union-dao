@@ -26,17 +26,12 @@ type Proposal @entity {
   id: Bytes!
   union: Union!
   numOptions: Int!
-  metadata: ProposalMetadata
+  metadata: String!
+  options: [ProposalOption!]! @derivedFrom(field: "proposal")
 }
 
-type ProposalMetadata @entity {
+type ProposalOption @entity {
   id: String!
-  description: String!
-  options: [ProposalMetadataOption!]! @derivedFrom(field: "proposal")
-}
-
-type ProposalMetadataOption @entity {
-  id: String!
-  proposal: ProposalMetadata!
-  description: String!
+  proposal: Proposal!
+  votes: Int!
 }
