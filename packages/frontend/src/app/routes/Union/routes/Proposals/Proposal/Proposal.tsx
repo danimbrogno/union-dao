@@ -80,10 +80,10 @@ export const Proposal = () => {
       }
       // group.addMember(identity.commitment);
 
+      // unionId,
       generateProof(identity, group, pollId, bigVote).then((fullProof) => {
         write({
           args: [
-            // unionId,
             bigVote,
             identity.nullifier,
             pollId,
