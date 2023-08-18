@@ -4,6 +4,7 @@ pragma solidity ^0.8.4;
 import {LibUnion} from "../libraries/LibUnion.sol";
 import {CountersUpgradeable} from "openzeppelin-upgradeable/utils/CountersUpgradeable.sol";
 import {ISemaphoreVoting} from "semaphore/interfaces/ISemaphoreVoting.sol";
+import "forge-std/console.sol";
 
 contract ProposalFacet {
     using CountersUpgradeable for CountersUpgradeable.Counter;
@@ -39,10 +40,11 @@ contract ProposalFacet {
         }
 
         // Add Voters
-        for (uint256 j = 0; j <= ds.unions[_union].identityIndex.current(); j++) {
+        for (uint256 j = 1; j <= ds.unions[_union].identityIndex.current(); j++) {
+            console.log("Adding voter %s", ds.unions[_union].identities[j]);
             _voting.addVoter(_index, ds.unions[_union].identities[j]);
         }
-
+        console.log("start poll %s", _index);
         _voting.startPoll(_index, 0);
 
         emit ProposalCreated(bytes32(_union), bytes32(_index), _numOptions, _metadata);

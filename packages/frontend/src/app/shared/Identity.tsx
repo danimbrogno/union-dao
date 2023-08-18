@@ -2,11 +2,9 @@ import { Identity as ID } from '@semaphore-protocol/identity';
 import {
   PropsWithChildren,
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
-  useState,
 } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useLocalStorage } from 'usehooks-ts';
@@ -33,9 +31,9 @@ export const Identity = ({ children }: PropsWithChildren) => {
     'identity',
     getAddress(nullSignature)
   );
-  console.log('id is', identity);
+
   const { data, signMessage } = useSignMessage();
-  console.log(identity);
+
   useEffect(() => {
     if (identity === nullSignature && data) {
       setIdentity(data);

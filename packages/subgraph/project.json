@@ -49,6 +49,15 @@
         "cwd": "./packages/subgraph"
       }
     },
+    "redeploy": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["remove", "create", "deploy"],
+      "options": {
+        "parallel": false,
+        "command": "echo 'done';",
+        "cwd": "./packages/subgraph"
+      }
+    },
     "remove": {
       "executor": "nx:run-commands",
       "dependsOn": ["getContractAddresses", "codegen"],

@@ -257,6 +257,7 @@ enum Proposal_orderBy {
   union__name
   union__logo
   union__description
+  union__votingAddress
   numOptions
   metadata
   metadata__id
@@ -568,6 +569,7 @@ type Union {
   name: String!
   logo: String!
   description: String!
+  votingAddress: Bytes!
   users(skip: Int = 0, first: Int = 100, orderBy: UserRole_orderBy, orderDirection: OrderDirection, where: UserRole_filter): [UserRole!]!
   proposals(skip: Int = 0, first: Int = 100, orderBy: Proposal_orderBy, orderDirection: OrderDirection, where: Proposal_filter): [Proposal!]!
 }
@@ -643,6 +645,16 @@ input Union_filter {
   description_ends_with_nocase: String
   description_not_ends_with: String
   description_not_ends_with_nocase: String
+  votingAddress: Bytes
+  votingAddress_not: Bytes
+  votingAddress_gt: Bytes
+  votingAddress_lt: Bytes
+  votingAddress_gte: Bytes
+  votingAddress_lte: Bytes
+  votingAddress_in: [Bytes!]
+  votingAddress_not_in: [Bytes!]
+  votingAddress_contains: Bytes
+  votingAddress_not_contains: Bytes
   users_: UserRole_filter
   proposals_: Proposal_filter
   """Filter for the block changed event."""
@@ -656,6 +668,7 @@ enum Union_orderBy {
   name
   logo
   description
+  votingAddress
   users
   proposals
 }
@@ -748,6 +761,7 @@ enum UserRole_orderBy {
   union__name
   union__logo
   union__description
+  union__votingAddress
   user
   user__id
   user__name

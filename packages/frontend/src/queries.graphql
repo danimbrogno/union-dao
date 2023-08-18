@@ -64,6 +64,9 @@ query ProposalDetails($id: ID!) {
   proposal(id: $id) {
     id
     numOptions
+    union {
+      votingAddress
+    }
     metadata {
       id
       description

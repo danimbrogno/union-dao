@@ -72,29 +72,29 @@ task('deploy:semaphore-voting', 'Deploy a SemaphoreVoting contract')
       );
     }
 
-    const SemaphoreVotingFactory = await ethers.getContractFactory(
-      'SemaphoreVoting',
-      {
-        libraries: {
-          IncrementalBinaryTree: incrementalBinaryTree.address,
-        },
-      }
-    );
+    // const SemaphoreVotingFactory = await ethers.getContractFactory(
+    //   'SemaphoreVoting',
+    //   {
+    //     libraries: {
+    //       IncrementalBinaryTree: incrementalBinaryTree.address,
+    //     },
+    //   }
+    // );
 
-    const semaphoreVoting = await SemaphoreVotingFactory.deploy(
-      semaphoreVerifier.address
-    );
+    // const semaphoreVoting = await SemaphoreVotingFactory.deploy(
+    //   semaphoreVerifier.address
+    // );
 
-    await semaphoreVoting.deployed();
+    // await semaphoreVoting.deployed();
 
-    if (logs) {
-      console.info(
-        `SemaphoreVoting contract has been deployed to: ${semaphoreVoting.address}`
-      );
-    }
+    // if (logs) {
+    //   console.info(
+    //     `SemaphoreVoting contract has been deployed to: ${semaphoreVoting.address}`
+    //   );
+    // }
 
     const addresses = {
-      semaphoreVoting: semaphoreVoting.address,
+      // semaphoreVoting: semaphoreVoting.address,
       semaphoreVerifier: semaphoreVerifier.address,
       pairing: pairing.address,
       poseidon: poseidon.address,

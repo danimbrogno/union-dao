@@ -60,7 +60,12 @@ const hardhatConfig: HardhatUserConfig = {
     apiKey: process.env.ETHERSCAN_API_KEY,
   },
   dependencyCompiler: {
-    paths: ['@semaphore-protocol/contracts/extensions/SemaphoreVoting.sol'],
+    paths: [
+      // '@semaphore-protocol/contracts/extensions/SemaphoreVoting.sol',
+      // '@semaphore-protocol/contracts/base/SemaphoreGroups.sol',
+      // '@semaphore-protocol/contracts/base/SemaphoreVerifier.sol',
+      // '@semaphore-protocol/contracts/base/Pairing.sol',
+    ],
   },
 };
 

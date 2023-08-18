@@ -266,6 +266,7 @@ export type Proposal_orderBy =
   | 'union__name'
   | 'union__logo'
   | 'union__description'
+  | 'union__votingAddress'
   | 'numOptions'
   | 'metadata'
   | 'metadata__id'
@@ -520,6 +521,7 @@ export type Union = {
   name: Scalars['String'];
   logo: Scalars['String'];
   description: Scalars['String'];
+  votingAddress: Scalars['Bytes'];
   users: Array<UserRole>;
   proposals: Array<Proposal>;
 };
@@ -613,6 +615,16 @@ export type Union_filter = {
   description_ends_with_nocase?: InputMaybe<Scalars['String']>;
   description_not_ends_with?: InputMaybe<Scalars['String']>;
   description_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  votingAddress?: InputMaybe<Scalars['Bytes']>;
+  votingAddress_not?: InputMaybe<Scalars['Bytes']>;
+  votingAddress_gt?: InputMaybe<Scalars['Bytes']>;
+  votingAddress_lt?: InputMaybe<Scalars['Bytes']>;
+  votingAddress_gte?: InputMaybe<Scalars['Bytes']>;
+  votingAddress_lte?: InputMaybe<Scalars['Bytes']>;
+  votingAddress_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  votingAddress_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  votingAddress_contains?: InputMaybe<Scalars['Bytes']>;
+  votingAddress_not_contains?: InputMaybe<Scalars['Bytes']>;
   users_?: InputMaybe<UserRole_filter>;
   proposals_?: InputMaybe<Proposal_filter>;
   /** Filter for the block changed event. */
@@ -626,6 +638,7 @@ export type Union_orderBy =
   | 'name'
   | 'logo'
   | 'description'
+  | 'votingAddress'
   | 'users'
   | 'proposals';
 
@@ -726,6 +739,7 @@ export type UserRole_orderBy =
   | 'union__name'
   | 'union__logo'
   | 'union__description'
+  | 'union__votingAddress'
   | 'user'
   | 'user__id'
   | 'user__name'

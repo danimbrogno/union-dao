@@ -289,6 +289,7 @@ export type Proposal_orderBy =
   | 'union__name'
   | 'union__logo'
   | 'union__description'
+  | 'union__votingAddress'
   | 'numOptions'
   | 'metadata'
   | 'metadata__id'
@@ -543,6 +544,7 @@ export type Union = {
   name: Scalars['String'];
   logo: Scalars['String'];
   description: Scalars['String'];
+  votingAddress: Scalars['Bytes'];
   users: Array<UserRole>;
   proposals: Array<Proposal>;
 };
@@ -636,6 +638,16 @@ export type Union_filter = {
   description_ends_with_nocase?: InputMaybe<Scalars['String']>;
   description_not_ends_with?: InputMaybe<Scalars['String']>;
   description_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  votingAddress?: InputMaybe<Scalars['Bytes']>;
+  votingAddress_not?: InputMaybe<Scalars['Bytes']>;
+  votingAddress_gt?: InputMaybe<Scalars['Bytes']>;
+  votingAddress_lt?: InputMaybe<Scalars['Bytes']>;
+  votingAddress_gte?: InputMaybe<Scalars['Bytes']>;
+  votingAddress_lte?: InputMaybe<Scalars['Bytes']>;
+  votingAddress_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  votingAddress_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  votingAddress_contains?: InputMaybe<Scalars['Bytes']>;
+  votingAddress_not_contains?: InputMaybe<Scalars['Bytes']>;
   users_?: InputMaybe<UserRole_filter>;
   proposals_?: InputMaybe<Proposal_filter>;
   /** Filter for the block changed event. */
@@ -649,6 +661,7 @@ export type Union_orderBy =
   | 'name'
   | 'logo'
   | 'description'
+  | 'votingAddress'
   | 'users'
   | 'proposals';
 
@@ -749,6 +762,7 @@ export type UserRole_orderBy =
   | 'union__name'
   | 'union__logo'
   | 'union__description'
+  | 'union__votingAddress'
   | 'user'
   | 'user__id'
   | 'user__name'
@@ -1066,6 +1080,7 @@ export type UnionResolvers<ContextType = MeshContext, ParentType extends Resolve
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   logo?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  votingAddress?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   users?: Resolver<Array<ResolversTypes['UserRole']>, ParentType, ContextType, RequireFields<UnionusersArgs, 'skip' | 'first'>>;
   proposals?: Resolver<Array<ResolversTypes['Proposal']>, ParentType, ContextType, RequireFields<UnionproposalsArgs, 'skip' | 'first'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1230,6 +1245,12 @@ const merger = new(BareMerger as any)({
         },
         location: 'UnionDetailsDocument.graphql'
       },{
+        document: WatchUnionDetailsDocument,
+        get rawSDL() {
+          return printWithCache(WatchUnionDetailsDocument);
+        },
+        location: 'WatchUnionDetailsDocument.graphql'
+      },{
         document: ProposalDetailsDocument,
         get rawSDL() {
           return printWithCache(ProposalDetailsDocument);
@@ -1296,6 +1317,19 @@ export type UnionDetailsQuery = { union?: Maybe<(
     )> }
   )> };
 
+export type WatchUnionDetailsQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type WatchUnionDetailsQuery = { union?: Maybe<(
+    Pick<Union, 'id' | 'name' | 'description' | 'logo'>
+    & { proposals: Array<(
+      Pick<Proposal, 'id' | 'numOptions'>
+      & { metadata?: Maybe<Pick<ProposalMetadata, 'id' | 'description'>> }
+    )> }
+  )> };
+
 export type ProposalDetailsQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -1303,7 +1337,7 @@ export type ProposalDetailsQueryVariables = Exact<{
 
 export type ProposalDetailsQuery = { proposal?: Maybe<(
     Pick<Proposal, 'id' | 'numOptions'>
-    & { metadata?: Maybe<(
+    & { union: Pick<Union, 'votingAddress'>, metadata?: Maybe<(
       Pick<ProposalMetadata, 'id' | 'description'>
       & { options: Array<Pick<ProposalMetadataOption, 'id' | 'description'>> }
     )> }
@@ -1358,11 +1392,32 @@ export const UnionDetailsDocument = gql`
   }
 }
     ` as unknown as DocumentNode<UnionDetailsQuery, UnionDetailsQueryVariables>;
+export const WatchUnionDetailsDocument = gql`
+    query WatchUnionDetails($id: ID!) @live {
+  union(id: $id) {
+    id
+    name
+    description
+    logo
+    proposals {
+      id
+      numOptions
+      metadata {
+        id
+        description
+      }
+    }
+  }
+}
+    ` as unknown as DocumentNode<WatchUnionDetailsQuery, WatchUnionDetailsQueryVariables>;
 export const ProposalDetailsDocument = gql`
     query ProposalDetails($id: ID!) {
   proposal(id: $id) {
     id
     numOptions
+    union {
+      votingAddress
+    }
     metadata {
       id
       description
@@ -1379,6 +1434,7 @@ export const ProposalDetailsDocument = gql`
 
 
 
+
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
@@ -1390,6 +1446,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     UnionDetails(variables: UnionDetailsQueryVariables, options?: C): Promise<UnionDetailsQuery> {
       return requester<UnionDetailsQuery, UnionDetailsQueryVariables>(UnionDetailsDocument, variables, options) as Promise<UnionDetailsQuery>;
+    },
+    WatchUnionDetails(variables: WatchUnionDetailsQueryVariables, options?: C): AsyncIterable<WatchUnionDetailsQuery> {
+      return requester<WatchUnionDetailsQuery, WatchUnionDetailsQueryVariables>(WatchUnionDetailsDocument, variables, options) as AsyncIterable<WatchUnionDetailsQuery>;
     },
     ProposalDetails(variables: ProposalDetailsQueryVariables, options?: C): Promise<ProposalDetailsQuery> {
       return requester<ProposalDetailsQuery, ProposalDetailsQueryVariables>(ProposalDetailsDocument, variables, options) as Promise<ProposalDetailsQuery>;

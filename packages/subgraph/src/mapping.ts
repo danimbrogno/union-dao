@@ -38,6 +38,7 @@ export function handleUnionCreated(ev: UnionCreated): void {
     union.name = ev.params.name.toString();
     union.description = ev.params.description.toString();
     union.logo = ev.params.logo.toString();
+    union.votingAddress = ev.params.voting;
     union.save();
     log.info('handleUnionCreated: union saved', []);
   }

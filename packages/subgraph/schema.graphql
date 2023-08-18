@@ -3,6 +3,7 @@ type Union @entity {
   name: String!
   logo: String!
   description: String!
+  votingAddress: Bytes!
   users: [UserRole!]! @derivedFrom(field: "union")
   proposals: [Proposal!]! @derivedFrom(field: "union")
 }

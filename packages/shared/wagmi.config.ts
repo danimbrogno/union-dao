@@ -7,7 +7,11 @@ export default defineConfig({
   plugins: [
     foundry({
       project: '../contracts',
-      include: ['ProposalFacet.sol/**', 'UnionFacet.sol/**'],
+      include: [
+        'ProposalFacet.sol/**',
+        'UnionFacet.sol/**',
+        'SemaphoreVoting.sol/**',
+      ],
     }),
   ],
 });

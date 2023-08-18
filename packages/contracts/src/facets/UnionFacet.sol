@@ -12,7 +12,7 @@ import {ISemaphoreVerifier} from "semaphore/interfaces/ISemaphoreVerifier.sol";
 contract UnionFacet is IUnionFacet {
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
-    event UnionCreated(bytes32 indexed index, bytes32 indexed name, string logo, string description);
+    event UnionCreated(bytes32 indexed index, bytes32 indexed name, string logo, string description, address voting);
     event MemberAdded(bytes32 indexed index, address indexed member);
     event MemberRemoved(bytes32 indexed index, address indexed member);
     event AdminAdded(bytes32 indexed index, address indexed admin);
@@ -33,7 +33,7 @@ contract UnionFacet is IUnionFacet {
         ds.index.increment();
         emit MemberAdded(bytes32(_index), msg.sender);
         emit AdminAdded(bytes32(_index), msg.sender);
-        emit UnionCreated(bytes32(_index), _name, _logo, _description);
+        emit UnionCreated(bytes32(_index), _name, _logo, _description, ds.unions[_index].voting);
         return _index;
     }
 
