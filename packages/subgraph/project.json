@@ -14,7 +14,7 @@
     "create": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx graph create 3VLINC/union-dao -g http://localhost:8020 ",
+        "command": "npx graph create 3VLINC/union-dao -g http://localhost:8020  || npx @graphprotocol/graph-cli create 3VLINC/union-dao -g http://localhost:8020",
         "cwd": "./packages/subgraph"
       }
     },
