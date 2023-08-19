@@ -17,7 +17,7 @@ import "../src/facets/UnionFacet.sol";
 import {DiamondInit} from "../src/upgradeInitializers/DiamondInit.sol";
 import {ProposalFacet} from "../src/facets/ProposalFacet.sol";
 import "../src/Diamond.sol";
-import "forge-std/test.sol";
+import "forge-std/Test.sol";
 import {Vm} from "forge-std/Vm.sol";
 import {AppDeployer} from "../script/AppDeployer.s.sol";
 

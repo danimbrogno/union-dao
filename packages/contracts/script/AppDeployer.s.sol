@@ -7,7 +7,7 @@ import "../src/facets/OwnershipFacet.sol";
 import "../src/facets/UnionFacet.sol";
 import {DiamondInit} from "../src/upgradeInitializers/DiamondInit.sol";
 import {ProposalFacet} from "../src/facets/ProposalFacet.sol";
-import "forge-std/test.sol";
+import "forge-std/Test.sol";
 import {DeployHelper} from "./DeployHelper.sol";
 import {Diamond, DiamondArgs} from "../src/Diamond.sol";
 

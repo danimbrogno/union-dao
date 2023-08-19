@@ -16,7 +16,7 @@ import "../src/facets/OwnershipFacet.sol";
 import "../src/facets/Test1Facet.sol";
 import "../src/facets/Test2Facet.sol";
 import "../src/Diamond.sol";
-import "forge-std/test.sol";
+import "forge-std/Test.sol";
 import {Vm} from "forge-std/Vm.sol";
 import {AppDeployer} from "../script/AppDeployer.s.sol";
 
