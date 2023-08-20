@@ -1,0 +1,12 @@
+- [x] 1connectwallet.png -> ConnectWallet.tsx
+  - wagmi with button
+- [x] 2aRegistedmenuandcard.png -> MemberDash.tsx
+  - Sub components: UnionProfile, UnionCard, Members, Proposals
+- [x] 2bNotRegisteredanyunionsqrtoregister.png -> RegisterMember.tsx
+  - Implement QR
+  - Style "scan QR" text
+  - Link component  - Implement QR
+- [x] 3RegisterUnion.png - RegisterUnion.tsx
+- [ ] app.tsx
+- [ ] components.tsx
+- [ ] routes

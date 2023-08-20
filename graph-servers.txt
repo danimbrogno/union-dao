@@ -1,0 +1,11 @@
+subgraph-graph-node-1  | Aug 19 00:23:24.660 INFO Starting JSON-RPC admin server at: http://localhost:8020, component: JsonRpcServer
+subgraph-graph-node-1  | Aug 19 00:23:24.660 INFO Starting GraphQL HTTP server at: http://localhost:8000, component: GraphQLServer
+subgraph-graph-node-1  | Aug 19 00:23:24.660 INFO Starting index node server at: http://localhost:8030, component: IndexNodeServer
+subgraph-graph-node-1  | Aug 19 00:23:24.660 INFO Started all assigned subgraphs, node_id: default, count: 0, component: SubgraphRegistrar
+subgraph-graph-node-1  | Aug 19 00:23:24.660 INFO Starting GraphQL WebSocket server at: ws://localhost:8001
+subgraph-graph-node-1  | , component
+subgraph-graph-node-1  | : SubscriptionServer
+subgraph-graph-node-1  | Aug 19 00:23:24.660 INFO Starting metrics server at: http://localhost:8040, component: MetricsServer
+subgraph-graph-node-1  | Aug 19 00:23:24.662 INFO Downloading latest blocks from Ethereum, this may take a few minutes..., provider: mainnet-rpc-0, component: EthereumPollingBlockIngestor
+
+

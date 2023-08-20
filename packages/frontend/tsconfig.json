@@ -2,10 +2,10 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "allowJs": false,
-    "esModuleInterop": false,
-    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "jsxImportSource": "@emotion/react"
+    "jsxImportSource": "@emotion/react",
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   },
   "files": [],
   "include": [],
