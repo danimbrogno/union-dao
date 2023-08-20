@@ -1,0 +1,72 @@
+{
+  "name": "subgraph",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/subgraph/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/subgraph",
+        "command": "docker-compose -f docker-compose.yaml -f docker-compose.localhost.yaml up"
+      }
+    },
+    "create": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx graph create 3VLINC/union-dao -g http://localhost:8020 ",
+        "cwd": "./packages/subgraph"
+      }
+    },
+    "codegen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx graph codegen ./subgraph.yaml --output-dir ./generated",
+        "cwd": "./packages/subgraph"
+      }
+    },
+    "getContractAddresses": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx ts-node -P ./tsconfig.tools.json ./etc/getContractAddresses.ts networks.json",
+        "cwd": "./packages/subgraph"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "parallel": false,
+        "command": "npx graph build ./subgraph.yaml",
+        "cwd": "./packages/subgraph"
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["getContractAddresses", "codegen"],
+      "options": {
+        "parallel": false,
+        "command": "npx graph deploy 3VLINC/union-dao ./subgraph.yaml --ipfs http://localhost:5001 --node http://localhost:8020 --version-label 0.2.3 --network base-testnet",
+        "cwd": "./packages/subgraph"
+      }
+    },
+    "redeploy": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["remove", "create", "deploy"],
+      "options": {
+        "parallel": false,
+        "command": "echo 'done';",
+        "cwd": "./packages/subgraph"
+      }
+    },
+    "remove": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["getContractAddresses", "codegen"],
+      "options": {
+        "parallel": false,
+        "command": "npx graph remove 3VLINC/union-dao --node http://localhost:8020",
+        "cwd": "./packages/subgraph"
+      }
+    }
+  },
+  "tags": ["type:lib"]
+}

@@ -16,9 +16,11 @@ import "../src/facets/OwnershipFacet.sol";
 import "../src/facets/Test1Facet.sol";
 import "../src/facets/Test2Facet.sol";
 import "../src/Diamond.sol";
-import "./HelperContract.sol";
+import "forge-std/test.sol";
+import {Vm} from "forge-std/Vm.sol";
+import {AppDeployer} from "../script/AppDeployer.s.sol";
 
-abstract contract StateDeployDiamond is HelperContract {
+abstract contract StateDeployDiamond is AppDeployer, Test {
     //contract types of facets to be deployed
     Diamond diamond;
     DiamondCutFacet dCutFacet;

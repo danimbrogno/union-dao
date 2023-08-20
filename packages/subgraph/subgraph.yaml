@@ -1,0 +1,64 @@
+specVersion: 0.0.4
+description: Union
+repository: https://github.com/danimbrogno/union-dao
+features:
+  - ipfsOnEthereumContracts
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: UnionFacet
+    network: base-testnet
+    source:
+      abi: UnionFacet
+      address: "0x0b27a79cb9C0B38eE06Ca3d94DAA68e0Ed17F953"
+      startBlock: 8164238
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Union
+        - UserRole
+        - User
+      abis:
+        - name: Diamond
+          file: ../contracts/out/Diamond.sol/Diamond.json
+        - name: UnionFacet
+          file: ../contracts/out/UnionFacet.sol/UnionFacet.json
+      eventHandlers:
+        - event: UnionCreated(indexed bytes32,indexed bytes32,string,string,address)
+          handler: handleUnionCreated
+        - event: MemberAdded(indexed bytes32,indexed address)
+          handler: handleMemberAdded
+        - event: MemberRemoved(indexed bytes32,indexed address)
+          handler: handleMemberRemoved
+        - event: AdminAdded(indexed bytes32,indexed address)
+          handler: handleAdminAdded
+        - event: AdminRemoved(indexed bytes32,indexed address)
+          handler: handleAdminRemoved
+      file: ./src/mapping.ts
+  - kind: ethereum/contract
+    name: ProposalFacet
+    network: base-testnet
+    source:
+      abi: ProposalFacet
+      address: "0x0b27a79cb9C0B38eE06Ca3d94DAA68e0Ed17F953"
+      startBlock: 8164238
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Proposal
+      abis:
+        - name: Diamond
+          file: ../contracts/out/Diamond.sol/Diamond.json
+        - name: ProposalFacet
+          file: ../contracts/out/ProposalFacet.sol/ProposalFacet.json
+      eventHandlers:
+        - event: ProposalCreated(indexed bytes32,indexed bytes32,uint16,string)
+          handler: handleProposalCreated
+        - event: VoteCast(indexed bytes32,indexed bytes32,uint256,uint256)
+          handler: handleVoteCast
+      file: ./src/mapping.ts

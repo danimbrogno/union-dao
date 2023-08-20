@@ -7,22 +7,46 @@
  */
 pragma solidity ^0.8.0;
 
-import {Counters} from "openzeppelin/utils/Counters.sol";
+import {CountersUpgradeable} from "openzeppelin-upgradeable/utils/CountersUpgradeable.sol";
+import {ISemaphoreVoting} from "semaphore/interfaces/ISemaphoreVoting.sol";
 
 // Remember to add the loupe functions from DiamondLoupeFacet to the diamond.
 // The loupe functions are required by the EIP2535 Diamonds standard
 
 library LibUnion {
-    using Counters for Counters.Counter;
+    using CountersUpgradeable for CountersUpgradeable.Counter;
 
     struct UnionData {
         bytes32 name;
+        mapping(address => bool) admins;
+        mapping(address => bool) members;
+        mapping(uint256 => uint256) identities;
+        mapping(address => uint256) identityIndexMap;
+        mapping(uint256 => Proposal) proposals;
+        CountersUpgradeable.Counter proposalIndex;
+        CountersUpgradeable.Counter identityIndex;
+        address voting;
     }
 
     bytes32 constant _DIAMOND_STORAGE_POSITION = keccak256("diamond.standard.UnionDao.LibUnion");
 
     struct UnionStorage {
         mapping(uint256 => UnionData) unions;
+        CountersUpgradeable.Counter index;
+        address verifier;
+    }
+
+    struct Proposal {
+        // ProposalZKTree tree;
+        ProposalConfig config;
+    }
+
+    struct ProposalConfig {
+        address owner;
+        mapping(uint256 => bool) validators;
+        mapping(uint256 => bool) uniqueHashes;
+        uint16 numOptions;
+        mapping(uint256 => uint256) optionCounter;
     }
 
     function unionStorage() internal pure returns (UnionStorage storage ds) {
@@ -32,9 +56,7 @@ library LibUnion {
         }
     }
 
-    function createUnion(uint256 index, bytes32 name) public returns (UnionData memory) {
-        UnionStorage storage ds = unionStorage();
-        ds.unions[index] = UnionData(name);
-        return ds.unions[index];
+    function getVoting(uint256 _union) public view returns (ISemaphoreVoting) {
+        return ISemaphoreVoting(unionStorage().unions[_union].voting);
     }
 }

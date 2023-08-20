@@ -8,18 +8,54 @@ pragma solidity ^0.8.0;
  * /*****************************************************************************
  */
 import "./AppHarness.sol";
-import "../src/interfaces/IUnionFacet.sol";
+import "../src/facets/UnionFacet.sol";
 import "../src/libraries/LibUnion.sol";
+import "forge-std/console.sol";
 
 // test proper deployment of diamond
 contract TestUnionFacet is AppHarness {
     // TEST CASES
+    address payable[] users;
+
+    function setUp() public override {
+        users = createUsers(2);
+        super.setUp();
+    }
 
     function testCreateUnion() public {
-        IUnionFacet sut = IUnionFacet(address(_diamond));
+        UnionFacet sut = UnionFacet(address(_diamond));
+        uint256 unionId = sut.createUnion("My Union", "", "", 0);
+        uint256 unionId2 = sut.createUnion("My Second Union", "", "", 0);
+        bytes32 name = sut.getUnionName(unionId);
+        bool isMember = sut.isMember(unionId, address(this));
+        bool isAdmin = sut.isAdmin(unionId, address(this));
 
-        LibUnion.UnionData memory res = sut.createUnion("My Union");
+        assertEq(isMember, true);
+        assertEq(isAdmin, true);
+        assertEq(unionId, 0);
+        assertEq(name, "My Union");
+        assertEq(unionId2, 1);
+    }
 
-        assertEq(res.name, "My Union");
+    function testAddMember() public {
+        UnionFacet sut = UnionFacet(address(_diamond));
+
+        uint256 unionId = sut.createUnion("My Union", "", "", 0);
+        sut.addMember(unionId, users[0]);
+        bool isMember = sut.isMember(unionId, users[0]);
+        bool isNotMember = sut.isMember(unionId, users[1]);
+        assertEq(isMember, true);
+        assertEq(isNotMember, false);
+    }
+
+    function testAddAdmin() public {
+        UnionFacet sut = UnionFacet(address(_diamond));
+
+        uint256 unionId = sut.createUnion("My Union", "", "", 0);
+        sut.addAdmin(unionId, users[0]);
+        bool isAdmin = sut.isAdmin(unionId, users[0]);
+        bool isNotAdmin = sut.isAdmin(unionId, users[1]);
+        assertEq(isAdmin, true);
+        assertEq(isNotAdmin, false);
     }
 }

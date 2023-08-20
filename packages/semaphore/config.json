@@ -1,0 +1,17 @@
+{
+  "config": {
+    "solidity": {
+      "version": "0.8.4"
+    },
+    "paths": {
+      "contracts": "./contracts",
+      "tests": "./test",
+      "cache": "./cache",
+      "build": {
+        "snark-artifacts": "./build/snark-artifacts",
+        "contracts": "./build/contracts",
+        "typechain": "./build/typechain"
+      }
+    }
+  }
+}

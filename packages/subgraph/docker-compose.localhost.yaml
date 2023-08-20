@@ -1,0 +1,5 @@
+version: '3'
+services:
+  graph-node:
+    environment:
+      ethereum: 'base-testnet:http://host.docker.internal:8545'

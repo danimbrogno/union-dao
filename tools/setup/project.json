@@ -1,0 +1,16 @@
+{
+  "name": "setup",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "tools/setup/src",
+  "projectType": "application",
+  "targets": {
+    "do": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "tools/setup",
+        "command": "docker-compose run --rm generate"
+      }
+    }
+  },
+  "tags": []
+}
