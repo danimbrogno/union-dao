@@ -21,7 +21,7 @@
     "codegen": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx graph codegen ./subgraph.yaml --output-dir ./generated",
+        "command": "npx graph codegen ./subgraph.yaml --output-dir ./generated ||npx @graphprotocol/graph-clicodegen ./subgraph.yaml --output-dir ./generated",
         "cwd": "./packages/subgraph"
       }
     },
@@ -36,7 +36,7 @@
       "executor": "nx:run-commands",
       "options": {
         "parallel": false,
-        "command": "npx graph build ./subgraph.yaml",
+        "command": "npx graph build ./subgraph.yaml || npx @graphprotocol/graph-cli build ./subgraph.yaml",
         "cwd": "./packages/subgraph"
       }
     },
@@ -45,7 +45,7 @@
       "dependsOn": ["getContractAddresses", "codegen"],
       "options": {
         "parallel": false,
-        "command": "npx graph deploy 3VLINC/union-dao ./subgraph.yaml --ipfs http://localhost:5001 --node http://localhost:8020 --version-label 0.2.3 --network base-testnet",
+        "command": "npx graph deploy 3VLINC/union-dao ./subgraph.yaml --ipfs http://localhost:5001 --node http://localhost:8020 --version-label 0.2.3 --network base-testnet ||npx @graphprotocol/graph-cli deploy 3VLINC/union-dao ./subgraph.yaml --ipfs http://localhost:5001 --node http://localhost:8020 --version-label 0.2.3 --network base-testnet ",
         "cwd": "./packages/subgraph"
       }
     },
@@ -63,7 +63,7 @@
       "dependsOn": ["getContractAddresses", "codegen"],
       "options": {
         "parallel": false,
-        "command": "npx graph remove 3VLINC/union-dao --node http://localhost:8020",
+        "command": "npx graph remove 3VLINC/union-dao --node http://localhost:8020 ||@graphprotocol/graph-cli remove 3VLINC/union-dao --node http://localhost:8020 ",
         "cwd": "./packages/subgraph"
       }
     }
