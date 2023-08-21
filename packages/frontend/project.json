@@ -71,6 +71,13 @@
         "lintFilePatterns": ["packages/frontend/**/*.{ts,tsx,js,jsx}"]
       }
     },
+    "codegen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "graphclient build",
+        "cwd": "packages/frontend"
+      }
+    },
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
