@@ -6,15 +6,12 @@ import {
 import { useConfig } from 'packages/frontend/src/app/shared/Config';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { proposalFacetABI, semaphoreVotingABI } from 'shared';
+import { proposalFacetABI } from 'shared';
 import { Hex, getAddress, hexToBigInt } from 'viem';
 import { useContractWrite, useWaitForTransaction } from 'wagmi';
-import { FullProof, generateProof } from '@semaphore-protocol/proof';
-import { Group } from '@semaphore-protocol/group';
+import { generateProof } from '@semaphore-protocol/proof';
 import { useIdentity } from 'packages/frontend/src/app/shared/Identity';
-import { SemaphoreEthers } from '@semaphore-protocol/data';
 import useSemaphore from 'packages/frontend/src/app/shared/useSemaphoreEthers';
-import { waitForTransaction } from '@wagmi/core';
 
 export const Proposal = () => {
   const params = useParams<'id' | 'proposalId'>();
@@ -27,7 +24,8 @@ export const Proposal = () => {
   const identity = useIdentity();
   const contractAddress = proposalDetailQuery?.proposal?.union.votingAddress;
   const { refreshGroup, group } = useSemaphore(contractAddress);
-  const { write, error, data } = useContractWrite({
+
+  const { write, data } = useContractWrite({
     address: getAddress(diamond),
     abi: proposalFacetABI,
     functionName: 'vote',
@@ -73,21 +71,18 @@ export const Proposal = () => {
 
       const unionId = hexToBigInt(params.id as Hex);
       const pollId = hexToBigInt(params.proposalId as Hex);
-      // const _users = [identity.commitment];
 
       if (!group) {
         throw new Error('group not set');
       }
-      // group.addMember(identity.commitment);
 
-      // unionId,
       generateProof(identity, group, pollId, bigVote).then((fullProof) => {
         write({
           args: [
             unionId,
             pollId,
-            bigVote,
-            identity.nullifier,
+            BigInt(fullProof.signal),
+            BigInt(fullProof.nullifierHash),
             [
               BigInt(fullProof.proof[0]),
               BigInt(fullProof.proof[1]),

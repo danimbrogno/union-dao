@@ -10,6 +10,7 @@ import {ProposalFacet} from "../src/facets/ProposalFacet.sol";
 import "forge-std/test.sol";
 import {DeployHelper} from "./DeployHelper.sol";
 import {Diamond, DiamondArgs} from "../src/Diamond.sol";
+import {SemaphoreVerifier} from "semaphore/base/SemaphoreVerifier.sol";
 
 contract AppDeployer is DeployHelper {
     //contract types of facets to be deployed
@@ -20,6 +21,7 @@ contract AppDeployer is DeployHelper {
     UnionFacet _unionF;
     ProposalFacet _proposalF;
     DiamondInit _diamondInitC;
+    SemaphoreVerifier _semaphoreVerifier;
 
     //interfaces with Facet ABI connected to _diamond address
     IDiamondLoupe _iLoupe;
@@ -30,6 +32,7 @@ contract AppDeployer is DeployHelper {
     // TEST PRIVATE KEY BELOW
     uint256 constant ACCOUNT_A_PRIVATE = 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80;
     address constant ACCOUNT_A_PUBLIC = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
+    error NotDeployed(string contractName);
 
     function run() public {
         vm.startBroadcast(ACCOUNT_A_PRIVATE);
@@ -40,18 +43,17 @@ contract AppDeployer is DeployHelper {
         _unionF = new UnionFacet();
         _proposalF = new ProposalFacet();
         _diamondInitC = new DiamondInit();
+         if (address(_diamondInitC) == address(0)) { revert NotDeployed("DiamondInit"); }
 
-        string memory semaphoreAddresses = vm.readFile("./src/addresses/semaphore.json");
-
-        address semaphoreVerifier = bytesToAddress(vm.parseJson(semaphoreAddresses, "$.semaphoreVerifier"));
+        address semaphoreVerifier = address(new SemaphoreVerifier());
 
         _facetNames = ["DiamondCutFacet", "DiamondLoupeFacet", "OwnershipFacet", "UnionFacet", "ProposalFacet"];
 
         // diamod arguments
         DiamondArgs memory _args = DiamondArgs({
             owner: address(ACCOUNT_A_PUBLIC),
-            init: address(0),
-            initCalldata: abi.encodeWithSignature("init(address verifierAddress)", semaphoreVerifier)
+            init: address(_diamondInitC),
+            initCalldata: abi.encodeWithSelector(DiamondInit.init.selector, semaphoreVerifier)
         });
 
         // FacetCut with CutFacet for initialisation
@@ -111,19 +113,6 @@ contract AppDeployer is DeployHelper {
 
         // get all addresses
         _facetAddressList = _iLoupe.facetAddresses();
-
-        // vm.writeJson(""), path);
-        // // Diamond proxy addresses, last updated 24.03.2023
-        // address DIAMOND_PROXY_MAINNET = 0x32400084C286CF3E17e7B677ea9583e60a000324;
-        // // address DIAMOND_PROXY_GOERLI = 0x1908e2BF4a88F91E4eF0DC72f02b8Ea36BEa2319;
-
-        // // Provide zkSync compiler version and address of the diamond proxy on L1
-        // Deployer deployer = new Deployer("1.3.7", DIAMOND_PROXY_MAINNET);
-
-        // // Provide path to contract, input params & salt
-        // // Returns deployment address on L2
-        // deployer.deployFromL1("src/Counter.sol", new bytes(0), bytes32(uint256(1337)));
-        // vm.broadcast();
 
         vm.stopBroadcast();
     }

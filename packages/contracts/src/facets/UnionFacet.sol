@@ -8,6 +8,7 @@ import {CountersUpgradeable} from "openzeppelin-upgradeable/utils/CountersUpgrad
 import {SemaphoreVoting} from "semaphore/extensions/SemaphoreVoting.sol";
 import {SemaphoreGroups} from "semaphore/base/SemaphoreGroups.sol";
 import {ISemaphoreVerifier} from "semaphore/interfaces/ISemaphoreVerifier.sol";
+import "forge-std/console.sol";
 
 contract UnionFacet is IUnionFacet {
     using CountersUpgradeable for CountersUpgradeable.Counter;

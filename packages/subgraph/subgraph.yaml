@@ -11,8 +11,8 @@ dataSources:
     network: base-testnet
     source:
       abi: UnionFacet
-      address: "0x0b27a79cb9C0B38eE06Ca3d94DAA68e0Ed17F953"
-      startBlock: 8164238
+      address: "0x89372b32b8AF3F1272e2efb3088616318D2834cA"
+      startBlock: 8164378
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -43,8 +43,8 @@ dataSources:
     network: base-testnet
     source:
       abi: ProposalFacet
-      address: "0x0b27a79cb9C0B38eE06Ca3d94DAA68e0Ed17F953"
-      startBlock: 8164238
+      address: "0x89372b32b8AF3F1272e2efb3088616318D2834cA"
+      startBlock: 8164378
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

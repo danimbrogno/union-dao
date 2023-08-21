@@ -31,6 +31,7 @@ contract DiamondInit {
     // data to set your own state variables
     function init(address verifierAddress) external {
         // adding ERC165 data
+        
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
         ds.supportedInterfaces[type(IERC165).interfaceId] = true;
         ds.supportedInterfaces[type(IDiamondCut).interfaceId] = true;

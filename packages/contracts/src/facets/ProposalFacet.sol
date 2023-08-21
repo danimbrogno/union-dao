@@ -42,10 +42,8 @@ contract ProposalFacet {
 
         // Add Voters
         for (uint256 j = 1; j <= ds.unions[_union].identityIndex.current(); j++) {
-            console.log("Adding voter %s", ds.unions[_union].identities[j]);
             _voting.addVoter(_index, ds.unions[_union].identities[j]);
         }
-        console.log("start poll %s", _index);
         _voting.startPoll(_index, 0);
 
         emit ProposalCreated(bytes32(_union), bytes32(_index), _numOptions, _metadata);
@@ -58,8 +56,8 @@ contract ProposalFacet {
     {
         LibUnion.Proposal storage theProposal = getProposal(_union, _index);
         require(_vote <= theProposal.config.numOptions, "Invalid option!");
-        // ISemaphoreVoting _voting = LibUnion.getVoting(_union);
-        //_voting.castVote(_vote, _nullifier, _index, _proof);
+        ISemaphoreVoting _voting = LibUnion.getVoting(_union);
+        _voting.castVote(_vote, _nullifier, _index, _proof);
         theProposal.config.optionCounter[_vote] = theProposal.config.optionCounter[_vote] + 1;
 
         emit VoteCast(bytes32(_union), bytes32(_index), _vote, theProposal.config.optionCounter[_vote]);

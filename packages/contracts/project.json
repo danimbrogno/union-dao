@@ -4,8 +4,16 @@
   "sourceRoot": "packages/contracts/src",
   "projectType": "application",
   "targets": {
+    "generateTestIdentity": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/contracts",
+        "command": "ts-node -P tsconfig.app.json ./test/helpers/generateTestIdentity.ts"
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
+      "dependsOn": [""],
       "options": {
         "cwd": "packages/contracts",
         "command": "forge test --fork-url https://goerli.base.org --ffi -vv"
@@ -27,7 +35,7 @@
     },
     "deploy": {
       "executor": "nx:run-commands",
-      "dependsOn": ["semaphore:deploy"],
+      "dependsOn": [],
       "options": {
         "cwd": "packages/contracts",
         "command": "forge script --chain-id 84531 script/AppDeployer.s.sol:AppDeployer --fork-url http://localhost:8545 --broadcast --ffi"

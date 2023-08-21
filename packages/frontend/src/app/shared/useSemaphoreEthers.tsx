@@ -17,6 +17,8 @@ export default function useSemaphore(
       if (!contractAddress) {
         return;
       }
+
+      // TODO: dynamic rpc url
       const semaphore = new SemaphoreEthers('http://localhost:8545', {
         address: contractAddress,
         startBlock: 8163958,

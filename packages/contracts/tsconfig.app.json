@@ -1,11 +1,15 @@
 {
+  "ts-node": {
+    "files": true
+  },
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "types": ["node"]
   },
   "files": [
-    "index.ts"
+    "index.ts",
+    "test/helpers/generateTestIdentity.ts"
   ],
   "exclude": [
   ],

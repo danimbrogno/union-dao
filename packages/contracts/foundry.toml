@@ -4,7 +4,7 @@ out = "out"
 libs = ["lib"]
 solc = "0.8.4"
 optimizer_details.yul = false
-allow_paths = ["../../node_modules", "../semaphore"]
+allow_paths = ["../../node_modules"]
 broadcast = "../../broadcast"
-fs_permissions = [{ access = "read", path = "./src/compiled/Hasher.json"}, { access = "read", path = "./src/addresses/semaphore.json"}]
+fs_permissions = [{ access = "read", path = "./src/compiled/Hasher.json"}, { access = "read", path = "./test/helpers/identity.json"}]
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
