@@ -15,6 +15,7 @@ import { useConfig } from 'frontend/shared/Config';
 
 export const Proposal = () => {
   const params = useParams<'id' | 'proposalId'>();
+  const [err, setErr] = useState('');
 
   const [proposalDetailQuery, setProposalDetailQuery] =
     useState<ProposalDetailsQuery>();
@@ -42,8 +43,8 @@ export const Proposal = () => {
   });
 
   useEffect(() => {
-    refreshGroup(params.id as string);
-  }, [params.id, refreshGroup]);
+    refreshGroup(params.proposalId as string);
+  }, [params.proposalId, refreshGroup]);
 
   const fetchProposalDetail = useCallback(async () => {
     if (!params.id || !params.proposalId) return;
@@ -74,26 +75,37 @@ export const Proposal = () => {
         throw new Error('group not set');
       }
 
-      generateProof(identity, group, pollId, bigVote).then((fullProof) => {
-        write({
-          args: [
-            unionId,
-            pollId,
-            BigInt(fullProof.signal),
-            BigInt(fullProof.nullifierHash),
-            [
-              BigInt(fullProof.proof[0]),
-              BigInt(fullProof.proof[1]),
-              BigInt(fullProof.proof[2]),
-              BigInt(fullProof.proof[3]),
-              BigInt(fullProof.proof[4]),
-              BigInt(fullProof.proof[5]),
-              BigInt(fullProof.proof[6]),
-              BigInt(fullProof.proof[7]),
+      generateProof(identity, group, pollId, bigVote)
+        .then((fullProof) => {
+          write({
+            args: [
+              unionId,
+              pollId,
+              BigInt(fullProof.signal),
+              BigInt(fullProof.nullifierHash),
+              [
+                BigInt(fullProof.proof[0]),
+                BigInt(fullProof.proof[1]),
+                BigInt(fullProof.proof[2]),
+                BigInt(fullProof.proof[3]),
+                BigInt(fullProof.proof[4]),
+                BigInt(fullProof.proof[5]),
+                BigInt(fullProof.proof[6]),
+                BigInt(fullProof.proof[7]),
+              ],
             ],
-          ],
+          });
+        })
+        .catch((err) => {
+          switch (err.toString()) {
+            case 'Error: The identity is not part of the group':
+              setErr('Sorry you are not approved to vote on this proposal.');
+              break;
+            default:
+              setErr(err.toString());
+              break;
+          }
         });
-      });
     },
     [identity, params.id, params.proposalId, write, group]
   );
@@ -111,7 +123,7 @@ export const Proposal = () => {
           {hexToBigInt(proposal.id).toString()}:{' '}
           {/* {proposal.metadata?.description} */}
         </h1>
-
+        {err && <p>{err}</p>}
         <h2>Options</h2>
         <ul>
           {options.map((option, index) => (

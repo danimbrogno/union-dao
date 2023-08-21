@@ -41,8 +41,6 @@ contract UnionFacet is IUnionFacet {
         uint256 _index = ds.index.current();
         ds.unions[_index].name = _name;
         ds.unions[_index].voting = address(new SemaphoreVoting(ISemaphoreVerifier(ds.verifier)));
-        console.log("the message sender is", msg.sender);
-        console.log("the diamond contract is", address(this));
         this.addAdmin(_index, msg.sender, _identity);
         this.addMember(_index, msg.sender, _identity);
         ds.index.increment();
@@ -50,19 +48,19 @@ contract UnionFacet is IUnionFacet {
         return _index;
     }
 
-    function addIdentity(uint256 _index, uint256 _identity) internal {
+    function addIdentity(uint256 _index, uint256 _identity, address _address) internal {
         LibUnion.UnionStorage storage ds = LibUnion.unionStorage();
-        if (ds.unions[_index].identityIndexMap[msg.sender] != 0) {
+        if (ds.unions[_index].identityIndexMap[_address] != 0) {
             // Already added
             return;
         }
         ds.unions[_index].identityIndex.increment();
         uint256 _identityIndex = ds.unions[_index].identityIndex.current();
-        ds.unions[_index].identityIndexMap[msg.sender] = _identityIndex;
+        ds.unions[_index].identityIndexMap[_address] = _identityIndex;
         ds.unions[_index].identities[_identityIndex] = _identity;
     }
 
-    function submitApplication(uint256 _index, uint256 _identity, string calldata _metadataCID) external {
+    function submitApplication(uint256 _index, uint256 _identity, string calldata _metadataCID) external override {
         LibUnion.UnionStorage storage ds = LibUnion.unionStorage();
         if (ds.unions[_index].pendingApplications[msg.sender] == 0) {
             ds.unions[_index].pendingApplications[msg.sender] = _identity;
@@ -73,6 +71,7 @@ contract UnionFacet is IUnionFacet {
 
     function approveApplication(uint256 _index, address _address, bool _isAdmin)
         external
+        override
         onlyAdmin(_index, msg.sender)
     {
         LibUnion.UnionStorage storage ds = LibUnion.unionStorage();
@@ -95,7 +94,7 @@ contract UnionFacet is IUnionFacet {
 
     function addAdmin(uint256 _index, address _address, uint256 _identity) public {
         LibUnion.unionStorage().unions[_index].admins[_address] = true;
-        addIdentity(_index, _identity);
+        addIdentity(_index, _identity, _address);
         emit AdminAdded(bytes32(_index), _address);
     }
 
@@ -106,7 +105,7 @@ contract UnionFacet is IUnionFacet {
 
     function addMember(uint256 _index, address _address, uint256 _identity) public {
         LibUnion.unionStorage().unions[_index].members[_address] = true;
-        addIdentity(_index, _identity);
+        addIdentity(_index, _identity, _address);
         emit MemberAdded(bytes32(_index), _address);
     }
 

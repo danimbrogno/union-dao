@@ -17,6 +17,7 @@ contract ProposalFacet {
         return ds.unions[_union].proposals[_index];
     }
 
+    // TODO: Only admins and members
     function initializeProposal(uint256 _union, uint16 _numOptions, string calldata _metadata)
         external
         returns (uint256)
@@ -66,5 +67,10 @@ contract ProposalFacet {
     function getOptionCounter(uint256 _union, uint256 _index, uint256 _option) external view returns (uint256) {
         LibUnion.Proposal storage theProposal = getProposal(_union, _index);
         return theProposal.config.optionCounter[_option];
+    }
+
+    function getNumIdentities(uint256 _union) external view returns (uint256) {
+        LibUnion.UnionStorage storage ds = LibUnion.unionStorage();
+        return ds.unions[_union].identityIndex.current();
     }
 }

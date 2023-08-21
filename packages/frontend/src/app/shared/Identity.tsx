@@ -7,7 +7,7 @@ import {
   useMemo,
 } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useLocalStorage, useSessionStorage } from 'usehooks-ts';
+import { useLocalStorage } from 'usehooks-ts';
 import { getAddress } from 'viem';
 import { useAccount, useSignMessage } from 'wagmi';
 
@@ -29,7 +29,7 @@ export const Identity = ({ children }: PropsWithChildren) => {
   } = useForm<Inputs>();
   const [identity, setIdentity] = useLocalStorage(
     `identity-${address}`,
-    getAddress(nullSignature)
+    address || getAddress(nullSignature)
   );
 
   const { data, signMessage } = useSignMessage();

@@ -58,7 +58,6 @@ export const Create = () => {
   const [allUnionsQuery, setAllUnionsQuery] = useState<FetchAllUnionsQuery>();
 
   const fetchUnions = useCallback(async () => {
-    debugger;
     const result = await execute(FetchAllUnionsDocument, {});
     if (result.data) {
       setAllUnionsQuery(result.data);

@@ -28,7 +28,7 @@ export default function useSemaphore(
         semaphore.getGroupMembers(groupId),
         semaphore.getGroup(groupId),
       ]);
-
+      console.log(_members);
       const group = new Group(
         _group.id,
         parseInt(_group.merkleTree.depth as any),
@@ -37,7 +37,7 @@ export default function useSemaphore(
 
       setGroup(group);
     },
-    [contractAddress]
+    [contractAddress, ethereum.rpcUrl, ethereum.startBlock]
   );
 
   return {

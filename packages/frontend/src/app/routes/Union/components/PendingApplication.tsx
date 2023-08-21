@@ -39,23 +39,27 @@ export const PendingApplication = (props: ApplicationDetailFragment) => {
   };
 
   if (isAdmin) {
-    approveButton = <button onClick={handleApprove}>Approve</button>;
+    approveButton = (
+      <>
+        <p>
+          <label>
+            <input
+              id={`${props.id}-input`}
+              checked={admin}
+              onClick={handleToggleAdmin}
+              type="checkbox"
+            />{' '}
+            Is Admin?
+          </label>
+        </p>
+        <button onClick={handleApprove}>Approve</button>
+      </>
+    );
   }
 
   return (
     <div key={props.id}>
       {props.user.id}
-      <p>
-        <label>
-          <input
-            id={`${props.id}-input`}
-            checked={admin}
-            onClick={handleToggleAdmin}
-            type="checkbox"
-          />{' '}
-          Is Admin?
-        </label>
-      </p>
       {approveButton}
     </div>
   );
