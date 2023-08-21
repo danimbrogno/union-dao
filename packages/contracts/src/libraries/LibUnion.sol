@@ -20,6 +20,7 @@ library LibUnion {
         bytes32 name;
         mapping(address => bool) admins;
         mapping(address => bool) members;
+        mapping(address => uint256) pendingApplications;
         mapping(uint256 => uint256) identities;
         mapping(address => uint256) identityIndexMap;
         mapping(uint256 => Proposal) proposals;

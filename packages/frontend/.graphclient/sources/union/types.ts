@@ -21,6 +21,89 @@ export type Scalars = {
   Bytes: any;
 };
 
+export type Application = {
+  id: Scalars['Bytes'];
+  union: Union;
+  user: User;
+  approved: Scalars['Boolean'];
+};
+
+export type Application_filter = {
+  id?: InputMaybe<Scalars['Bytes']>;
+  id_not?: InputMaybe<Scalars['Bytes']>;
+  id_gt?: InputMaybe<Scalars['Bytes']>;
+  id_lt?: InputMaybe<Scalars['Bytes']>;
+  id_gte?: InputMaybe<Scalars['Bytes']>;
+  id_lte?: InputMaybe<Scalars['Bytes']>;
+  id_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  id_contains?: InputMaybe<Scalars['Bytes']>;
+  id_not_contains?: InputMaybe<Scalars['Bytes']>;
+  union?: InputMaybe<Scalars['String']>;
+  union_not?: InputMaybe<Scalars['String']>;
+  union_gt?: InputMaybe<Scalars['String']>;
+  union_lt?: InputMaybe<Scalars['String']>;
+  union_gte?: InputMaybe<Scalars['String']>;
+  union_lte?: InputMaybe<Scalars['String']>;
+  union_in?: InputMaybe<Array<Scalars['String']>>;
+  union_not_in?: InputMaybe<Array<Scalars['String']>>;
+  union_contains?: InputMaybe<Scalars['String']>;
+  union_contains_nocase?: InputMaybe<Scalars['String']>;
+  union_not_contains?: InputMaybe<Scalars['String']>;
+  union_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  union_starts_with?: InputMaybe<Scalars['String']>;
+  union_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  union_not_starts_with?: InputMaybe<Scalars['String']>;
+  union_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  union_ends_with?: InputMaybe<Scalars['String']>;
+  union_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  union_not_ends_with?: InputMaybe<Scalars['String']>;
+  union_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  union_?: InputMaybe<Union_filter>;
+  user?: InputMaybe<Scalars['String']>;
+  user_not?: InputMaybe<Scalars['String']>;
+  user_gt?: InputMaybe<Scalars['String']>;
+  user_lt?: InputMaybe<Scalars['String']>;
+  user_gte?: InputMaybe<Scalars['String']>;
+  user_lte?: InputMaybe<Scalars['String']>;
+  user_in?: InputMaybe<Array<Scalars['String']>>;
+  user_not_in?: InputMaybe<Array<Scalars['String']>>;
+  user_contains?: InputMaybe<Scalars['String']>;
+  user_contains_nocase?: InputMaybe<Scalars['String']>;
+  user_not_contains?: InputMaybe<Scalars['String']>;
+  user_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  user_starts_with?: InputMaybe<Scalars['String']>;
+  user_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  user_not_starts_with?: InputMaybe<Scalars['String']>;
+  user_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  user_ends_with?: InputMaybe<Scalars['String']>;
+  user_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  user_not_ends_with?: InputMaybe<Scalars['String']>;
+  user_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  user_?: InputMaybe<User_filter>;
+  approved?: InputMaybe<Scalars['Boolean']>;
+  approved_not?: InputMaybe<Scalars['Boolean']>;
+  approved_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  approved_not_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<Application_filter>>>;
+  or?: InputMaybe<Array<InputMaybe<Application_filter>>>;
+};
+
+export type Application_orderBy =
+  | 'id'
+  | 'union'
+  | 'union__id'
+  | 'union__name'
+  | 'union__logo'
+  | 'union__description'
+  | 'union__votingAddress'
+  | 'user'
+  | 'user__id'
+  | 'user__metadata'
+  | 'approved';
+
 export type BlockChangedFilter = {
   number_gte: Scalars['Int'];
 };
@@ -205,6 +288,8 @@ export type Proposal_orderBy =
 export type Query = {
   union?: Maybe<Union>;
   unions: Array<Union>;
+  application?: Maybe<Application>;
+  applications: Array<Application>;
   userRole?: Maybe<UserRole>;
   userRoles: Array<UserRole>;
   user?: Maybe<User>;
@@ -231,6 +316,24 @@ export type QueryunionsArgs = {
   orderBy?: InputMaybe<Union_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   where?: InputMaybe<Union_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryapplicationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryapplicationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Application_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Application_filter>;
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
@@ -315,6 +418,8 @@ export type Query_metaArgs = {
 export type Subscription = {
   union?: Maybe<Union>;
   unions: Array<Union>;
+  application?: Maybe<Application>;
+  applications: Array<Application>;
   userRole?: Maybe<UserRole>;
   userRoles: Array<UserRole>;
   user?: Maybe<User>;
@@ -341,6 +446,24 @@ export type SubscriptionunionsArgs = {
   orderBy?: InputMaybe<Union_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   where?: InputMaybe<Union_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionapplicationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionapplicationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Application_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Application_filter>;
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
@@ -428,8 +551,18 @@ export type Union = {
   logo: Scalars['String'];
   description: Scalars['String'];
   votingAddress: Scalars['Bytes'];
+  pendingApplications: Array<Application>;
   users: Array<UserRole>;
   proposals: Array<Proposal>;
+};
+
+
+export type UnionpendingApplicationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Application_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Application_filter>;
 };
 
 
@@ -531,6 +664,7 @@ export type Union_filter = {
   votingAddress_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
   votingAddress_contains?: InputMaybe<Scalars['Bytes']>;
   votingAddress_not_contains?: InputMaybe<Scalars['Bytes']>;
+  pendingApplications_?: InputMaybe<Application_filter>;
   users_?: InputMaybe<UserRole_filter>;
   proposals_?: InputMaybe<Proposal_filter>;
   /** Filter for the block changed event. */
@@ -545,12 +679,13 @@ export type Union_orderBy =
   | 'logo'
   | 'description'
   | 'votingAddress'
+  | 'pendingApplications'
   | 'users'
   | 'proposals';
 
 export type User = {
   id: Scalars['Bytes'];
-  name: Scalars['String'];
+  metadata?: Maybe<Scalars['String']>;
   roles: Array<UserRole>;
 };
 
@@ -648,7 +783,7 @@ export type UserRole_orderBy =
   | 'union__votingAddress'
   | 'user'
   | 'user__id'
-  | 'user__name'
+  | 'user__metadata'
   | 'isMember'
   | 'isAdmin';
 
@@ -663,26 +798,26 @@ export type User_filter = {
   id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
   id_contains?: InputMaybe<Scalars['Bytes']>;
   id_not_contains?: InputMaybe<Scalars['Bytes']>;
-  name?: InputMaybe<Scalars['String']>;
-  name_not?: InputMaybe<Scalars['String']>;
-  name_gt?: InputMaybe<Scalars['String']>;
-  name_lt?: InputMaybe<Scalars['String']>;
-  name_gte?: InputMaybe<Scalars['String']>;
-  name_lte?: InputMaybe<Scalars['String']>;
-  name_in?: InputMaybe<Array<Scalars['String']>>;
-  name_not_in?: InputMaybe<Array<Scalars['String']>>;
-  name_contains?: InputMaybe<Scalars['String']>;
-  name_contains_nocase?: InputMaybe<Scalars['String']>;
-  name_not_contains?: InputMaybe<Scalars['String']>;
-  name_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  name_starts_with?: InputMaybe<Scalars['String']>;
-  name_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  name_not_starts_with?: InputMaybe<Scalars['String']>;
-  name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  name_ends_with?: InputMaybe<Scalars['String']>;
-  name_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  name_not_ends_with?: InputMaybe<Scalars['String']>;
-  name_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata?: InputMaybe<Scalars['String']>;
+  metadata_not?: InputMaybe<Scalars['String']>;
+  metadata_gt?: InputMaybe<Scalars['String']>;
+  metadata_lt?: InputMaybe<Scalars['String']>;
+  metadata_gte?: InputMaybe<Scalars['String']>;
+  metadata_lte?: InputMaybe<Scalars['String']>;
+  metadata_in?: InputMaybe<Array<Scalars['String']>>;
+  metadata_not_in?: InputMaybe<Array<Scalars['String']>>;
+  metadata_contains?: InputMaybe<Scalars['String']>;
+  metadata_contains_nocase?: InputMaybe<Scalars['String']>;
+  metadata_not_contains?: InputMaybe<Scalars['String']>;
+  metadata_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  metadata_starts_with?: InputMaybe<Scalars['String']>;
+  metadata_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata_not_starts_with?: InputMaybe<Scalars['String']>;
+  metadata_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata_ends_with?: InputMaybe<Scalars['String']>;
+  metadata_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata_not_ends_with?: InputMaybe<Scalars['String']>;
+  metadata_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   roles_?: InputMaybe<UserRole_filter>;
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
@@ -692,7 +827,7 @@ export type User_filter = {
 
 export type User_orderBy =
   | 'id'
-  | 'name'
+  | 'metadata'
   | 'roles';
 
 export type _Block_ = {
@@ -732,6 +867,10 @@ export type _SubgraphErrorPolicy_ =
   /** null **/
   unions: InContextSdkMethod<Query['unions'], QueryunionsArgs, MeshContext>,
   /** null **/
+  application: InContextSdkMethod<Query['application'], QueryapplicationArgs, MeshContext>,
+  /** null **/
+  applications: InContextSdkMethod<Query['applications'], QueryapplicationsArgs, MeshContext>,
+  /** null **/
   userRole: InContextSdkMethod<Query['userRole'], QueryuserRoleArgs, MeshContext>,
   /** null **/
   userRoles: InContextSdkMethod<Query['userRoles'], QueryuserRolesArgs, MeshContext>,
@@ -760,6 +899,10 @@ export type _SubgraphErrorPolicy_ =
   union: InContextSdkMethod<Subscription['union'], SubscriptionunionArgs, MeshContext>,
   /** null **/
   unions: InContextSdkMethod<Subscription['unions'], SubscriptionunionsArgs, MeshContext>,
+  /** null **/
+  application: InContextSdkMethod<Subscription['application'], SubscriptionapplicationArgs, MeshContext>,
+  /** null **/
+  applications: InContextSdkMethod<Subscription['applications'], SubscriptionapplicationsArgs, MeshContext>,
   /** null **/
   userRole: InContextSdkMethod<Subscription['userRole'], SubscriptionuserRoleArgs, MeshContext>,
   /** null **/

@@ -115,6 +115,7 @@
     "react-dom": "18.2.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.45.4",
+    "react-qr-code": "^2.0.12",
     "react-router-dom": "6.11.2",
     "solidity-stringutils": "github:LayerZero-Labs/solidity-stringutils",
     "stream-browserify": "^3.0.0",

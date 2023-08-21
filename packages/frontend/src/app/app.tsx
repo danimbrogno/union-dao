@@ -10,6 +10,7 @@ import { IPFS } from './shared/IPFS';
 import { Proposal } from './routes/Union/routes/Proposals/Proposal/Proposal';
 import { Identity } from './shared/Identity';
 import { WagmiProvider } from './shared/WagmiProvider';
+import { Join } from './routes/Union/routes/Join';
 
 const StyledApp = styled.div`
   // Your style here
@@ -42,6 +43,7 @@ export function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/create" element={<Create />} />
                 <Route path="/union/:id" element={<Union />} />
+                <Route path="/union/:id/join" element={<Join />} />
                 <Route
                   path="/union/:id/proposal/create"
                   element={<ProposalCreate />}

@@ -7,7 +7,7 @@ import {
   useMemo,
 } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useLocalStorage } from 'usehooks-ts';
+import { useLocalStorage, useSessionStorage } from 'usehooks-ts';
 import { getAddress } from 'viem';
 import { useAccount, useSignMessage } from 'wagmi';
 
@@ -21,14 +21,14 @@ type Inputs = {
 
 const nullSignature = '0x0000000000000000000000000000000000000000';
 export const Identity = ({ children }: PropsWithChildren) => {
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const {
     register,
     handleSubmit,
     formState: { isValid, isSubmitting },
   } = useForm<Inputs>();
   const [identity, setIdentity] = useLocalStorage(
-    'identity',
+    `identity-${address}`,
     getAddress(nullSignature)
   );
 
@@ -39,6 +39,10 @@ export const Identity = ({ children }: PropsWithChildren) => {
       setIdentity(data);
     }
   }, [data, identity, setIdentity]);
+
+  useEffect(() => {
+    setIdentity(getAddress(nullSignature));
+  }, [address, setIdentity]);
 
   const onSubmit: SubmitHandler<Inputs> = async ({ passphrase }) => {
     signMessage({ message: passphrase });

@@ -16,6 +16,7 @@ const receipt = LastBroadcast.receipts[txIndex];
 
 export const environment = {
   production: false,
+  appUrl: process.env.NX_FRONTEND_URL || 'http://localhost:4200',
   ethereum: {
     chainId: process.env.ETHEREUM_CHAIN_ID
       ? parseInt(process.env.ETHEREUM_CHAIN_ID)

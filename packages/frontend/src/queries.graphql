@@ -32,6 +32,9 @@ query UnionDetails($id: ID!) {
     name
     description
     logo
+    pendingApplications(where: { approved: false }) {
+      ...ApplicationDetail
+    }
     proposals {
       id
       numOptions
@@ -41,6 +44,14 @@ query UnionDetails($id: ID!) {
       }
     }
   }
+}
+
+fragment ApplicationDetail on Application {
+  id
+  user {
+    id
+  }
+  approved
 }
 
 query WatchUnionDetails($id: ID!) @live {
@@ -72,5 +83,16 @@ query ProposalDetails($id: ID!) {
       votes
     }
     metadata
+  }
+}
+
+query IsUserAdminOfUnion($id: ID!, $unionId: Bytes!) {
+  user(id: $id) {
+    id
+    roles(where: { isAdmin: true, union_: { id: $unionId } }) {
+      union {
+        id
+      }
+    }
   }
 }

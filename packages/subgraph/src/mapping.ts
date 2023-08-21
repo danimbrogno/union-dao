@@ -1,15 +1,19 @@
 import {
   AdminAdded,
   AdminRemoved,
+  ApplicationApproved,
+  ApplicationSubmitted,
   MemberAdded,
   MemberRemoved,
   UnionCreated,
+  UserMetadataUpdated,
 } from '../generated/UnionFacet/UnionFacet';
 import {
   ProposalCreated,
   VoteCast,
 } from '../generated/ProposalFacet/ProposalFacet';
 import {
+  Application,
   Proposal,
   ProposalOption,
   Union,
@@ -17,13 +21,7 @@ import {
   UserRole,
 } from '../generated/schema';
 
-import {
-  log,
-  Bytes,
-  dataSource,
-  json,
-  JSONValueKind,
-} from '@graphprotocol/graph-ts';
+import { log, Bytes } from '@graphprotocol/graph-ts';
 
 export function handleUnionCreated(ev: UnionCreated): void {
   log.info('Enters handleUnionCreated handler', []);
@@ -47,26 +45,29 @@ export function handleUnionCreated(ev: UnionCreated): void {
 }
 
 export function handleMemberAdded(ev: MemberAdded): void {
-  const id = Bytes.fromHexString(
+  log.info('Index = {}, Member = {}', [
+    ev.params.index.toHexString(),
+    ev.params.member.toHexString(),
+  ]);
+  const roleId = Bytes.fromHexString(
     ev.params.member.toHex() + ev.params.index.toHex()
   );
 
   const unionId = ev.params.index;
 
-  let role = UserRole.load(id);
+  let role = UserRole.load(roleId);
 
   let user = User.load(ev.params.member);
 
   if (!user) {
     user = new User(ev.params.member);
-    user.name = '';
     user.save();
   }
 
   if (!role) {
-    role = new UserRole(id);
+    role = new UserRole(roleId);
     role.union = unionId;
-    role.user = ev.params.member;
+    role.user = Bytes.fromHexString(ev.params.member.toHexString());
     role.isAdmin = false;
     role.isMember = true;
     role.save();
@@ -77,6 +78,10 @@ export function handleMemberAdded(ev: MemberAdded): void {
 }
 
 export function handleAdminAdded(ev: AdminAdded): void {
+  log.info('Index = {}, Admin = {}', [
+    ev.params.index.toHexString(),
+    ev.params.admin.toHexString(),
+  ]);
   const id = Bytes.fromHexString(
     ev.params.admin.toHex() + ev.params.index.toHex()
   );
@@ -89,14 +94,13 @@ export function handleAdminAdded(ev: AdminAdded): void {
 
   if (!user) {
     user = new User(ev.params.admin);
-    user.name = '';
     user.save();
   }
 
   if (!role) {
     role = new UserRole(id);
     role.union = unionId;
-    role.user = ev.params.admin;
+    role.user = Bytes.fromHexString(ev.params.admin.toHexString());
     role.isAdmin = true;
     role.isMember = false;
     role.save();
@@ -184,5 +188,61 @@ export function handleVoteCast(ev: VoteCast): void {
     option.votes = ev.params.numVotes.toI32();
     option.save();
     log.info('handleVoteCast: proposal option saved', []);
+  }
+}
+
+export function handleApplicationSubmitted(ev: ApplicationSubmitted): void {
+  log.info('Enters handleApplicationSubmitted handler', []);
+  log.info('handleApplicationSubmitted: {}', [ev.params.index.toString()]);
+
+  const applicationId = Bytes.fromHexString(
+    ev.params.member.toHex() + ev.params.index.toHex()
+  );
+
+  let application = Application.load(applicationId);
+
+  if (!application) {
+    let user = User.load(ev.params.member);
+    if (!user) {
+      user = new User(ev.params.member);
+      user.save();
+    }
+    const unionId = ev.params.index;
+    const application = new Application(applicationId);
+    application.union = unionId;
+    application.user = ev.params.member;
+    application.approved = false;
+    application.save();
+  }
+}
+
+export function handleApplicationApproved(ev: ApplicationApproved): void {
+  log.info('Enters handleApplicationApproved handler', []);
+  log.info('handleApplicationApproved: {}', [ev.params.index.toString()]);
+
+  const applicationId = Bytes.fromHexString(
+    ev.params.member.toHex() + ev.params.index.toHex()
+  );
+
+  let application = Application.load(applicationId);
+
+  if (application) {
+    log.info('handleApplicationApproved: application found', []);
+    log.info('handleApplicationApproved: updating application', []);
+    application.approved = true;
+    application.save();
+    log.info('handleApplicationApproved: application saved', []);
+  }
+}
+
+export function handleUserMetadataUpdated(ev: UserMetadataUpdated): void {
+  let user = User.load(ev.params.member);
+  if (!user) {
+    user = new User(ev.params.member);
+    user.metadata = ev.params.metadataCID;
+    user.save();
+  } else {
+    user.metadata = ev.params.metadataCID;
+    user.save();
   }
 }

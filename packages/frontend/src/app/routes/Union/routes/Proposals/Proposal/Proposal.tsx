@@ -42,8 +42,6 @@ export const Proposal = () => {
   });
 
   useEffect(() => {
-    const gid = hexToBigInt(params.id as Hex).toString();
-    console.log(params.id);
     refreshGroup(params.id as string);
   }, [params.id, refreshGroup]);
 

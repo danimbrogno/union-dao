@@ -11,8 +11,8 @@ dataSources:
     network: base-testnet
     source:
       abi: UnionFacet
-      address: "0xeF31027350Be2c7439C1b0BE022d49421488b72C"
-      startBlock: 8164209
+      address: "0xe38b6847E611e942E6c80eD89aE867F522402e80"
+      startBlock: 8164251
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -37,14 +37,20 @@ dataSources:
           handler: handleAdminAdded
         - event: AdminRemoved(indexed bytes32,indexed address)
           handler: handleAdminRemoved
+        - event: ApplicationSubmitted(indexed bytes32,indexed address)
+          handler: handleApplicationSubmitted
+        - event: ApplicationApproved(indexed bytes32,indexed address)
+          handler: handleApplicationApproved
+        - event: UserMetadataUpdated(indexed address,string)
+          handler: handleUserMetadataUpdated
       file: ./src/mapping.ts
   - kind: ethereum/contract
     name: ProposalFacet
     network: base-testnet
     source:
       abi: ProposalFacet
-      address: "0xeF31027350Be2c7439C1b0BE022d49421488b72C"
-      startBlock: 8164209
+      address: "0xe38b6847E611e942E6c80eD89aE867F522402e80"
+      startBlock: 8164251
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

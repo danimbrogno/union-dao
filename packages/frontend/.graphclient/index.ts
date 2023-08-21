@@ -44,6 +44,89 @@ export type Scalars = {
   Bytes: any;
 };
 
+export type Application = {
+  id: Scalars['Bytes'];
+  union: Union;
+  user: User;
+  approved: Scalars['Boolean'];
+};
+
+export type Application_filter = {
+  id?: InputMaybe<Scalars['Bytes']>;
+  id_not?: InputMaybe<Scalars['Bytes']>;
+  id_gt?: InputMaybe<Scalars['Bytes']>;
+  id_lt?: InputMaybe<Scalars['Bytes']>;
+  id_gte?: InputMaybe<Scalars['Bytes']>;
+  id_lte?: InputMaybe<Scalars['Bytes']>;
+  id_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  id_contains?: InputMaybe<Scalars['Bytes']>;
+  id_not_contains?: InputMaybe<Scalars['Bytes']>;
+  union?: InputMaybe<Scalars['String']>;
+  union_not?: InputMaybe<Scalars['String']>;
+  union_gt?: InputMaybe<Scalars['String']>;
+  union_lt?: InputMaybe<Scalars['String']>;
+  union_gte?: InputMaybe<Scalars['String']>;
+  union_lte?: InputMaybe<Scalars['String']>;
+  union_in?: InputMaybe<Array<Scalars['String']>>;
+  union_not_in?: InputMaybe<Array<Scalars['String']>>;
+  union_contains?: InputMaybe<Scalars['String']>;
+  union_contains_nocase?: InputMaybe<Scalars['String']>;
+  union_not_contains?: InputMaybe<Scalars['String']>;
+  union_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  union_starts_with?: InputMaybe<Scalars['String']>;
+  union_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  union_not_starts_with?: InputMaybe<Scalars['String']>;
+  union_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  union_ends_with?: InputMaybe<Scalars['String']>;
+  union_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  union_not_ends_with?: InputMaybe<Scalars['String']>;
+  union_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  union_?: InputMaybe<Union_filter>;
+  user?: InputMaybe<Scalars['String']>;
+  user_not?: InputMaybe<Scalars['String']>;
+  user_gt?: InputMaybe<Scalars['String']>;
+  user_lt?: InputMaybe<Scalars['String']>;
+  user_gte?: InputMaybe<Scalars['String']>;
+  user_lte?: InputMaybe<Scalars['String']>;
+  user_in?: InputMaybe<Array<Scalars['String']>>;
+  user_not_in?: InputMaybe<Array<Scalars['String']>>;
+  user_contains?: InputMaybe<Scalars['String']>;
+  user_contains_nocase?: InputMaybe<Scalars['String']>;
+  user_not_contains?: InputMaybe<Scalars['String']>;
+  user_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  user_starts_with?: InputMaybe<Scalars['String']>;
+  user_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  user_not_starts_with?: InputMaybe<Scalars['String']>;
+  user_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  user_ends_with?: InputMaybe<Scalars['String']>;
+  user_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  user_not_ends_with?: InputMaybe<Scalars['String']>;
+  user_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  user_?: InputMaybe<User_filter>;
+  approved?: InputMaybe<Scalars['Boolean']>;
+  approved_not?: InputMaybe<Scalars['Boolean']>;
+  approved_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  approved_not_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<Application_filter>>>;
+  or?: InputMaybe<Array<InputMaybe<Application_filter>>>;
+};
+
+export type Application_orderBy =
+  | 'id'
+  | 'union'
+  | 'union__id'
+  | 'union__name'
+  | 'union__logo'
+  | 'union__description'
+  | 'union__votingAddress'
+  | 'user'
+  | 'user__id'
+  | 'user__metadata'
+  | 'approved';
+
 export type BlockChangedFilter = {
   number_gte: Scalars['Int'];
 };
@@ -228,6 +311,8 @@ export type Proposal_orderBy =
 export type Query = {
   union?: Maybe<Union>;
   unions: Array<Union>;
+  application?: Maybe<Application>;
+  applications: Array<Application>;
   userRole?: Maybe<UserRole>;
   userRoles: Array<UserRole>;
   user?: Maybe<User>;
@@ -254,6 +339,24 @@ export type QueryunionsArgs = {
   orderBy?: InputMaybe<Union_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   where?: InputMaybe<Union_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryapplicationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryapplicationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Application_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Application_filter>;
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
@@ -338,6 +441,8 @@ export type Query_metaArgs = {
 export type Subscription = {
   union?: Maybe<Union>;
   unions: Array<Union>;
+  application?: Maybe<Application>;
+  applications: Array<Application>;
   userRole?: Maybe<UserRole>;
   userRoles: Array<UserRole>;
   user?: Maybe<User>;
@@ -364,6 +469,24 @@ export type SubscriptionunionsArgs = {
   orderBy?: InputMaybe<Union_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   where?: InputMaybe<Union_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionapplicationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionapplicationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Application_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Application_filter>;
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
@@ -451,8 +574,18 @@ export type Union = {
   logo: Scalars['String'];
   description: Scalars['String'];
   votingAddress: Scalars['Bytes'];
+  pendingApplications: Array<Application>;
   users: Array<UserRole>;
   proposals: Array<Proposal>;
+};
+
+
+export type UnionpendingApplicationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Application_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Application_filter>;
 };
 
 
@@ -554,6 +687,7 @@ export type Union_filter = {
   votingAddress_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
   votingAddress_contains?: InputMaybe<Scalars['Bytes']>;
   votingAddress_not_contains?: InputMaybe<Scalars['Bytes']>;
+  pendingApplications_?: InputMaybe<Application_filter>;
   users_?: InputMaybe<UserRole_filter>;
   proposals_?: InputMaybe<Proposal_filter>;
   /** Filter for the block changed event. */
@@ -568,12 +702,13 @@ export type Union_orderBy =
   | 'logo'
   | 'description'
   | 'votingAddress'
+  | 'pendingApplications'
   | 'users'
   | 'proposals';
 
 export type User = {
   id: Scalars['Bytes'];
-  name: Scalars['String'];
+  metadata?: Maybe<Scalars['String']>;
   roles: Array<UserRole>;
 };
 
@@ -671,7 +806,7 @@ export type UserRole_orderBy =
   | 'union__votingAddress'
   | 'user'
   | 'user__id'
-  | 'user__name'
+  | 'user__metadata'
   | 'isMember'
   | 'isAdmin';
 
@@ -686,26 +821,26 @@ export type User_filter = {
   id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
   id_contains?: InputMaybe<Scalars['Bytes']>;
   id_not_contains?: InputMaybe<Scalars['Bytes']>;
-  name?: InputMaybe<Scalars['String']>;
-  name_not?: InputMaybe<Scalars['String']>;
-  name_gt?: InputMaybe<Scalars['String']>;
-  name_lt?: InputMaybe<Scalars['String']>;
-  name_gte?: InputMaybe<Scalars['String']>;
-  name_lte?: InputMaybe<Scalars['String']>;
-  name_in?: InputMaybe<Array<Scalars['String']>>;
-  name_not_in?: InputMaybe<Array<Scalars['String']>>;
-  name_contains?: InputMaybe<Scalars['String']>;
-  name_contains_nocase?: InputMaybe<Scalars['String']>;
-  name_not_contains?: InputMaybe<Scalars['String']>;
-  name_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  name_starts_with?: InputMaybe<Scalars['String']>;
-  name_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  name_not_starts_with?: InputMaybe<Scalars['String']>;
-  name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  name_ends_with?: InputMaybe<Scalars['String']>;
-  name_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  name_not_ends_with?: InputMaybe<Scalars['String']>;
-  name_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata?: InputMaybe<Scalars['String']>;
+  metadata_not?: InputMaybe<Scalars['String']>;
+  metadata_gt?: InputMaybe<Scalars['String']>;
+  metadata_lt?: InputMaybe<Scalars['String']>;
+  metadata_gte?: InputMaybe<Scalars['String']>;
+  metadata_lte?: InputMaybe<Scalars['String']>;
+  metadata_in?: InputMaybe<Array<Scalars['String']>>;
+  metadata_not_in?: InputMaybe<Array<Scalars['String']>>;
+  metadata_contains?: InputMaybe<Scalars['String']>;
+  metadata_contains_nocase?: InputMaybe<Scalars['String']>;
+  metadata_not_contains?: InputMaybe<Scalars['String']>;
+  metadata_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  metadata_starts_with?: InputMaybe<Scalars['String']>;
+  metadata_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata_not_starts_with?: InputMaybe<Scalars['String']>;
+  metadata_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata_ends_with?: InputMaybe<Scalars['String']>;
+  metadata_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata_not_ends_with?: InputMaybe<Scalars['String']>;
+  metadata_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   roles_?: InputMaybe<UserRole_filter>;
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
@@ -715,7 +850,7 @@ export type User_filter = {
 
 export type User_orderBy =
   | 'id'
-  | 'name'
+  | 'metadata'
   | 'roles';
 
 export type _Block_ = {
@@ -835,6 +970,9 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  Application: ResolverTypeWrapper<Application>;
+  Application_filter: Application_filter;
+  Application_orderBy: Application_orderBy;
   BigDecimal: ResolverTypeWrapper<Scalars['BigDecimal']>;
   BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
   BlockChangedFilter: BlockChangedFilter;
@@ -870,6 +1008,8 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
+  Application: Application;
+  Application_filter: Application_filter;
   BigDecimal: Scalars['BigDecimal'];
   BigInt: Scalars['BigInt'];
   BlockChangedFilter: BlockChangedFilter;
@@ -912,6 +1052,14 @@ export type derivedFromDirectiveArgs = {
 
 export type derivedFromDirectiveResolver<Result, Parent, ContextType = MeshContext, Args = derivedFromDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
+export type ApplicationResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Application'] = ResolversParentTypes['Application']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  union?: Resolver<ResolversTypes['Union'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  approved?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export interface BigDecimalScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigDecimal'], any> {
   name: 'BigDecimal';
 }
@@ -943,6 +1091,8 @@ export type ProposalOptionResolvers<ContextType = MeshContext, ParentType extend
 export type QueryResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   union?: Resolver<Maybe<ResolversTypes['Union']>, ParentType, ContextType, RequireFields<QueryunionArgs, 'id' | 'subgraphError'>>;
   unions?: Resolver<Array<ResolversTypes['Union']>, ParentType, ContextType, RequireFields<QueryunionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  application?: Resolver<Maybe<ResolversTypes['Application']>, ParentType, ContextType, RequireFields<QueryapplicationArgs, 'id' | 'subgraphError'>>;
+  applications?: Resolver<Array<ResolversTypes['Application']>, ParentType, ContextType, RequireFields<QueryapplicationsArgs, 'skip' | 'first' | 'subgraphError'>>;
   userRole?: Resolver<Maybe<ResolversTypes['UserRole']>, ParentType, ContextType, RequireFields<QueryuserRoleArgs, 'id' | 'subgraphError'>>;
   userRoles?: Resolver<Array<ResolversTypes['UserRole']>, ParentType, ContextType, RequireFields<QueryuserRolesArgs, 'skip' | 'first' | 'subgraphError'>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryuserArgs, 'id' | 'subgraphError'>>;
@@ -957,6 +1107,8 @@ export type QueryResolvers<ContextType = MeshContext, ParentType extends Resolve
 export type SubscriptionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   union?: SubscriptionResolver<Maybe<ResolversTypes['Union']>, "union", ParentType, ContextType, RequireFields<SubscriptionunionArgs, 'id' | 'subgraphError'>>;
   unions?: SubscriptionResolver<Array<ResolversTypes['Union']>, "unions", ParentType, ContextType, RequireFields<SubscriptionunionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  application?: SubscriptionResolver<Maybe<ResolversTypes['Application']>, "application", ParentType, ContextType, RequireFields<SubscriptionapplicationArgs, 'id' | 'subgraphError'>>;
+  applications?: SubscriptionResolver<Array<ResolversTypes['Application']>, "applications", ParentType, ContextType, RequireFields<SubscriptionapplicationsArgs, 'skip' | 'first' | 'subgraphError'>>;
   userRole?: SubscriptionResolver<Maybe<ResolversTypes['UserRole']>, "userRole", ParentType, ContextType, RequireFields<SubscriptionuserRoleArgs, 'id' | 'subgraphError'>>;
   userRoles?: SubscriptionResolver<Array<ResolversTypes['UserRole']>, "userRoles", ParentType, ContextType, RequireFields<SubscriptionuserRolesArgs, 'skip' | 'first' | 'subgraphError'>>;
   user?: SubscriptionResolver<Maybe<ResolversTypes['User']>, "user", ParentType, ContextType, RequireFields<SubscriptionuserArgs, 'id' | 'subgraphError'>>;
@@ -974,6 +1126,7 @@ export type UnionResolvers<ContextType = MeshContext, ParentType extends Resolve
   logo?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   votingAddress?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  pendingApplications?: Resolver<Array<ResolversTypes['Application']>, ParentType, ContextType, RequireFields<UnionpendingApplicationsArgs, 'skip' | 'first'>>;
   users?: Resolver<Array<ResolversTypes['UserRole']>, ParentType, ContextType, RequireFields<UnionusersArgs, 'skip' | 'first'>>;
   proposals?: Resolver<Array<ResolversTypes['Proposal']>, ParentType, ContextType, RequireFields<UnionproposalsArgs, 'skip' | 'first'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -981,7 +1134,7 @@ export type UnionResolvers<ContextType = MeshContext, ParentType extends Resolve
 
 export type UserResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  metadata?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   roles?: Resolver<Array<ResolversTypes['UserRole']>, ParentType, ContextType, RequireFields<UserrolesArgs, 'skip' | 'first'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1010,6 +1163,7 @@ export type _Meta_Resolvers<ContextType = MeshContext, ParentType extends Resolv
 }>;
 
 export type Resolvers<ContextType = MeshContext> = ResolversObject<{
+  Application?: ApplicationResolvers<ContextType>;
   BigDecimal?: GraphQLScalarType;
   BigInt?: GraphQLScalarType;
   Bytes?: GraphQLScalarType;
@@ -1148,6 +1302,12 @@ const merger = new(BareMerger as any)({
           return printWithCache(ProposalDetailsDocument);
         },
         location: 'ProposalDetailsDocument.graphql'
+      },{
+        document: IsUserAdminOfUnionDocument,
+        get rawSDL() {
+          return printWithCache(IsUserAdminOfUnionDocument);
+        },
+        location: 'IsUserAdminOfUnionDocument.graphql'
       }
     ];
     },
@@ -1203,11 +1363,19 @@ export type UnionDetailsQueryVariables = Exact<{
 
 export type UnionDetailsQuery = { union?: Maybe<(
     Pick<Union, 'id' | 'name' | 'description' | 'logo'>
-    & { proposals: Array<(
+    & { pendingApplications: Array<(
+      Pick<Application, 'id' | 'approved'>
+      & { user: Pick<User, 'id'> }
+    )>, proposals: Array<(
       Pick<Proposal, 'id' | 'numOptions'>
       & { options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
     )> }
   )> };
+
+export type ApplicationDetailFragment = (
+  Pick<Application, 'id' | 'approved'>
+  & { user: Pick<User, 'id'> }
+);
 
 export type WatchUnionDetailsQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1232,7 +1400,26 @@ export type ProposalDetailsQuery = { proposal?: Maybe<(
     & { union: Pick<Union, 'votingAddress'>, options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
   )> };
 
+export type IsUserAdminOfUnionQueryVariables = Exact<{
+  id: Scalars['ID'];
+  unionId: Scalars['Bytes'];
+}>;
 
+
+export type IsUserAdminOfUnionQuery = { user?: Maybe<(
+    Pick<User, 'id'>
+    & { roles: Array<{ union: Pick<Union, 'id'> }> }
+  )> };
+
+export const ApplicationDetailFragmentDoc = gql`
+    fragment ApplicationDetail on Application {
+  id
+  user {
+    id
+  }
+  approved
+}
+    ` as unknown as DocumentNode<ApplicationDetailFragment, unknown>;
 export const WatchAllUnionsDocument = gql`
     query WatchAllUnions @live {
   unions(first: 50) {
@@ -1270,6 +1457,9 @@ export const UnionDetailsDocument = gql`
     name
     description
     logo
+    pendingApplications(where: {approved: false}) {
+      ...ApplicationDetail
+    }
     proposals {
       id
       numOptions
@@ -1280,7 +1470,7 @@ export const UnionDetailsDocument = gql`
     }
   }
 }
-    ` as unknown as DocumentNode<UnionDetailsQuery, UnionDetailsQueryVariables>;
+    ${ApplicationDetailFragmentDoc}` as unknown as DocumentNode<UnionDetailsQuery, UnionDetailsQueryVariables>;
 export const WatchUnionDetailsDocument = gql`
     query WatchUnionDetails($id: ID!) @live {
   union(id: $id) {
@@ -1315,6 +1505,19 @@ export const ProposalDetailsDocument = gql`
   }
 }
     ` as unknown as DocumentNode<ProposalDetailsQuery, ProposalDetailsQueryVariables>;
+export const IsUserAdminOfUnionDocument = gql`
+    query IsUserAdminOfUnion($id: ID!, $unionId: Bytes!) {
+  user(id: $id) {
+    id
+    roles(where: {isAdmin: true, union_: {id: $unionId}}) {
+      union {
+        id
+      }
+    }
+  }
+}
+    ` as unknown as DocumentNode<IsUserAdminOfUnionQuery, IsUserAdminOfUnionQueryVariables>;
+
 
 
 
@@ -1338,6 +1541,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     ProposalDetails(variables: ProposalDetailsQueryVariables, options?: C): Promise<ProposalDetailsQuery> {
       return requester<ProposalDetailsQuery, ProposalDetailsQueryVariables>(ProposalDetailsDocument, variables, options) as Promise<ProposalDetailsQuery>;
+    },
+    IsUserAdminOfUnion(variables: IsUserAdminOfUnionQueryVariables, options?: C): Promise<IsUserAdminOfUnionQuery> {
+      return requester<IsUserAdminOfUnionQuery, IsUserAdminOfUnionQueryVariables>(IsUserAdminOfUnionDocument, variables, options) as Promise<IsUserAdminOfUnionQuery>;
     }
   };
 }
