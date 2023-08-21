@@ -6,6 +6,7 @@ import { hexToBigInt } from 'viem';
 import QR from 'react-qr-code';
 import { PendingApplication } from './components/PendingApplication';
 import { UserUnionContext } from './shared/UnionUserContext';
+import { MembersList } from './components/MembersList';
 
 export const Union = () => {
   const params = useParams();
@@ -46,6 +47,8 @@ export const Union = () => {
               </li>
             ))}
           </ul>
+          <h2>Members</h2>
+          <MembersList />
           <h2>Pending Members</h2>
           <ul>
             {unionDetailQuery.union.pendingApplications.map((application) => (

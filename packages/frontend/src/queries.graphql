@@ -71,6 +71,20 @@ query WatchUnionDetails($id: ID!) @live {
   }
 }
 
+query UnionMembers($id: ID!) {
+  union(id: $id) {
+    id
+    users {
+      id
+      isAdmin
+      user {
+        id
+        metadata
+      }
+    }
+  }
+}
+
 query ProposalDetails($id: ID!) {
   proposal(id: $id) {
     id
