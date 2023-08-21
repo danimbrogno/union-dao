@@ -2,11 +2,6 @@
 
 # Setup
 
-1. Add .env.local and populate with
-```
-NX_ANVIL_INFURA_API_KEY=
-```
-
 # Loading
 1. Run `nx serve contracts` to start the local fork of the Base Goerli chain
 1. Run `nx deploy contracts` to deploy our contracts to our local node

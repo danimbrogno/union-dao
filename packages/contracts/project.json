@@ -35,7 +35,6 @@
     },
     "deploy": {
       "executor": "nx:run-commands",
-      "dependsOn": [],
       "options": {
         "cwd": "packages/contracts",
         "command": "forge script --chain-id 84531 script/AppDeployer.s.sol:AppDeployer --fork-url http://localhost:8545 --broadcast --ffi"
