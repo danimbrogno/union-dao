@@ -1,5 +1,5 @@
-import { useConfig } from 'packages/frontend/src/app/shared/Config';
-import { useIPFS } from 'packages/frontend/src/app/shared/IPFS';
+import { useConfig } from 'frontend/shared/Config';
+import { useIPFS } from 'frontend/shared/IPFS';
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { proposalFacetABI } from 'shared';

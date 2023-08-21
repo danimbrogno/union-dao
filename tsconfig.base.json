@@ -15,7 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "setup-hasher": ["packages/setup-hasher/src/index.ts"],
       "shared": ["packages/shared/src/index.ts"]
     }
   },

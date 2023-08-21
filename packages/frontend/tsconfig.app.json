@@ -4,7 +4,12 @@
     "outDir": "../../dist/out-tsc",
     "types": ["node"],
     "resolveJsonModule": true,
-    "target": "ES2020"
+    "target": "ES2020",
+    "paths": {
+      "frontend/*": ["packages/frontend/src/app/*"],
+      "shared": ["packages/shared/src/index.ts"],
+      "graphclient": ["packages/frontend/.graphclient/index.ts"],
+    }
   },
   "files": [
     "../../node_modules/@nx/react/typings/cssmodule.d.ts",

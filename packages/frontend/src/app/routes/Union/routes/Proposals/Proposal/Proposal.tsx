@@ -2,16 +2,16 @@ import {
   ProposalDetailsDocument,
   ProposalDetailsQuery,
   execute,
-} from 'packages/frontend/.graphclient';
-import { useConfig } from 'packages/frontend/src/app/shared/Config';
+} from 'graphclient';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { proposalFacetABI } from 'shared';
 import { Hex, getAddress, hexToBigInt } from 'viem';
 import { useContractWrite, useWaitForTransaction } from 'wagmi';
 import { generateProof } from '@semaphore-protocol/proof';
-import { useIdentity } from 'packages/frontend/src/app/shared/Identity';
-import useSemaphore from 'packages/frontend/src/app/shared/useSemaphoreEthers';
+import { useIdentity } from 'frontend/shared/Identity';
+import useSemaphore from 'frontend/shared/useSemaphoreEthers';
+import { useConfig } from 'frontend/shared/Config';
 
 export const Proposal = () => {
   const params = useParams<'id' | 'proposalId'>();
