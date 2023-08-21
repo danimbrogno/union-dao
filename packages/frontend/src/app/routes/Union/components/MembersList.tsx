@@ -22,7 +22,9 @@ export const MembersList = () => {
   return (
     <ul>
       {(data?.union?.users || []).map((user) => (
-        <li key={user.user.id}>{user.user.metadata}</li>
+        <li key={user.user.id}>
+          {user.user.metadata}– {user.user.id} {user.isAdmin ? '[admin]' : ''}
+        </li>
       ))}
     </ul>
   );
