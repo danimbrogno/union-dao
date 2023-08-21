@@ -2,15 +2,6 @@ import styled from '@emotion/styled';
 import { Route, Routes, Link } from 'react-router-dom';
 import { Config } from './shared/Config';
 import { Home } from './routes/Home';
-import {
-  Chain,
-  WagmiConfig,
-  configureChains,
-  createConfig,
-  mainnet,
-} from 'wagmi';
-import { publicProvider } from 'wagmi/providers/public';
-import { InjectedConnector } from '@wagmi/core';
 import { Connect } from './components/Connect';
 import { Create } from './routes/Create/Create';
 import { Create as ProposalCreate } from './routes/Union/routes/Proposals/Create';
@@ -18,32 +9,7 @@ import { Union } from './routes/Union/Union';
 import { IPFS } from './shared/IPFS';
 import { Proposal } from './routes/Union/routes/Proposals/Proposal/Proposal';
 import { Identity } from './shared/Identity';
-
-//
-const localhost: Chain = {
-  ...mainnet,
-  id: 84531,
-  name: 'localhost',
-  rpcUrls: {
-    public: {
-      http: ['http://localhost:8545'],
-    },
-    default: {
-      http: ['http://localhost:8545'],
-    },
-  },
-};
-
-const { chains, publicClient } = configureChains(
-  [localhost],
-  [publicProvider()]
-);
-
-const config = createConfig({
-  autoConnect: true,
-  connectors: [new InjectedConnector({ chains })],
-  publicClient,
-});
+import { WagmiProvider } from './shared/WagmiProvider';
 
 const StyledApp = styled.div`
   // Your style here
@@ -54,7 +20,7 @@ export function App() {
     <StyledApp>
       <Config>
         <IPFS>
-          <WagmiConfig config={config}>
+          <WagmiProvider>
             <Connect />
             <Identity>
               {/* <NxWelcome title="frontend" />
@@ -86,7 +52,7 @@ export function App() {
                 />
               </Routes>
             </Identity>
-          </WagmiConfig>
+          </WagmiProvider>
         </IPFS>
       </Config>
       {/* END: routes */}

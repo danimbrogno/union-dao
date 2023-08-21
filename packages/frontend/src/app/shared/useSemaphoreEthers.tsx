@@ -1,6 +1,7 @@
 import { SemaphoreEthers } from '@semaphore-protocol/data';
 import { useCallback, useState } from 'react';
 import { Group } from '@semaphore-protocol/group';
+import { useConfig } from './Config';
 
 export type SemaphoreContextType = {
   group: Group | null;
@@ -11,17 +12,16 @@ export default function useSemaphore(
   contractAddress: string
 ): SemaphoreContextType {
   const [group, setGroup] = useState<Group | null>(null);
-
+  const { ethereum } = useConfig();
   const refreshGroup = useCallback(
     async (groupId: string): Promise<void> => {
       if (!contractAddress) {
         return;
       }
 
-      // TODO: dynamic rpc url
-      const semaphore = new SemaphoreEthers('http://localhost:8545', {
+      const semaphore = new SemaphoreEthers(ethereum.rpcUrl, {
         address: contractAddress,
-        startBlock: 8163958,
+        startBlock: ethereum.startBlock,
       });
 
       const [_members, _group] = await Promise.all([

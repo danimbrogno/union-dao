@@ -2,6 +2,10 @@ import { PropsWithChildren, createContext, useContext } from 'react';
 import { environment } from '../../environments/environment';
 
 interface ConfigContext {
+  ethereum: {
+    rpcUrl: string;
+    startBlock: number;
+  };
   addresses: {
     diamond: string;
   };
@@ -12,6 +16,10 @@ interface ConfigContext {
 }
 
 const Context = createContext<ConfigContext>({
+  ethereum: {
+    rpcUrl: '',
+    startBlock: 0,
+  },
   addresses: {
     diamond: '',
   },
@@ -33,6 +41,10 @@ export const Config = ({ children }: PropsWithChildren) => {
   return (
     <Context.Provider
       value={{
+        ethereum: {
+          rpcUrl: environment.ethereum.rpcUrl,
+          startBlock: environment.ethereum.startBlock,
+        },
         addresses: {
           diamond: environment.addresses.diamond,
         },
