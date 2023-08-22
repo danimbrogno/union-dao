@@ -20,6 +20,7 @@ import { Link } from 'react-router-dom';
 import { useIPFS } from '../../shared/IPFS';
 import { useDropzone } from 'react-dropzone';
 import { useIdentity } from '../../shared/Identity';
+import Chrome from 'frontend/shared/Chrome/Chrome';
 
 type Inputs = {
   name: string;
@@ -126,7 +127,7 @@ export const Create = () => {
   };
 
   return (
-    <>
+    <Chrome>
       <ul>
         {allUnionsQuery?.unions.map((union) => (
           <li key={union.id}>
@@ -170,6 +171,6 @@ export const Create = () => {
         {isPrepareError && <p>{prepareError?.message}</p>}
         {isError && <p>{error?.message}</p>}
       </form>
-    </>
+    </Chrome>
   );
 };

@@ -6,6 +6,7 @@ import {
   execute,
 } from 'graphclient';
 import { useAccount } from 'wagmi';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const StyledSelect = styled.select`
   color: ${(props) => props.theme.colors.white};
@@ -18,6 +19,9 @@ const StyledSelect = styled.select`
 
 const ProjectSelector = () => {
   const { address } = useAccount();
+  const { id } = useParams<'id'>();
+  const navigate = useNavigate();
+
   const [userUnionsQuery, setUserUnionsQuery] = useState<GetUserUnionsQuery>();
   useEffect(() => {
     const load = () => {
@@ -29,10 +33,8 @@ const ProjectSelector = () => {
     load();
   });
 
-  const [selectedUnion, setSelectedUnion] = React.useState('');
-
   const handleUnionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedUnion(event.target.value);
+    navigate(`/union/${event.currentTarget.value}`);
   };
 
   const roles = userUnionsQuery?.user?.roles;
@@ -41,8 +43,13 @@ const ProjectSelector = () => {
     return null;
   }
 
+  console.log(roles);
+
   return (
-    <StyledSelect value={selectedUnion} onChange={handleUnionChange}>
+    <StyledSelect value={id} onChange={handleUnionChange}>
+      <option key="null" value="">
+        Select a Union
+      </option>
       {roles.map(({ union }) => (
         <option key={union.id} value={union.id}>
           {union.name}
