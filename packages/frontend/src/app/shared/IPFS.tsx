@@ -24,7 +24,7 @@ export const IPFS = (props: PropsWithChildren) => {
   const ipfs = create({ url: nodeAddress });
   const gatewayUrl = useCallback(
     (cid: string) => `${gatewayAddress}/${cid}`,
-    []
+    [gatewayAddress]
   );
   return <IPFSContext.Provider value={{ ipfs, gatewayUrl }} {...props} />;
 };

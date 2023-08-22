@@ -32,6 +32,7 @@ const StyledForm = styled.form`
   flex-direction: column;
   align-items: stretch;
   justify-content: stretch;
+  margin: auto;
 `;
 
 const StyledHeader = styled.h1`

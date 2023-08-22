@@ -49,7 +49,7 @@ const styles = css`
 
   a {
     text-decoration: none;
-    color: black;
+    color: ${theme.colors.link};
   }
 
   /* Make html and body flex components */

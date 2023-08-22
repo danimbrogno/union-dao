@@ -2,74 +2,88 @@ import { useConfig } from 'frontend/shared/Config';
 import { UnionDetailsDocument, UnionDetailsQuery, execute } from 'graphclient';
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { hexToBigInt } from 'viem';
 import QR from 'react-qr-code';
 import { PendingApplication } from './components/PendingApplication';
 import { UserUnionContext } from './shared/UnionUserContext';
 import { MembersList } from './components/MembersList';
+import Chrome from 'frontend/shared/Chrome/Chrome';
+import styled from '@emotion/styled';
+import { Header } from './components/Header';
+import { Proposals } from './components/Proposals';
+
+const UnionPage = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+`;
+
+const Columns = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+`;
+
+const Column = styled.div`
+  flex: 1;
+`;
 
 export const Union = () => {
-  const params = useParams();
+  const { id } = useParams<'id'>();
   const { appUrl } = useConfig();
   const [unionDetailQuery, setUnionDetailQuery] = useState<UnionDetailsQuery>();
 
+  if (!id) throw new Error(`ID not set`);
   const fetchUnionDetail = useCallback(async () => {
-    if (!params.id) return;
+    if (!id) return;
 
-    const result = await execute(UnionDetailsDocument, { id: params.id });
+    const result = await execute(UnionDetailsDocument, { id });
     if (result.data) {
       setUnionDetailQuery(result.data);
     }
-  }, [params.id]);
+  }, [id]);
 
   useEffect(() => {
     fetchUnionDetail();
   }, [fetchUnionDetail]);
 
   if (unionDetailQuery?.union) {
-    const joinUrl = `${appUrl}/union/${params.id}/join`;
+    const joinUrl = `${appUrl}/union/${id}/join`;
     return (
-      <UserUnionContext>
-        <div>
-          <h1>
-            {hexToBigInt(unionDetailQuery.union.id).toString()}:{' '}
-            {unionDetailQuery.union.name}
-          </h1>
-          <p>{unionDetailQuery.union.logo}</p>
-          <p>{unionDetailQuery.union.description}</p>
-          <h2>Proposals</h2>
-          <ul>
-            {unionDetailQuery.union.proposals.map((proposal) => (
-              <li key={proposal.id}>
-                <Link to={`/union/${params.id}/proposal/${proposal.id}`}>
-                  Proposal: {proposal.id}
-                </Link>
+      <Chrome>
+        <UserUnionContext>
+          <UnionPage>
+            <Header unionDetailQuery={unionDetailQuery} />
+            <Columns>
+              <Column>
+                <Proposals id={id} unionDetailQuery={unionDetailQuery} />
+              </Column>
+              <Column>
+                <MembersList />
+              </Column>
+            </Columns>
+
+            <h2>Pending Members</h2>
+            <ul>
+              {unionDetailQuery.union.pendingApplications.map((application) => (
+                <li key={application.id}>
+                  <PendingApplication {...application} />
+                </li>
+              ))}
+            </ul>
+            <h2>Join URL</h2>
+            <p>
+              <Link to={`/union/${id}/join`}>{joinUrl}</Link>
+            </p>
+            <QR value={joinUrl} />
+            <h2>Menu</h2>
+            <ul>
+              <li>
+                <Link to="./proposal/create">Create a Proposal</Link>
               </li>
-            ))}
-          </ul>
-          <h2>Members</h2>
-          <MembersList />
-          <h2>Pending Members</h2>
-          <ul>
-            {unionDetailQuery.union.pendingApplications.map((application) => (
-              <li key={application.id}>
-                <PendingApplication {...application} />
-              </li>
-            ))}
-          </ul>
-          <h2>Join URL</h2>
-          <p>
-            <Link to={`/union/${params.id}/join`}>{joinUrl}</Link>
-          </p>
-          <QR value={joinUrl} />
-          <h2>Menu</h2>
-          <ul>
-            <li>
-              <Link to="./proposal/create">Create a Proposal</Link>
-            </li>
-          </ul>
-        </div>
-      </UserUnionContext>
+            </ul>
+          </UnionPage>
+        </UserUnionContext>
+      </Chrome>
     );
   }
 };

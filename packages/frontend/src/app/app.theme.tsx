@@ -8,6 +8,7 @@ export const theme = {
     color6: '#d7d794',
     white: '#FFFFFF',
     black: '#000000',
+    link: '#3b3289',
   },
   fonts: {
     default: 'Arial, sans-serif',

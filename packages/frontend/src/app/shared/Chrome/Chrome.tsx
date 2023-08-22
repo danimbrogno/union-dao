@@ -4,14 +4,12 @@ import styled from '@emotion/styled';
 import { Connect } from './components/Connect';
 import { useAccount } from 'wagmi';
 import ProjectSelector from './components/ProjectSelector/ProjectSelector';
-const StyledDiv = styled.div`
+const StyledContainer = styled.div`
   color: ${(props) => props.theme.colors.color1};
   background: ${(props) => '#fbfad7'};
 
-  flex: 1;
-  height: 100%;
+  height: 100vh;
   display: flex;
-
   flex-direction: column;
 `;
 
@@ -49,10 +47,16 @@ const StyledNav = styled.nav`
 
 const StyledMain = styled.main`
   color: ${(props) => props.theme.colors.color1};
-  flex: 1;
-  display: flex;
+  flex-grow: 1;
   flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+`;
+
+const StyledScroll = styled.div`
   padding: 40px;
+  display: flex;
+  min-height: min-content;
 `;
 
 const StyledFooter = styled.footer`
@@ -68,7 +72,7 @@ const Chrome = ({ children }: PropsWithChildren) => {
   const { isConnected } = useAccount();
 
   return (
-    <StyledDiv>
+    <StyledContainer>
       <StyledHeader>
         <StyledH1>
           <Link to="/">Union</Link>
@@ -83,11 +87,13 @@ const Chrome = ({ children }: PropsWithChildren) => {
         {isConnected && <ProjectSelector />}
         {!isConnected && <Connect />}
       </StyledHeader>
-      <StyledMain>{children}</StyledMain>
+      <StyledMain>
+        <StyledScroll>{children}</StyledScroll>
+      </StyledMain>
       <StyledFooter>
         <p>Soliditary meets Solidity</p>
       </StyledFooter>
-    </StyledDiv>
+    </StyledContainer>
   );
 };
 
