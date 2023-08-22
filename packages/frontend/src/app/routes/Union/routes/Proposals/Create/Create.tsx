@@ -62,6 +62,7 @@ export const Create = () => {
     formState: { isValid, isSubmitting },
   } = useForm<Inputs>({
     defaultValues: {
+      title: '',
       description: '',
       options: [{ description: 'Yay' }, { description: 'Nay' }],
     },
@@ -91,6 +92,10 @@ export const Create = () => {
     <Chrome>
       <StyledForm onSubmit={handleSubmit(onSubmit)}>
         <h1>Create Proposal</h1>
+        <Input
+          placeholder="Proposal Title"
+          {...register(`title`, { required: true })}
+        />
         <Textarea
           placeholder="Proposal Description"
           {...register(`description`, { required: true })}

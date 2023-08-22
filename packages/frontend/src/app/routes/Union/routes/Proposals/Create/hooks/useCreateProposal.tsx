@@ -64,9 +64,9 @@ export const useCreateProposal = ({
 
   const { ipfs } = useIPFS();
 
-  const onSubmit: SubmitHandler<Inputs> = ({ options, description }) => {
+  const onSubmit: SubmitHandler<Inputs> = ({ title, options, description }) => {
     ipfs
-      .add(JSON.stringify({ description, options }))
+      .add(JSON.stringify({ title, description, options }))
       .then((result) => ipfs.pin.add(result.cid))
       .then((result) =>
         write({

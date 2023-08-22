@@ -5,6 +5,10 @@ import { useVote } from './hooks/useVote';
 import { useProposalDetails } from './hooks/useProposalDetails';
 import { useFetchJsonFromCid } from 'frontend/shared/IPFS';
 import { ProposalMetadata } from 'frontend/app.interface';
+import { SecondaryButton } from 'ui/SecondaryButton';
+import { PrimaryButton } from 'ui/PrimaryButton';
+import { useState } from 'react';
+import { ProposalOption } from './components/ProposalOption';
 
 const VotePage = styled.div`
   display: flex;
@@ -18,25 +22,15 @@ const VotePage = styled.div`
 `;
 
 const StyledH1 = styled.h1``;
+const ProposalDescription = styled.p``;
 const StyledH2 = styled.h2``;
 const StyledUl = styled.ul``;
-const StyledLi = styled.li`
-  padding: 20px;
-  display: flex;
-  /* justify-content: center; */
-  align-items: center;
-  gap: 1rem;
-  color: ${(props) => props.theme.colors.white};
-  /* background-color: ${(props) => props.theme.colors.color1}; */
-`;
+
 const StyledP = styled.p``;
-const StyledVotes = styled.p`
-  font-size: 32px;
-`;
-const StyledButton = styled.button``;
 
 export const Proposal = () => {
   const params = useParams<'id' | 'proposalId'>();
+  const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
   const { id: unionId, proposalId } = params;
 
@@ -61,31 +55,43 @@ export const Proposal = () => {
     votingContractAddress: proposal?.union.votingAddress,
   });
 
-  if (proposal) {
-    const options = Array.from(
-      { length: proposal.numOptions },
-      (_, index) => index
-    );
+  const handleVote = () => {
+    if (selectedOption) {
+      doVote(selectedOption);
+    }
+  };
 
+  const hasTitleAndDesc =
+    metadata?.title && metadata?.description ? true : false;
+
+  if (proposal) {
     return (
       <Chrome>
         <VotePage>
-          <StyledH1>{metadata?.description}</StyledH1>
+          <StyledH1>{metadata?.title || metadata?.description}</StyledH1>
+          {hasTitleAndDesc && (
+            <ProposalDescription>{metadata?.description}</ProposalDescription>
+          )}
           {error && <StyledP>{error}</StyledP>}
-          <StyledH2>Options</StyledH2>
+          <StyledH2>Voting</StyledH2>
           <StyledUl>
-            {options.map((option, index) => (
-              <StyledLi key={index}>
-                <StyledP>
-                  {metadata?.options[index]?.description}: Votes:{' '}
-                </StyledP>
-                <StyledVotes>{proposal.options[index].votes}</StyledVotes>
-                <StyledButton disabled={!isReady} onClick={() => doVote(index)}>
-                  Vote!
-                </StyledButton>
-              </StyledLi>
+            {proposal.options.map((option, index) => (
+              <ProposalOption
+                key={index}
+                index={index}
+                onClick={setSelectedOption}
+                option={option}
+                metadata={metadata?.options?.[index]}
+                selected={selectedOption === index}
+              />
             ))}
           </StyledUl>
+          <PrimaryButton
+            disabled={selectedOption === null || isReady === false}
+            onClick={handleVote}
+          >
+            Vote
+          </PrimaryButton>
         </VotePage>
       </Chrome>
     );

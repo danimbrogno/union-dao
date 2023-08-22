@@ -11,7 +11,7 @@ const Link = styled(RouterLink)`
 
 const H2 = styled.h2``;
 
-const Ul = styled.ul`
+const ProposalList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
@@ -43,23 +43,21 @@ export const Proposals = ({
       <>
         <P>No proposals created yet.</P>
         <Link to={`/union/${id}/proposal/create`}>
-          Create a new proposal now.
-        </Link>
-      </>
-    );
-    content = (
-      <>
-        <P>No proposals created yet.</P>
-        <Link to={`/union/${id}/proposal/create`}>
           Create the first proposal now.
         </Link>
       </>
+    );
+  } else {
+    content = (
+      <div css={{ marginTop: 20 }}>
+        <Link to={`/union/${id}/proposal/create`}>Create a new proposal</Link>
+      </div>
     );
   }
   return (
     <>
       <H2>Proposals</H2>
-      <Ul>
+      <ProposalList>
         {proposals.map((proposal) => (
           <Li key={proposal.id}>
             <Link to={`/union/${id}/proposal/${proposal.id}`}>
@@ -67,13 +65,13 @@ export const Proposals = ({
             </Link>
           </Li>
         ))}
-        <Li>{content}</Li>
-      </Ul>
+      </ProposalList>
+      {content}
     </>
   );
 };
 
 const ProposalItem = ({ cid }: { cid: string }) => {
   const { data } = useFetchJsonFromCid<ProposalMetadata>(cid);
-  return data?.description;
+  return data?.title || data?.description;
 };

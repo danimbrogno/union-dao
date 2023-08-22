@@ -28,6 +28,9 @@ export const useVote = ({
     abi: proposalFacetABI,
     functionName: 'vote',
     onError: (error) => {
+      if (error.toString().indexOf('0x948d0674') !== -1) {
+        setError(`Sorry, you can only vote once.`);
+      }
       console.log('err', error);
     },
   });

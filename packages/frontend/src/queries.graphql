@@ -66,9 +66,13 @@ fragment ProposalDetail on Proposal {
   numOptions
   metadata
   options {
-    id
-    votes
+    ...ProposalOptionDetail
   }
+}
+
+fragment ProposalOptionDetail on ProposalOption {
+  id
+  votes
 }
 
 query UnionMembers($id: ID!) {

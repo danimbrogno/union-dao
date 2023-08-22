@@ -1413,6 +1413,8 @@ export type ProposalDetailFragment = (
   & { options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
 );
 
+export type ProposalOptionDetailFragment = Pick<ProposalOption, 'id' | 'votes'>;
+
 export type UnionMembersQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -1473,17 +1475,22 @@ export const ApplicationDetailFragmentDoc = gql`
   approved
 }
     ` as unknown as DocumentNode<ApplicationDetailFragment, unknown>;
+export const ProposalOptionDetailFragmentDoc = gql`
+    fragment ProposalOptionDetail on ProposalOption {
+  id
+  votes
+}
+    ` as unknown as DocumentNode<ProposalOptionDetailFragment, unknown>;
 export const ProposalDetailFragmentDoc = gql`
     fragment ProposalDetail on Proposal {
   id
   numOptions
   metadata
   options {
-    id
-    votes
+    ...ProposalOptionDetail
   }
 }
-    ` as unknown as DocumentNode<ProposalDetailFragment, unknown>;
+    ${ProposalOptionDetailFragmentDoc}` as unknown as DocumentNode<ProposalDetailFragment, unknown>;
 export const WatchAllUnionsDocument = gql`
     query WatchAllUnions @live {
   unions(first: 50) {
