@@ -24,7 +24,7 @@ const StyledForm = styled.form`
   gap: 1.5rem;
 `;
 
-const OptionRow = styled.form`
+const OptionRow = styled.div`
   flex: 1;
   width: 100%;
   display: flex;

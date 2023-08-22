@@ -1385,7 +1385,7 @@ export type UnionDetailsQuery = { union?: Maybe<(
       Pick<Application, 'id' | 'approved'>
       & { user: Pick<User, 'id'> }
     )>, proposals: Array<(
-      Pick<Proposal, 'id' | 'numOptions'>
+      Pick<Proposal, 'id' | 'numOptions' | 'metadata'>
       & { options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
     )> }
   )> };
@@ -1403,10 +1403,15 @@ export type WatchUnionDetailsQueryVariables = Exact<{
 export type WatchUnionDetailsQuery = { union?: Maybe<(
     Pick<Union, 'id' | 'name' | 'description' | 'logo'>
     & { proposals: Array<(
-      Pick<Proposal, 'id' | 'numOptions'>
+      Pick<Proposal, 'id' | 'numOptions' | 'metadata'>
       & { options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
     )> }
   )> };
+
+export type ProposalDetailFragment = (
+  Pick<Proposal, 'id' | 'numOptions' | 'metadata'>
+  & { options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
+);
 
 export type UnionMembersQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1468,6 +1473,17 @@ export const ApplicationDetailFragmentDoc = gql`
   approved
 }
     ` as unknown as DocumentNode<ApplicationDetailFragment, unknown>;
+export const ProposalDetailFragmentDoc = gql`
+    fragment ProposalDetail on Proposal {
+  id
+  numOptions
+  metadata
+  options {
+    id
+    votes
+  }
+}
+    ` as unknown as DocumentNode<ProposalDetailFragment, unknown>;
 export const WatchAllUnionsDocument = gql`
     query WatchAllUnions @live {
   unions(first: 50) {
@@ -1509,16 +1525,12 @@ export const UnionDetailsDocument = gql`
       ...ApplicationDetail
     }
     proposals {
-      id
-      numOptions
-      options {
-        id
-        votes
-      }
+      ...ProposalDetail
     }
   }
 }
-    ${ApplicationDetailFragmentDoc}` as unknown as DocumentNode<UnionDetailsQuery, UnionDetailsQueryVariables>;
+    ${ApplicationDetailFragmentDoc}
+${ProposalDetailFragmentDoc}` as unknown as DocumentNode<UnionDetailsQuery, UnionDetailsQueryVariables>;
 export const WatchUnionDetailsDocument = gql`
     query WatchUnionDetails($id: ID!) @live {
   union(id: $id) {
@@ -1527,16 +1539,11 @@ export const WatchUnionDetailsDocument = gql`
     description
     logo
     proposals {
-      id
-      numOptions
-      options {
-        id
-        votes
-      }
+      ...ProposalDetail
     }
   }
 }
-    ` as unknown as DocumentNode<WatchUnionDetailsQuery, WatchUnionDetailsQueryVariables>;
+    ${ProposalDetailFragmentDoc}` as unknown as DocumentNode<WatchUnionDetailsQuery, WatchUnionDetailsQueryVariables>;
 export const UnionMembersDocument = gql`
     query UnionMembers($id: ID!) {
   union(id: $id) {

@@ -36,12 +36,7 @@ query UnionDetails($id: ID!) {
       ...ApplicationDetail
     }
     proposals {
-      id
-      numOptions
-      options {
-        id
-        votes
-      }
+      ...ProposalDetail
     }
   }
 }
@@ -61,13 +56,18 @@ query WatchUnionDetails($id: ID!) @live {
     description
     logo
     proposals {
-      id
-      numOptions
-      options {
-        id
-        votes
-      }
+      ...ProposalDetail
     }
+  }
+}
+
+fragment ProposalDetail on Proposal {
+  id
+  numOptions
+  metadata
+  options {
+    id
+    votes
   }
 }
 

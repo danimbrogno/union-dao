@@ -1,6 +1,8 @@
 import { UnionDetailsQuery } from 'graphclient';
 import styled from '@emotion/styled';
 import { Link as RouterLink } from 'react-router-dom';
+import { useFetchJsonFromCid } from 'frontend/shared/IPFS';
+import { ProposalMetadata } from 'frontend/app.interface';
 
 const Link = styled(RouterLink)`
   /* color: inherit;
@@ -61,7 +63,7 @@ export const Proposals = ({
         {proposals.map((proposal) => (
           <Li key={proposal.id}>
             <Link to={`/union/${id}/proposal/${proposal.id}`}>
-              Proposal: {proposal.id}
+              <ProposalItem cid={proposal.metadata} />
             </Link>
           </Li>
         ))}
@@ -69,4 +71,9 @@ export const Proposals = ({
       </Ul>
     </>
   );
+};
+
+const ProposalItem = ({ cid }: { cid: string }) => {
+  const { data } = useFetchJsonFromCid<ProposalMetadata>(cid);
+  return data?.description;
 };

@@ -75,12 +75,6 @@ export const Union = () => {
               <Link to={`/union/${id}/join`}>{joinUrl}</Link>
             </p>
             <QR value={joinUrl} />
-            <h2>Menu</h2>
-            <ul>
-              <li>
-                <Link to="./proposal/create">Create a Proposal</Link>
-              </li>
-            </ul>
           </UnionPage>
         </UserUnionContext>
       </Chrome>

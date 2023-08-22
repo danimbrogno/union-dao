@@ -1,116 +1,66 @@
-import {
-  ProposalDetailsDocument,
-  ProposalDetailsQuery,
-  execute,
-} from 'graphclient';
-import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { proposalFacetABI } from 'shared';
-import { Hex, getAddress, hexToBigInt } from 'viem';
-import { useContractWrite, useWaitForTransaction } from 'wagmi';
-import { generateProof } from '@semaphore-protocol/proof';
-import { useIdentity } from 'frontend/shared/Identity';
-import useSemaphore from 'frontend/shared/useSemaphoreEthers';
-import { useConfig } from 'frontend/shared/Config';
+import Chrome from 'frontend/shared/Chrome/Chrome';
+import styled from '@emotion/styled';
+import { useVote } from './hooks/useVote';
+import { useProposalDetails } from './hooks/useProposalDetails';
+import { useFetchJsonFromCid } from 'frontend/shared/IPFS';
+import { ProposalMetadata } from 'frontend/app.interface';
+
+const VotePage = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+  margin: auto;
+  gap: 1.5rem;
+  max-width: 480px;
+  width: 100%;
+`;
+
+const StyledH1 = styled.h1``;
+const StyledH2 = styled.h2``;
+const StyledUl = styled.ul``;
+const StyledLi = styled.li`
+  padding: 20px;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 1rem;
+  color: ${(props) => props.theme.colors.white};
+  /* background-color: ${(props) => props.theme.colors.color1}; */
+`;
+const StyledP = styled.p``;
+const StyledVotes = styled.p`
+  font-size: 32px;
+`;
+const StyledButton = styled.button``;
 
 export const Proposal = () => {
   const params = useParams<'id' | 'proposalId'>();
-  const [err, setErr] = useState('');
 
-  const [proposalDetailQuery, setProposalDetailQuery] =
-    useState<ProposalDetailsQuery>();
-  const {
-    addresses: { diamond },
-  } = useConfig();
-  const identity = useIdentity();
-  const contractAddress = proposalDetailQuery?.proposal?.union.votingAddress;
-  const { refreshGroup, group } = useSemaphore(contractAddress);
+  const { id: unionId, proposalId } = params;
 
-  const { write, data } = useContractWrite({
-    address: getAddress(diamond),
-    abi: proposalFacetABI,
-    functionName: 'vote',
-    onError: (error) => {
-      console.log('err', error);
-    },
+  if (!unionId) {
+    throw new Error('Missing unionId');
+  }
+  if (!proposalId) {
+    throw new Error('Missing proposal id');
+  }
+
+  const { proposal } = useProposalDetails({
+    proposalId,
   });
 
-  useWaitForTransaction({
-    hash: data?.hash,
-    onError: (error) => {
-      console.log('err', error);
-    },
-  });
-
-  useEffect(() => {
-    refreshGroup(params.proposalId as string);
-  }, [params.proposalId, refreshGroup]);
-
-  const fetchProposalDetail = useCallback(async () => {
-    if (!params.id || !params.proposalId) return;
-
-    const result = await execute(ProposalDetailsDocument, {
-      id: params.proposalId,
-    });
-    if (result.data) {
-      setProposalDetailQuery(result.data);
-    }
-  }, [params.id, params.proposalId]);
-
-  useEffect(() => {
-    fetchProposalDetail();
-  }, [fetchProposalDetail]);
-
-  const doVote = useCallback(
-    async (optionId: number) => {
-      const bigVote = BigInt(optionId);
-      if (!params.proposalId || !params.id) {
-        throw new Error('missing proposal id');
-      }
-
-      const unionId = hexToBigInt(params.id as Hex);
-      const pollId = hexToBigInt(params.proposalId as Hex);
-
-      if (!group) {
-        throw new Error('group not set');
-      }
-
-      generateProof(identity, group, pollId, bigVote)
-        .then((fullProof) => {
-          write({
-            args: [
-              unionId,
-              pollId,
-              BigInt(fullProof.signal),
-              BigInt(fullProof.nullifierHash),
-              [
-                BigInt(fullProof.proof[0]),
-                BigInt(fullProof.proof[1]),
-                BigInt(fullProof.proof[2]),
-                BigInt(fullProof.proof[3]),
-                BigInt(fullProof.proof[4]),
-                BigInt(fullProof.proof[5]),
-                BigInt(fullProof.proof[6]),
-                BigInt(fullProof.proof[7]),
-              ],
-            ],
-          });
-        })
-        .catch((err) => {
-          switch (err.toString()) {
-            case 'Error: The identity is not part of the group':
-              setErr('Sorry you are not approved to vote on this proposal.');
-              break;
-            default:
-              setErr(err.toString());
-              break;
-          }
-        });
-    },
-    [identity, params.id, params.proposalId, write, group]
+  const { data: metadata } = useFetchJsonFromCid<ProposalMetadata>(
+    proposal?.metadata
   );
 
-  const proposal = proposalDetailQuery?.proposal;
+  const { doVote, error, isReady } = useVote({
+    proposalId,
+    unionId,
+    votingContractAddress: proposal?.union.votingAddress,
+  });
+
   if (proposal) {
     const options = Array.from(
       { length: proposal.numOptions },
@@ -118,26 +68,26 @@ export const Proposal = () => {
     );
 
     return (
-      <div>
-        <h1>
-          {hexToBigInt(proposal.id).toString()}:{' '}
-          {/* {proposal.metadata?.description} */}
-        </h1>
-        {err && <p>{err}</p>}
-        <h2>Options</h2>
-        <ul>
-          {options.map((option, index) => (
-            <li key={index}>
-              <p>
-                {index}: Votes: {proposal.options[index].votes}
-              </p>
-              <button disabled={!group} onClick={() => doVote(index)}>
-                Vote!
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <Chrome>
+        <VotePage>
+          <StyledH1>{metadata?.description}</StyledH1>
+          {error && <StyledP>{error}</StyledP>}
+          <StyledH2>Options</StyledH2>
+          <StyledUl>
+            {options.map((option, index) => (
+              <StyledLi key={index}>
+                <StyledP>
+                  {metadata?.options[index]?.description}: Votes:{' '}
+                </StyledP>
+                <StyledVotes>{proposal.options[index].votes}</StyledVotes>
+                <StyledButton disabled={!isReady} onClick={() => doVote(index)}>
+                  Vote!
+                </StyledButton>
+              </StyledLi>
+            ))}
+          </StyledUl>
+        </VotePage>
+      </Chrome>
     );
   }
   return null;
