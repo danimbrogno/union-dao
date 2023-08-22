@@ -9,7 +9,7 @@ import {
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useLocalStorage } from 'usehooks-ts';
 import { getAddress } from 'viem';
-import { useAccount, useSignMessage } from 'wagmi';
+import { ConnectorData, useAccount, useSignMessage } from 'wagmi';
 
 const Context = createContext({
   identity: '',
@@ -21,7 +21,7 @@ type Inputs = {
 
 const nullSignature = '0x0000000000000000000000000000000000000000';
 export const Identity = ({ children }: PropsWithChildren) => {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, connector: activeConnector } = useAccount();
   const {
     register,
     handleSubmit,
@@ -35,14 +35,31 @@ export const Identity = ({ children }: PropsWithChildren) => {
   const { data, signMessage } = useSignMessage();
 
   useEffect(() => {
+    const clearIdentity = () => {
+      setIdentity(getAddress(nullSignature));
+    };
+    const handleConnectorUpdate = ({ account, chain }: ConnectorData) => {
+      if (account) {
+        clearIdentity();
+      } else if (chain) {
+        clearIdentity();
+      }
+    };
+
+    if (activeConnector) {
+      activeConnector.on('change', handleConnectorUpdate);
+    }
+
+    return () => {
+      activeConnector?.off('change', handleConnectorUpdate);
+    };
+  }, [activeConnector, setIdentity]);
+
+  useEffect(() => {
     if (identity === nullSignature && data) {
       setIdentity(data);
     }
   }, [data, identity, setIdentity]);
-
-  useEffect(() => {
-    setIdentity(getAddress(nullSignature));
-  }, [address, setIdentity]);
 
   const onSubmit: SubmitHandler<Inputs> = async ({ passphrase }) => {
     signMessage({ message: passphrase });

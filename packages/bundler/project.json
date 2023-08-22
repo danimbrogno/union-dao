@@ -1,0 +1,16 @@
+{
+  "name": "bundler",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/bundler/src",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/bundler",
+        "command": "docker-compose -f docker-compose.yaml -f docker-compose.localhost.yaml up"
+      }
+    }
+  },
+  "tags": ["type:lib"]
+}

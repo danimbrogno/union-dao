@@ -1,0 +1,6 @@
+version: '3'
+services:
+  bundler:
+    image: sherifahmed990/voltaire-bundler:0.20
+    extra_hosts:
+      - host.docker.internal:host-gateway
