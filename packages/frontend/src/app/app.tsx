@@ -1,8 +1,7 @@
-import styled from '@emotion/styled';
 import { Route, Routes, Link } from 'react-router-dom';
 import { Config } from './shared/Config';
-import { Home } from './routes/Home';
-import { Connect } from './components/Connect';
+import { Home } from './routes/Home/Home';
+import { Connect } from './shared/Chrome/components/Connect';
 import { Create } from './routes/Create/Create';
 import { Create as ProposalCreate } from './routes/Union/routes/Proposals/Create';
 import { Union } from './routes/Union/Union';
@@ -11,54 +10,82 @@ import { Proposal } from './routes/Union/routes/Proposals/Proposal/Proposal';
 import { Identity } from './shared/Identity';
 import { WagmiProvider } from './shared/WagmiProvider';
 import { Join } from './routes/Union/routes/Join';
+import { Global, ThemeProvider, css } from '@emotion/react';
+import { theme } from './app.theme';
 
-const StyledApp = styled.div`
-  // Your style here
+const styles = css`
+  /* Global CSS Reset */
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  /* Remove default margins */
+  html,
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  ol,
+  ul {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', 'sans-serif';
+    color: #131111;
+  }
+
+  /* Remove list bullets */
+  ol,
+  ul {
+    list-style: none;
+  }
+
+  /* Make html and body flex components */
+  html,
+  body,
+  #root {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
 `;
 
 export function App() {
   return (
-    <StyledApp>
-      <Config>
-        <IPFS>
-          <WagmiProvider>
-            <Connect />
-            <Identity>
-              {/* <NxWelcome title="frontend" />
-
-            {/* START: routes */}
-              {/* These routes and navigation have been generated for you */}
-              {/* Feel free to move and update them to fit your needs */}
-              <br />
-              <hr />
-              <br />
-              <div role="navigation">
-                <ul>
-                  <li>
-                    <Link to="/create">Create Union</Link>
-                  </li>
-                </ul>
-              </div>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/create" element={<Create />} />
-                <Route path="/union/:id" element={<Union />} />
-                <Route path="/union/:id/join" element={<Join />} />
-                <Route
-                  path="/union/:id/proposal/create"
-                  element={<ProposalCreate />}
-                />
-                <Route
-                  path="/union/:id/proposal/:proposalId"
-                  element={<Proposal />}
-                />
-              </Routes>
-            </Identity>
-          </WagmiProvider>
-        </IPFS>
-      </Config>
-      {/* END: routes */}
-    </StyledApp>
+    <>
+      <Global styles={styles} />
+      <ThemeProvider theme={theme}>
+        <Config>
+          <IPFS>
+            <WagmiProvider>
+              <Identity>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/create" element={<Create />} />
+                  <Route path="/union/:id" element={<Union />} />
+                  <Route path="/union/:id/join" element={<Join />} />
+                  <Route
+                    path="/union/:id/proposal/create"
+                    element={<ProposalCreate />}
+                  />
+                  <Route
+                    path="/union/:id/proposal/:proposalId"
+                    element={<Proposal />}
+                  />
+                </Routes>
+              </Identity>
+            </WagmiProvider>
+          </IPFS>
+        </Config>
+      </ThemeProvider>
+    </>
   );
 }
 
