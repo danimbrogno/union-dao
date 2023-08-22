@@ -11,6 +11,7 @@ const StyledDiv = styled.div`
 const StyledH1 = styled.h1`
   margin: 20px 0;
 `;
+
 const StyledP = styled.p`
   text-align: center;
   line-height: 1.5rem;
