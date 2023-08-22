@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Config } from './shared/Config';
 import { Home } from './routes/Home/Home';
 import { Create } from './routes/Create/Create';
-import { Create as ProposalCreate } from './routes/Union/routes/Proposals/Create';
+import { Create as ProposalCreate } from './routes/Union/routes/Proposals/Create/Create';
 import { Union } from './routes/Union/Union';
 import { IPFS } from './shared/IPFS';
 import { Proposal } from './routes/Union/routes/Proposals/Proposal/Proposal';

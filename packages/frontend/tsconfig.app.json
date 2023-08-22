@@ -8,6 +8,7 @@
     "target": "ES2020",
     "paths": {
       "frontend/*": ["packages/frontend/src/app/*"],
+      "ui/*": ["packages/frontend/src/ui/*"],
       "shared": ["packages/shared/src/index.ts"],
       "graphclient": ["packages/frontend/.graphclient/index.ts"],
     }

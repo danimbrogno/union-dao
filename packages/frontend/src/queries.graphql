@@ -85,6 +85,17 @@ query UnionMembers($id: ID!) {
   }
 }
 
+query WatchForProposalCreation($id: ID!) @live {
+  proposal(id: $id) {
+    id
+  }
+  _meta {
+    block {
+      hash
+    }
+  }
+}
+
 query ProposalDetails($id: ID!) {
   proposal(id: $id) {
     id

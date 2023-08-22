@@ -1303,6 +1303,12 @@ const merger = new(BareMerger as any)({
         },
         location: 'UnionMembersDocument.graphql'
       },{
+        document: WatchForProposalCreationDocument,
+        get rawSDL() {
+          return printWithCache(WatchForProposalCreationDocument);
+        },
+        location: 'WatchForProposalCreationDocument.graphql'
+      },{
         document: ProposalDetailsDocument,
         get rawSDL() {
           return printWithCache(ProposalDetailsDocument);
@@ -1414,6 +1420,13 @@ export type UnionMembersQuery = { union?: Maybe<(
       & { user: Pick<User, 'id' | 'metadata'> }
     )> }
   )> };
+
+export type WatchForProposalCreationQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type WatchForProposalCreationQuery = { proposal?: Maybe<Pick<Proposal, 'id'>>, _meta?: Maybe<{ block: Pick<_Block_, 'hash'> }> };
 
 export type ProposalDetailsQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1539,6 +1552,18 @@ export const UnionMembersDocument = gql`
   }
 }
     ` as unknown as DocumentNode<UnionMembersQuery, UnionMembersQueryVariables>;
+export const WatchForProposalCreationDocument = gql`
+    query WatchForProposalCreation($id: ID!) @live {
+  proposal(id: $id) {
+    id
+  }
+  _meta {
+    block {
+      hash
+    }
+  }
+}
+    ` as unknown as DocumentNode<WatchForProposalCreationQuery, WatchForProposalCreationQueryVariables>;
 export const ProposalDetailsDocument = gql`
     query ProposalDetails($id: ID!) {
   proposal(id: $id) {
@@ -1589,6 +1614,7 @@ export const GetUserUnionsDocument = gql`
 
 
 
+
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
@@ -1606,6 +1632,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     UnionMembers(variables: UnionMembersQueryVariables, options?: C): Promise<UnionMembersQuery> {
       return requester<UnionMembersQuery, UnionMembersQueryVariables>(UnionMembersDocument, variables, options) as Promise<UnionMembersQuery>;
+    },
+    WatchForProposalCreation(variables: WatchForProposalCreationQueryVariables, options?: C): AsyncIterable<WatchForProposalCreationQuery> {
+      return requester<WatchForProposalCreationQuery, WatchForProposalCreationQueryVariables>(WatchForProposalCreationDocument, variables, options) as AsyncIterable<WatchForProposalCreationQuery>;
     },
     ProposalDetails(variables: ProposalDetailsQueryVariables, options?: C): Promise<ProposalDetailsQuery> {
       return requester<ProposalDetailsQuery, ProposalDetailsQueryVariables>(ProposalDetailsDocument, variables, options) as Promise<ProposalDetailsQuery>;

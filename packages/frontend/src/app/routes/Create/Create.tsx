@@ -9,23 +9,10 @@ import { useNavigate } from 'react-router-dom';
 import { WatchAllUnionsQuery } from 'graphclient';
 import { useCreateUnion } from './hooks/useCreateUnion';
 import { Inputs } from './Create.interface';
-
-const CloseIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="32"
-    height="32"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="18" y1="6" x2="6" y2="18"></line>
-    <line x1="6" y1="6" x2="18" y2="18"></line>
-  </svg>
-);
+import { Input } from 'ui/Input';
+import { Textarea } from 'ui/Textarea';
+import { CloseIcon } from 'ui/CloseIcon';
+import { PrimaryButton } from 'ui/PrimaryButton';
 
 const StyledForm = styled.form`
   display: flex;
@@ -33,21 +20,20 @@ const StyledForm = styled.form`
   align-items: stretch;
   justify-content: stretch;
   margin: auto;
+  gap: 1.5rem;
+  max-width: 480px;
 `;
 
 const StyledHeader = styled.h1`
-  margin: 20px 0;
   text-align: center;
 `;
 const StyledParagraph = styled.p`
-  margin: 20px 0;
   text-align: center;
 `;
 
 const StyledActiveImage = styled.div`
   display: flex;
   flex: 0;
-  max-width: 320px;
   margin: auto;
   position: relative;
   flex-direction: column;
@@ -55,38 +41,6 @@ const StyledActiveImage = styled.div`
   img {
     width: 100%;
     height: auto;
-  }
-`;
-
-const StyledInput = styled.input`
-  margin: 20px 0 10px;
-  border-radius: 5px;
-  padding: 10px 8px;
-  border: 1px solid ${({ theme }) => theme.colors.color3};
-  color: ${({ theme }) => theme.colors.black};
-  background-color: transparent;
-  font-family: 'Arial', 'sans-serif';
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.color5};
-  }
-`;
-
-const StyledTextarea = styled.textarea`
-  margin: 10px 0;
-  border-radius: 5px;
-  padding: 10px 8px;
-  height: 140px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  font-family: 'Arial', 'sans-serif';
-  border: 1px solid ${({ theme }) => theme.colors.color3};
-  color: ${({ theme }) => theme.colors.black};
-  background-color: transparent;
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.color5};
   }
 `;
 
@@ -102,23 +56,6 @@ const StyledClearButton = styled.button`
   background: ${(props) => props.theme.colors.white};
   border: none;
   color: black;
-`;
-const StyledButton = styled.button`
-  margin: 10px 0;
-  padding: 15px 20px;
-  flex: 1;
-  background-color: ${(props) => props.theme.colors.color1};
-  color: ${(props) => props.theme.colors.white};
-  border: none;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-  &:hover {
-    background-color: ${(props) => props.theme.colors.color2};
-  }
-  &:disabled {
-    background-color: ${(props) => props.theme.colors.color3};
-    cursor: not-allowed;
-  }
 `;
 
 const StyledImage = styled.img``;
@@ -199,7 +136,7 @@ export const Create = () => {
     }
     dropzone = (
       <StyledDropzone {...getRootProps()}>
-        <StyledInput {...getInputProps()} />
+        <Input {...getInputProps()} />
         {dropzone}
       </StyledDropzone>
     );
@@ -213,23 +150,23 @@ export const Create = () => {
           Start your journey with organized labour by creating a union.
         </StyledParagraph>
         {dropzone}
-        <StyledInput
+        <Input
           type="input"
           placeholder="Name"
           {...register('name', { required: true })}
         />
-        <StyledTextarea
+        <Textarea
           rows={4}
           placeholder="Description"
           {...register('description')}
         />
-        <StyledButton
+        <PrimaryButton
           disabled={!isValid || isSubmitting}
           type="submit"
           value="Submit"
         >
           Create
-        </StyledButton>
+        </PrimaryButton>
         {error && <p>{error.toString()}</p>}
       </StyledForm>
     </Chrome>
