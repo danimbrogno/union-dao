@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Connect } from './components/Connect';
 import { useAccount } from 'wagmi';
-import ProjectSelector from './components/ProjectSelector';
+import ProjectSelector from './components/ProjectSelector/ProjectSelector';
 const StyledDiv = styled.div`
   color: ${(props) => props.theme.colors.color1};
   background: ${(props) => '#fbfad7'};

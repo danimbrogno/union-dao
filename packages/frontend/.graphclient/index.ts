@@ -1314,6 +1314,12 @@ const merger = new(BareMerger as any)({
           return printWithCache(IsUserAdminOfUnionDocument);
         },
         location: 'IsUserAdminOfUnionDocument.graphql'
+      },{
+        document: GetUserUnionsDocument,
+        get rawSDL() {
+          return printWithCache(GetUserUnionsDocument);
+        },
+        location: 'GetUserUnionsDocument.graphql'
       }
     ];
     },
@@ -1428,6 +1434,16 @@ export type IsUserAdminOfUnionQueryVariables = Exact<{
 export type IsUserAdminOfUnionQuery = { user?: Maybe<(
     Pick<User, 'id'>
     & { roles: Array<{ union: Pick<Union, 'id'> }> }
+  )> };
+
+export type GetUserUnionsQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetUserUnionsQuery = { user?: Maybe<(
+    Pick<User, 'id'>
+    & { roles: Array<{ union: Pick<Union, 'id' | 'name'> }> }
   )> };
 
 export const ApplicationDetailFragmentDoc = gql`
@@ -1551,6 +1567,20 @@ export const IsUserAdminOfUnionDocument = gql`
   }
 }
     ` as unknown as DocumentNode<IsUserAdminOfUnionQuery, IsUserAdminOfUnionQueryVariables>;
+export const GetUserUnionsDocument = gql`
+    query GetUserUnions($id: ID!) {
+  user(id: $id) {
+    id
+    roles {
+      union {
+        id
+        name
+      }
+    }
+  }
+}
+    ` as unknown as DocumentNode<GetUserUnionsQuery, GetUserUnionsQueryVariables>;
+
 
 
 
@@ -1582,6 +1612,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     IsUserAdminOfUnion(variables: IsUserAdminOfUnionQueryVariables, options?: C): Promise<IsUserAdminOfUnionQuery> {
       return requester<IsUserAdminOfUnionQuery, IsUserAdminOfUnionQueryVariables>(IsUserAdminOfUnionDocument, variables, options) as Promise<IsUserAdminOfUnionQuery>;
+    },
+    GetUserUnions(variables: GetUserUnionsQueryVariables, options?: C): Promise<GetUserUnionsQuery> {
+      return requester<GetUserUnionsQuery, GetUserUnionsQueryVariables>(GetUserUnionsDocument, variables, options) as Promise<GetUserUnionsQuery>;
     }
   };
 }

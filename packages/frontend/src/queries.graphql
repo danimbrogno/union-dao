@@ -110,3 +110,15 @@ query IsUserAdminOfUnion($id: ID!, $unionId: Bytes!) {
     }
   }
 }
+
+query GetUserUnions($id: ID!) {
+  user(id: $id) {
+    id
+    roles {
+      union {
+        id
+        name
+      }
+    }
+  }
+}
