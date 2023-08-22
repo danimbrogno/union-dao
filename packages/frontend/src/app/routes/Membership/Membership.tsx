@@ -1,9 +1,9 @@
-import Card from './Card.svg';
+import { Card } from './Card';
 
 export const Membership = () => {
   return (
     <div>
-      <img src={Card} alt="Card" />
+      <Card name="Joe Smith" />
     </div>
   );
 };
