@@ -31,7 +31,7 @@ const ProjectSelector = () => {
     };
 
     load();
-  });
+  }, [address]);
 
   const handleUnionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     navigate(`/union/${event.currentTarget.value}`);
@@ -42,8 +42,6 @@ const ProjectSelector = () => {
   if (!roles) {
     return null;
   }
-
-  console.log(roles);
 
   return (
     <StyledSelect value={id} onChange={handleUnionChange}>

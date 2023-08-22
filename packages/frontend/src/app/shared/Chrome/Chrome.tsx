@@ -27,7 +27,9 @@ const StyledHeader = styled.header`
 
 const StyledH1 = styled.h1`
   flex: 4;
-  color: ${(props) => props.theme.colors.color5};
+  a {
+    color: ${(props) => props.theme.colors.color5};
+  }
 `;
 
 const StyledNav = styled.nav`
@@ -45,10 +47,6 @@ const StyledNav = styled.nav`
   }
 `;
 
-const StyledLabel = styled.label`
-  color: ${(props) => props.theme.colors.color5};
-`;
-
 const StyledMain = styled.main`
   color: ${(props) => props.theme.colors.color1};
   flex: 1;
@@ -58,8 +56,6 @@ const StyledMain = styled.main`
 `;
 
 const StyledFooter = styled.footer`
-  //background-color: ${(props) => props.theme.colors.color5};
-
   flex: 0;
   padding: 20px;
   text-align: center;
@@ -74,7 +70,9 @@ const Chrome = ({ children }: PropsWithChildren) => {
   return (
     <StyledDiv>
       <StyledHeader>
-        <StyledH1>Union</StyledH1>
+        <StyledH1>
+          <Link to="/">Union</Link>
+        </StyledH1>
         <StyledNav>
           <ul>
             <li>

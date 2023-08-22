@@ -47,6 +47,11 @@ const styles = css`
     list-style: none;
   }
 
+  a {
+    text-decoration: none;
+    color: black;
+  }
+
   /* Make html and body flex components */
   html,
   body,
