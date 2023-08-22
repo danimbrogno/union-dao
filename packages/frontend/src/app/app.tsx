@@ -1,7 +1,6 @@
-import { Route, Routes, Link } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { Config } from './shared/Config';
 import { Home } from './routes/Home/Home';
-import { Connect } from './shared/Chrome/components/Connect';
 import { Create } from './routes/Create/Create';
 import { Create as ProposalCreate } from './routes/Union/routes/Proposals/Create';
 import { Union } from './routes/Union/Union';
@@ -12,6 +11,7 @@ import { WagmiProvider } from './shared/WagmiProvider';
 import { Join } from './routes/Union/routes/Join';
 import { Global, ThemeProvider, css } from '@emotion/react';
 import { theme } from './app.theme';
+import { Membership } from './routes/Membership/Membership';
 
 const styles = css`
   /* Global CSS Reset */
@@ -74,6 +74,7 @@ export function App() {
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/create" element={<Create />} />
+                  <Route path="/membership" element={<Membership />} />
                   <Route path="/union/:id" element={<Union />} />
                   <Route path="/union/:id/join" element={<Join />} />
                   <Route
