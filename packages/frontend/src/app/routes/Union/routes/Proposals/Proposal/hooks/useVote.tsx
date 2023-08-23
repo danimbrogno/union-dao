@@ -3,21 +3,49 @@ import { useIdentity } from 'frontend/shared/Identity';
 import useSemaphore from 'frontend/shared/useSemaphoreEthers';
 import { useCallback, useEffect, useState } from 'react';
 import { proposalFacetABI } from 'shared';
-import { Hex, getAddress, hexToBigInt } from 'viem';
+import { Hex, getAddress, hexToBigInt, numberToHex } from 'viem';
 import { useContractWrite, useWaitForTransaction } from 'wagmi';
 import { generateProof } from '@semaphore-protocol/proof';
+import {
+  WatchProposalDetailsDocument,
+  WatchProposalDetailsQuery,
+  execute,
+} from 'graphclient';
+import { ExecutionResult } from 'graphql';
 export const useVote = ({
   votingContractAddress,
   unionId,
   proposalId,
+  onVoted,
 }: {
   votingContractAddress: string;
   unionId: string;
   proposalId: string;
+  onVoted: (data: WatchProposalDetailsQuery) => void;
 }) => {
   const [error, setError] = useState('');
 
   const identity = useIdentity();
+
+  const watchUntilBlockHash = useCallback(
+    async (blockHash: string, _unionId: Hex, _proposalId: Hex) => {
+      const repeater = (await execute(WatchProposalDetailsDocument, {
+        id: `${numberToHex(parseInt(_unionId), { size: 32 })}.${numberToHex(
+          parseInt(_proposalId),
+          { size: 32 }
+        )}`,
+      })) as AsyncIterable<ExecutionResult<WatchProposalDetailsQuery>>;
+      for await (const result of repeater) {
+        console.log('watching...');
+        if (result.data?._meta?.block.hash === blockHash) {
+          console.log('done.');
+          onVoted(result.data);
+          break;
+        }
+      }
+    },
+    [onVoted]
+  );
 
   const {
     addresses: { diamond },
@@ -37,8 +65,20 @@ export const useVote = ({
 
   useWaitForTransaction({
     hash: data?.hash,
+    confirmations: 1,
     onError: (error) => {
-      console.log('err', error);
+      setError(error.toString());
+    },
+    onSuccess(data) {
+      const _unionId = data.logs[1].topics[1];
+      //'0x0000000000000000000000000000000000000000000000000000000000000000'
+      const _proposalId = data.logs[1].topics[2];
+      //  '0x0000000000000000000000000000000000000000000000000000000000000001'
+      if (!_unionId || !_proposalId) {
+        throw new Error('Could not get union id or proposal id');
+      }
+
+      watchUntilBlockHash(data.blockHash, _unionId, _proposalId);
     },
   });
 

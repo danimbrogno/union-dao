@@ -1331,6 +1331,12 @@ const merger = new(BareMerger as any)({
         },
         location: 'ProposalDetailsDocument.graphql'
       },{
+        document: WatchProposalDetailsDocument,
+        get rawSDL() {
+          return printWithCache(WatchProposalDetailsDocument);
+        },
+        location: 'WatchProposalDetailsDocument.graphql'
+      },{
         document: IsUserAdminOfUnionDocument,
         get rawSDL() {
           return printWithCache(IsUserAdminOfUnionDocument);
@@ -1408,7 +1414,7 @@ export type UnionDetailsQuery = { union?: Maybe<(
       & { user: Pick<User, 'id' | 'metadata'> }
     )>, proposals: Array<(
       Pick<Proposal, 'id' | 'numOptions' | 'metadata'>
-      & { options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
+      & { union: Pick<Union, 'votingAddress'>, options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
     )>, owner: Pick<User, 'id' | 'metadata'> }
   )> };
 
@@ -1421,16 +1427,9 @@ export type WatchUnionDetailsQuery = { union?: Maybe<(
     Pick<Union, 'id' | 'metadata'>
     & { proposals: Array<(
       Pick<Proposal, 'id' | 'numOptions' | 'metadata'>
-      & { options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
+      & { union: Pick<Union, 'votingAddress'>, options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
     )>, owner: Pick<User, 'id' | 'metadata'> }
   )> };
-
-export type ProposalDetailFragment = (
-  Pick<Proposal, 'id' | 'numOptions' | 'metadata'>
-  & { options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
-);
-
-export type ProposalOptionDetailFragment = Pick<ProposalOption, 'id' | 'votes'>;
 
 export type UnionMembersQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1461,6 +1460,13 @@ export type ProposalDetailsQuery = { proposal?: Maybe<(
     Pick<Proposal, 'id' | 'numOptions' | 'metadata'>
     & { union: Pick<Union, 'votingAddress'>, options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
   )> };
+
+export type WatchProposalDetailsQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type WatchProposalDetailsQuery = { proposal?: Maybe<Pick<Proposal, 'id'>>, _meta?: Maybe<{ block: Pick<_Block_, 'hash'> }> };
 
 export type IsUserAdminOfUnionQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1495,22 +1501,13 @@ export type ApplicationDetailFragment = (
   & { user: Pick<User, 'id' | 'metadata'> }
 );
 
-export const ProposalOptionDetailFragmentDoc = gql`
-    fragment ProposalOptionDetail on ProposalOption {
-  id
-  votes
-}
-    ` as unknown as DocumentNode<ProposalOptionDetailFragment, unknown>;
-export const ProposalDetailFragmentDoc = gql`
-    fragment ProposalDetail on Proposal {
-  id
-  numOptions
-  metadata
-  options {
-    ...ProposalOptionDetail
-  }
-}
-    ${ProposalOptionDetailFragmentDoc}` as unknown as DocumentNode<ProposalDetailFragment, unknown>;
+export type ProposalDetailFragment = (
+  Pick<Proposal, 'id' | 'numOptions' | 'metadata'>
+  & { union: Pick<Union, 'votingAddress'>, options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
+);
+
+export type ProposalOptionDetailFragment = Pick<ProposalOption, 'id' | 'votes'>;
+
 export const UserDetailFragmentDoc = gql`
     fragment UserDetail on User {
   id
@@ -1537,6 +1534,25 @@ export const ApplicationDetailFragmentDoc = gql`
   approved
 }
     ` as unknown as DocumentNode<ApplicationDetailFragment, unknown>;
+export const ProposalOptionDetailFragmentDoc = gql`
+    fragment ProposalOptionDetail on ProposalOption {
+  id
+  votes
+}
+    ` as unknown as DocumentNode<ProposalOptionDetailFragment, unknown>;
+export const ProposalDetailFragmentDoc = gql`
+    fragment ProposalDetail on Proposal {
+  id
+  numOptions
+  metadata
+  union {
+    votingAddress
+  }
+  options {
+    ...ProposalOptionDetail
+  }
+}
+    ${ProposalOptionDetailFragmentDoc}` as unknown as DocumentNode<ProposalDetailFragment, unknown>;
 export const WatchAllUnionsDocument = gql`
     query WatchAllUnions @live {
   unions(first: 50) {
@@ -1616,19 +1632,22 @@ export const WatchForProposalCreationDocument = gql`
 export const ProposalDetailsDocument = gql`
     query ProposalDetails($id: ID!) {
   proposal(id: $id) {
+    ...ProposalDetail
+  }
+}
+    ${ProposalDetailFragmentDoc}` as unknown as DocumentNode<ProposalDetailsQuery, ProposalDetailsQueryVariables>;
+export const WatchProposalDetailsDocument = gql`
+    query WatchProposalDetails($id: ID!) @live {
+  proposal(id: $id) {
     id
-    numOptions
-    metadata
-    union {
-      votingAddress
-    }
-    options {
-      id
-      votes
+  }
+  _meta {
+    block {
+      hash
     }
   }
 }
-    ` as unknown as DocumentNode<ProposalDetailsQuery, ProposalDetailsQueryVariables>;
+    ` as unknown as DocumentNode<WatchProposalDetailsQuery, WatchProposalDetailsQueryVariables>;
 export const IsUserAdminOfUnionDocument = gql`
     query IsUserAdminOfUnion($id: ID!, $unionId: Bytes!) {
   user(id: $id) {
@@ -1665,6 +1684,7 @@ export const GetUserUnionsDocument = gql`
 
 
 
+
 export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
 export function getSdk<C, E>(requester: Requester<C, E>) {
   return {
@@ -1688,6 +1708,9 @@ export function getSdk<C, E>(requester: Requester<C, E>) {
     },
     ProposalDetails(variables: ProposalDetailsQueryVariables, options?: C): Promise<ProposalDetailsQuery> {
       return requester<ProposalDetailsQuery, ProposalDetailsQueryVariables>(ProposalDetailsDocument, variables, options) as Promise<ProposalDetailsQuery>;
+    },
+    WatchProposalDetails(variables: WatchProposalDetailsQueryVariables, options?: C): AsyncIterable<WatchProposalDetailsQuery> {
+      return requester<WatchProposalDetailsQuery, WatchProposalDetailsQueryVariables>(WatchProposalDetailsDocument, variables, options) as AsyncIterable<WatchProposalDetailsQuery>;
     },
     IsUserAdminOfUnion(variables: IsUserAdminOfUnionQueryVariables, options?: C): Promise<IsUserAdminOfUnionQuery> {
       return requester<IsUserAdminOfUnionQuery, IsUserAdminOfUnionQueryVariables>(IsUserAdminOfUnionDocument, variables, options) as Promise<IsUserAdminOfUnionQuery>;

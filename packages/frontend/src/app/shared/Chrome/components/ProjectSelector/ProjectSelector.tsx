@@ -27,7 +27,9 @@ export const ProjectSelector = () => {
   const [userUnionsQuery, setUserUnionsQuery] = useState<GetUserUnionsQuery>();
   useEffect(() => {
     const load = () => {
-      execute(GetUserUnionsDocument, { id: address }).then((result) => {
+      execute(GetUserUnionsDocument, {
+        id: address?.toLowerCase(),
+      }).then((result) => {
         setUserUnionsQuery(result.data);
       });
     };

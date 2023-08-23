@@ -32,7 +32,7 @@ const StyledDescription = styled.p`
   line-height: 1.5rem;
 `;
 
-const Row = styled.p`
+const Row = styled.div`
   display: flex;
   gap: 1rem;
 `;

@@ -2,7 +2,7 @@ import { SubmitHandler } from 'react-hook-form';
 import { Inputs } from '../Create.interface';
 import { useCallback } from 'react';
 import { useContractWrite, useWaitForTransaction } from 'wagmi';
-import { getAddress } from 'viem';
+import { getAddress, hexToNumber } from 'viem';
 import { unionFacetABI } from 'shared';
 import { useConfig } from 'frontend/shared/Config';
 import {
@@ -64,7 +64,10 @@ export const useCreateUnion = ({
       if (!createdUnionId) {
         throw new Error('Created union id not found.');
       }
-      watchUntilBlockHash(data.blockHash, createdUnionId);
+      watchUntilBlockHash(
+        data.blockHash,
+        hexToNumber(createdUnionId).toString()
+      );
     },
   });
 

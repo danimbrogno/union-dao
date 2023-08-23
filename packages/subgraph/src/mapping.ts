@@ -21,21 +21,21 @@ import {
   UserRole,
 } from '../generated/schema';
 
-import { log, Bytes, BigInt } from '@graphprotocol/graph-ts';
+import { log, BigInt } from '@graphprotocol/graph-ts';
 
 export function handleUnionCreated(ev: UnionCreated): void {
   log.info('Enters handleUnionCreated handler', []);
-  log.info('handleUnionCreated: {}', [ev.params.index.toString()]);
+  log.info('handleUnionCreated: {}', [ev.params.index.toHex()]);
   const unionId = ev.params.index;
-  let union = Union.load(unionId);
+  let union = Union.load(unionId.toHex());
 
   if (!union) {
     log.info('handleUnionCreated: union not found', []);
     log.info('handleUnionCreated: creating new union', []);
-    union = new Union(unionId);
+    union = new Union(unionId.toHex());
 
     union.metadata = ev.params.metadataCID;
-    union.owner = ev.params.owner;
+    union.owner = ev.params.owner.toHex();
     union.votingAddress = ev.params.voting;
     union.save();
     log.info('handleUnionCreated: union saved', []);
@@ -45,28 +45,25 @@ export function handleUnionCreated(ev: UnionCreated): void {
 
 export function handleMemberAdded(ev: MemberAdded): void {
   log.info('Index = {}, Member = {}', [
-    ev.params.index.toHexString(),
-    ev.params.member.toHexString(),
+    ev.params.index.toHex(),
+    ev.params.member.toHex(),
   ]);
-  const roleId = Bytes.fromHexString(
-    ev.params.member.toHex() + ev.params.index.toHex()
-  );
-
+  const roleId = ev.params.member.toHex() + '.' + ev.params.index.toHex();
   const unionId = ev.params.index;
 
   let role = UserRole.load(roleId);
 
-  let user = User.load(ev.params.member);
+  let user = User.load(ev.params.member.toHex());
 
   if (!user) {
-    user = new User(ev.params.member);
+    user = new User(ev.params.member.toHex());
     user.save();
   }
 
   if (!role) {
     role = new UserRole(roleId);
-    role.union = unionId;
-    role.user = Bytes.fromHexString(ev.params.member.toHexString());
+    role.union = unionId.toHex();
+    role.user = ev.params.member.toHex();
     role.isAdmin = false;
     role.isMember = true;
     role.save();
@@ -78,28 +75,26 @@ export function handleMemberAdded(ev: MemberAdded): void {
 
 export function handleAdminAdded(ev: AdminAdded): void {
   log.info('Index = {}, Admin = {}', [
-    ev.params.index.toHexString(),
-    ev.params.admin.toHexString(),
+    ev.params.index.toHex(),
+    ev.params.admin.toHex(),
   ]);
-  const id = Bytes.fromHexString(
-    ev.params.admin.toHex() + ev.params.index.toHex()
-  );
+  const id = ev.params.admin.toHex() + '.' + ev.params.index.toHex();
 
   const unionId = ev.params.index;
 
   let role = UserRole.load(id);
 
-  let user = User.load(ev.params.admin);
+  let user = User.load(ev.params.admin.toHex());
 
   if (!user) {
-    user = new User(ev.params.admin);
+    user = new User(ev.params.admin.toHex());
     user.save();
   }
 
   if (!role) {
     role = new UserRole(id);
-    role.union = unionId;
-    role.user = Bytes.fromHexString(ev.params.admin.toHexString());
+    role.union = unionId.toHex();
+    role.user = ev.params.admin.toHex();
     role.isAdmin = true;
     role.isMember = false;
     role.save();
@@ -109,9 +104,7 @@ export function handleAdminAdded(ev: AdminAdded): void {
   }
 }
 export function handleMemberRemoved(ev: MemberRemoved): void {
-  const id = Bytes.fromHexString(
-    ev.params.member.toHex() + ev.params.index.toHex()
-  );
+  const id = ev.params.member.toHex() + '.' + ev.params.index.toHex();
 
   let role = UserRole.load(id);
 
@@ -122,9 +115,7 @@ export function handleMemberRemoved(ev: MemberRemoved): void {
 }
 
 export function handleAdminRemoved(ev: AdminRemoved): void {
-  const id = Bytes.fromHexString(
-    ev.params.admin.toHex() + ev.params.index.toHex()
-  );
+  const id = ev.params.admin.toHex() + '.' + ev.params.index.toHex();
 
   let role = UserRole.load(id);
 
@@ -136,31 +127,29 @@ export function handleAdminRemoved(ev: AdminRemoved): void {
 
 export function handleProposalCreated(ev: ProposalCreated): void {
   log.info('Enters handleProposalCreated handler', []);
-  log.info('handleProposalCreated: {}', [ev.params.index.toString()]);
+  log.info('handleProposalCreated: {}', [ev.params.index.toHex()]);
 
-  const proposalId = Bytes.fromHexString(
-    ev.params.union.toHex() + ev.params.index.toHex()
-  );
+  const proposalId = ev.params.union.toHex() + '.' + ev.params.index.toHex();
   let proposal = Proposal.load(proposalId);
 
   if (!proposal) {
     log.info('handleProposalCreated: proposal not found', []);
     log.info('handleProposalCreated: creating new proposal', []);
     proposal = new Proposal(proposalId);
-    proposal.union = ev.params.union;
-    proposal.owner = ev.params.owner;
+    proposal.union = ev.params.union.toHex();
+    proposal.owner = ev.params.owner.toHex();
     proposal.numOptions = ev.params.numOptions;
     proposal.metadata = ev.params.metadataCID;
 
     for (let i = 0; i < ev.params.numOptions; i++) {
-      let index = new BigInt(i);
-      log.info('Index = {}', [index.toString()]);
-      const optionId = Bytes.fromHexString(
+      log.info('Index = {}', [i.toString()]);
+      const optionId =
         ev.params.union.toHex() +
-          ev.params.index.toHex() +
-          Bytes.fromBigInt(index).toHex()
-      );
-      log.info('OptionId = {}', [optionId.toString()]);
+        '.' +
+        ev.params.index.toHex() +
+        '.' +
+        i.toString();
+      log.info('OptionId = {}', [optionId]);
 
       const option = new ProposalOption(optionId);
       option.votes = 0;
@@ -176,14 +165,14 @@ export function handleProposalCreated(ev: ProposalCreated): void {
 
 export function handleVoteCast(ev: VoteCast): void {
   log.info('Enters handleVoteCast handler', []);
-  log.info('handleVoteCast: {}', [ev.params.index.toString()]);
+  log.info('handleVoteCast: {}', [ev.params.index.toHex()]);
 
-  const optionId = Bytes.fromHexString(
+  const optionId =
     ev.params.union.toHex() +
-      ev.params.index.toHex() +
-      Bytes.fromBigInt(ev.params.option).toHex()
-  );
-
+    '.' +
+    ev.params.index.toHex() +
+    '.' +
+    ev.params.option.toHex();
   let option = ProposalOption.load(optionId);
 
   if (option) {
@@ -197,24 +186,23 @@ export function handleVoteCast(ev: VoteCast): void {
 
 export function handleApplicationSubmitted(ev: ApplicationSubmitted): void {
   log.info('Enters handleApplicationSubmitted handler', []);
-  log.info('handleApplicationSubmitted: {}', [ev.params.index.toString()]);
+  log.info('handleApplicationSubmitted: {}', [ev.params.index.toHex()]);
 
-  const applicationId = Bytes.fromHexString(
-    ev.params.member.toHex() + ev.params.index.toHex()
-  );
+  const applicationId =
+    ev.params.member.toHex() + '.' + ev.params.index.toHex();
 
   let application = Application.load(applicationId);
 
   if (!application) {
-    let user = User.load(ev.params.member);
+    let user = User.load(ev.params.member.toHex());
     if (!user) {
-      user = new User(ev.params.member);
+      user = new User(ev.params.member.toHex());
       user.save();
     }
     const unionId = ev.params.index;
     const application = new Application(applicationId);
-    application.union = unionId;
-    application.user = ev.params.member;
+    application.union = unionId.toHex();
+    application.user = ev.params.member.toHex();
     application.approved = false;
     application.save();
   }
@@ -222,11 +210,10 @@ export function handleApplicationSubmitted(ev: ApplicationSubmitted): void {
 
 export function handleApplicationApproved(ev: ApplicationApproved): void {
   log.info('Enters handleApplicationApproved handler', []);
-  log.info('handleApplicationApproved: {}', [ev.params.index.toString()]);
+  log.info('handleApplicationApproved: {}', [ev.params.index.toHex()]);
 
-  const applicationId = Bytes.fromHexString(
-    ev.params.member.toHex() + ev.params.index.toHex()
-  );
+  const applicationId =
+    ev.params.member.toHex() + '.' + ev.params.index.toHex();
 
   let application = Application.load(applicationId);
 
@@ -240,9 +227,9 @@ export function handleApplicationApproved(ev: ApplicationApproved): void {
 }
 
 export function handleUserMetadataUpdated(ev: UserMetadataUpdated): void {
-  let user = User.load(ev.params.member);
+  let user = User.load(ev.params.member.toHex());
   if (!user) {
-    user = new User(ev.params.member);
+    user = new User(ev.params.member.toHex());
     user.metadata = ev.params.metadataCID;
     user.save();
   } else {

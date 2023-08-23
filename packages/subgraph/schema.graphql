@@ -1,5 +1,5 @@
 type Union @entity {
-  id: Bytes!
+  id: String!
   metadata: String!
   owner: User!
   votingAddress: Bytes!
@@ -9,14 +9,14 @@ type Union @entity {
 }
 
 type Application @entity {
-  id: Bytes!
+  id: String!
   union: Union!
   user: User!
   approved: Boolean!
 }
 
 type UserRole @entity {
-  id: Bytes!
+  id: String!
   union: Union!
   user: User!
   isMember: Boolean!
@@ -24,7 +24,7 @@ type UserRole @entity {
 }
 
 type User @entity {
-  id: Bytes!
+  id: String!
   metadata: String
   roles: [UserRole!]! @derivedFrom(field: "user")
   proposals: [Proposal!]! @derivedFrom(field: "owner")
@@ -32,7 +32,7 @@ type User @entity {
 }
 
 type Proposal @entity {
-  id: Bytes!
+  id: String!
   union: Union!
   owner: User!
   numOptions: Int!
@@ -41,7 +41,7 @@ type Proposal @entity {
 }
 
 type ProposalOption @entity {
-  id: Bytes!
+  id: String!
   proposal: Proposal!
   votes: Int!
 }

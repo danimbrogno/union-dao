@@ -2,7 +2,7 @@ import { useConfig } from 'frontend/shared/Config';
 import { useIPFS } from 'frontend/shared/IPFS';
 import { SubmitHandler } from 'react-hook-form';
 import { proposalFacetABI } from 'shared';
-import { getAddress } from 'viem';
+import { Hex, getAddress, hexToNumber } from 'viem';
 import { useContractWrite, useWaitForTransaction } from 'wagmi';
 import { Inputs } from '../Create.interface';
 import { useCallback } from 'react';
@@ -28,15 +28,15 @@ export const useCreateProposal = ({
   } = useConfig();
 
   const watchUntilBlockHash = useCallback(
-    async (blockHash: string, createdProposalId: string) => {
+    async (blockHash: string, _unionId: Hex, _proposalId: Hex) => {
       const repeater = (await execute(WatchForProposalCreationDocument, {
-        id: createdProposalId,
+        id: `${_unionId}.${_proposalId}`,
       })) as AsyncIterable<ExecutionResult<WatchForProposalCreationQuery>>;
       for await (const result of repeater) {
         console.log('watching...');
         if (result.data?._meta?.block.hash === blockHash) {
           console.log('done.');
-          onCreated(result.data, createdProposalId);
+          onCreated(result.data, hexToNumber(_proposalId).toString());
           break;
         }
       }
@@ -54,11 +54,12 @@ export const useCreateProposal = ({
     hash: data?.hash,
     confirmations: 1,
     onSuccess(data) {
-      const proposalId = data.logs[data.logs.length - 1]?.topics[2];
-      if (!proposalId) {
+      const _unionId = data.logs[data.logs.length - 1]?.topics[1];
+      const _proposalId = data.logs[data.logs.length - 1]?.topics[2];
+      if (!_unionId || !_proposalId) {
         throw new Error('Could not get proposal id');
       }
-      watchUntilBlockHash(data.blockHash, proposalId);
+      watchUntilBlockHash(data.blockHash, _unionId, _proposalId);
     },
   });
 

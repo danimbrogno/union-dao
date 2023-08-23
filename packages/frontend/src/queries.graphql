@@ -41,20 +41,6 @@ query WatchUnionDetails($id: ID!) @live {
   }
 }
 
-fragment ProposalDetail on Proposal {
-  id
-  numOptions
-  metadata
-  options {
-    ...ProposalOptionDetail
-  }
-}
-
-fragment ProposalOptionDetail on ProposalOption {
-  id
-  votes
-}
-
 query UnionMembers($id: ID!) {
   union(id: $id) {
     id
@@ -81,15 +67,17 @@ query WatchForProposalCreation($id: ID!) @live {
 
 query ProposalDetails($id: ID!) {
   proposal(id: $id) {
+    ...ProposalDetail
+  }
+}
+
+query WatchProposalDetails($id: ID!) @live {
+  proposal(id: $id) {
     id
-    numOptions
-    metadata
-    union {
-      votingAddress
-    }
-    options {
-      id
-      votes
+  }
+  _meta {
+    block {
+      hash
     }
   }
 }
@@ -139,4 +127,20 @@ fragment ApplicationDetail on Application {
     metadata
   }
   approved
+}
+
+fragment ProposalDetail on Proposal {
+  id
+  numOptions
+  metadata
+  union {
+    votingAddress
+  }
+  options {
+    ...ProposalOptionDetail
+  }
+}
+fragment ProposalOptionDetail on ProposalOption {
+  id
+  votes
 }

@@ -4,7 +4,7 @@ import {
   execute,
 } from 'graphclient';
 import { useCallback, useEffect, useState } from 'react';
-import { numberToHex, stringToHex } from 'viem';
+import { numberToHex } from 'viem';
 
 export const useProposalDetails = ({
   unionId,
@@ -16,18 +16,12 @@ export const useProposalDetails = ({
   const [proposalDetailQuery, setProposalDetailQuery] =
     useState<ProposalDetailsQuery>();
 
-  const concatenateAndConvertToHex = (num1: string, num2: string) => {
-    const a = numberToHex(parseInt(num1), { size: 32 }).substring(2);
-    const b = numberToHex(parseInt(num2), { size: 32 }).substring(2);
-
-    // TODO: fix mystery 0s
-    const combined = `0x${a}00${b}`;
-    return combined;
-  };
-
   const fetchProposalDetail = useCallback(async () => {
     const result = await execute(ProposalDetailsDocument, {
-      id: concatenateAndConvertToHex(unionId, proposalId),
+      id: `${numberToHex(parseInt(unionId), { size: 32 })}.${numberToHex(
+        parseInt(proposalId),
+        { size: 32 }
+      )}`,
     });
     if (result.data) {
       setProposalDetailQuery(result.data);
@@ -40,5 +34,5 @@ export const useProposalDetails = ({
 
   const proposal = proposalDetailQuery?.proposal;
 
-  return { proposal };
+  return { proposal, refetch: fetchProposalDetail };
 };

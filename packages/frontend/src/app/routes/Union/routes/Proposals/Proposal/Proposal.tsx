@@ -33,7 +33,7 @@ export const Proposal = () => {
   const proposalId = useProposalIdParam();
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
-  const { proposal } = useProposalDetails({
+  const { proposal, refetch } = useProposalDetails({
     unionId,
     proposalId,
   });
@@ -46,6 +46,9 @@ export const Proposal = () => {
     proposalId,
     unionId,
     votingContractAddress: proposal?.union.votingAddress,
+    onVoted: () => {
+      refetch();
+    },
   });
 
   const handleVote = () => {

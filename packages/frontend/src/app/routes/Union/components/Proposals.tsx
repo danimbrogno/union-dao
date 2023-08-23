@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { Link as RouterLink } from 'react-router-dom';
 import { useFetchJsonFromCid } from 'frontend/shared/IPFS';
 import { ProposalMetadata } from 'frontend/app.interface';
+import { Hex, hexToNumber } from 'viem';
 
 const Link = styled(RouterLink)`
   /* color: inherit;
@@ -55,8 +56,16 @@ export const Proposals = ({
     );
   }
 
-  const proposalIdToPid = (a: string) =>
-    parseInt(`0x${a.substring(132, 68)}`, 16);
+  const proposalIdToLink = (pid: string) => {
+    const [_unionId, _proposalId] = pid.split('.');
+    if (!_unionId || !_proposalId) {
+      throw new Error('Missing id');
+    }
+
+    return `/union/${hexToNumber(
+      _unionId as Hex
+    ).toString()}/proposal/${hexToNumber(_proposalId as Hex).toString()}`;
+  };
 
   return (
     <>
@@ -64,7 +73,7 @@ export const Proposals = ({
       <ProposalList>
         {proposals.map((proposal) => (
           <Li key={proposal.id}>
-            <Link to={`/union/${id}/proposal/${proposalIdToPid(proposal.id)}`}>
+            <Link to={proposalIdToLink(proposal.id)}>
               <ProposalItem cid={proposal.metadata} />
             </Link>
           </Li>
