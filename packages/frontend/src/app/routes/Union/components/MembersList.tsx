@@ -1,16 +1,8 @@
 import styled from '@emotion/styled';
 import { UserMetadata } from 'frontend/app.interface';
 import { useFetchJsonFromCid } from 'frontend/shared/IPFS';
-import { useUnionIdParam } from 'frontend/shared/useUnionIdParam';
-import {
-  UnionDetailsQuery,
-  UnionMembersDocument,
-  UnionMembersQuery,
-  UserRoleDetailFragment,
-  execute,
-} from 'graphclient';
-import { useEffect, useState } from 'react';
-import { numberToHex } from 'viem';
+
+import { UnionDetailsQuery, UserRoleDetailFragment } from 'graphclient';
 
 const H2 = styled.h2``;
 

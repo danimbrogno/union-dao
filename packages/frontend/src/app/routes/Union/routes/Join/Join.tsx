@@ -8,6 +8,8 @@ import { useSubmitApplication } from './hooks/useSubmitApplication';
 import { Inputs } from './Join.interface';
 import { WatchUnionDetailsQuery } from 'graphclient';
 import { useNavigate } from 'react-router-dom';
+import { CardModal } from 'frontend/shared/CardModal';
+import { useState } from 'react';
 
 const StyledForm = styled.form`
   display: flex;
@@ -17,6 +19,7 @@ const StyledForm = styled.form`
   margin: auto;
   gap: 1.5rem;
   max-width: 480px;
+  width: 100%;
 `;
 
 const StyledHeader = styled.h1`
@@ -28,12 +31,17 @@ const StyledParagraph = styled.p`
 `;
 
 export const Join = () => {
+  const [showCard, setShowCard] = useState(false);
+  const [savedInputs, setSavedInputs] = useState<Inputs>();
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { isValid, isSubmitting },
   } = useForm<Inputs>();
+  const name = watch('name', '');
+  const password = watch('password', '');
   const navigate = useNavigate();
   const { onSubmit, error } = useSubmitApplication({
     onCreated(_: WatchUnionDetailsQuery, _unionId: string) {
@@ -44,23 +52,42 @@ export const Join = () => {
     },
   });
 
+  const interceptSubmit = (input: Inputs) => {
+    setSavedInputs(input);
+    setShowCard(true);
+  };
+
+  const onDownloaded = () => {
+    if (savedInputs) {
+      onSubmit(savedInputs);
+      setTimeout(() => {
+        setSavedInputs(undefined);
+        setShowCard(false);
+      });
+    }
+  };
+
   return (
     <Chrome>
-      <StyledForm onSubmit={handleSubmit(onSubmit)}>
+      <CardModal
+        name={name}
+        password={password}
+        onDismiss={() => setShowCard(false)}
+        onDownloaded={onDownloaded}
+        open={showCard}
+      />
+      <StyledForm onSubmit={handleSubmit(interceptSubmit)}>
         <StyledHeader>Join the Union</StyledHeader>
-        <div>
-          <label>
-            <Input
-              placeholder="Your Name"
-              {...register('name', { required: true })}
-            />
-            <Input
-              type="password"
-              placeholder="Your Password (Don't forget this!)"
-              {...register('password', { required: true })}
-            />
-          </label>
-        </div>
+
+        <Input
+          placeholder="Your Name"
+          {...register('name', { required: true })}
+        />
+        <Input
+          type="password"
+          placeholder="Your Password (Don't forget this!)"
+          {...register('password', { required: true })}
+        />
         <PrimaryButton disabled={!isValid || isSubmitting} type="submit">
           Submit
         </PrimaryButton>

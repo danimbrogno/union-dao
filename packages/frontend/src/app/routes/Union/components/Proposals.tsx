@@ -45,7 +45,7 @@ export const Proposals = ({
       <>
         <P>No proposals created yet.</P>
         <Link to={`/union/${unionId}/proposal/create`}>
-          Create the first proposal now.
+          Create the first proposal
         </Link>
       </>
     );

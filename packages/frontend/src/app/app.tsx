@@ -10,7 +10,7 @@ import { WagmiProvider } from './shared/WagmiProvider';
 import { Join } from './routes/Union/routes/Join/Join';
 import { Global, ThemeProvider, css } from '@emotion/react';
 import { theme } from './app.theme';
-import { Membership } from './routes/Membership/Membership';
+import { ThemeProvider as MuiThemeProvider } from '@mui/material';
 
 const styles = css`
   /* Global CSS Reset */
@@ -65,6 +65,7 @@ export function App() {
   return (
     <>
       <Global styles={styles} />
+
       <ThemeProvider theme={theme}>
         <Config>
           <IPFS>
@@ -72,7 +73,6 @@ export function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/create" element={<Create />} />
-                <Route path="/membership" element={<Membership />} />
                 <Route path="/union/:unionId" element={<Union />} />
                 <Route path="/union/:unionId/join" element={<Join />} />
                 <Route

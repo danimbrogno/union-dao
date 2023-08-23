@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
 import { useIPFS } from '../../shared/IPFS';
@@ -13,6 +13,7 @@ import { Input } from 'ui/Input';
 import { Textarea } from 'ui/Textarea';
 import { CloseIcon } from 'ui/CloseIcon';
 import { PrimaryButton } from 'ui/PrimaryButton';
+import { CardModal } from '../../shared/CardModal';
 
 const StyledForm = styled.form`
   display: flex;
@@ -85,8 +86,10 @@ export const Create = () => {
     reset,
     formState: { isValid, isSubmitting },
   } = useForm<Inputs>();
-
+  const [showCard, setShowCard] = useState(false);
+  const [savedInputs, setSavedInputs] = useState<Inputs>();
   const logo = watch('logo', '');
+  const name = watch('name', '');
   const password = watch('password', '');
   const getIdentity = useGetIdentity();
   const navigate = useNavigate();
@@ -140,9 +143,31 @@ export const Create = () => {
     );
   }
 
+  const interceptSubmit = (input: Inputs) => {
+    setSavedInputs(input);
+    setShowCard(true);
+  };
+
+  const onDownloaded = () => {
+    if (savedInputs) {
+      onSubmit(savedInputs);
+      setTimeout(() => {
+        setSavedInputs(undefined);
+        setShowCard(false);
+      });
+    }
+  };
+
   return (
     <Chrome>
-      <StyledForm onSubmit={handleSubmit(onSubmit)}>
+      <CardModal
+        name={name}
+        password={password}
+        onDismiss={() => setShowCard(false)}
+        onDownloaded={onDownloaded}
+        open={showCard}
+      />
+      <StyledForm onSubmit={handleSubmit(interceptSubmit)}>
         <StyledHeader>Create a Union</StyledHeader>
         <StyledParagraph>
           Start your journey with organized labour by creating a union.

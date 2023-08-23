@@ -33,7 +33,7 @@ export const Home = () => {
           for managing organized labour. It leverages the transparency,
           security, and immutability of blockchain technology to ensure fair and
           efficient management of labour resources. Workers can join unions and
-          participate in anonymous voting powerd by zero-knowledge proofs.
+          participate in anonymous voting powered by zero-knowledge proofs.
         </StyledP>
       </StyledDiv>
     </Chrome>
