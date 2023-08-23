@@ -1451,7 +1451,16 @@ export type WatchAllUnionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type WatchAllUnionsQuery = { unions: Array<(
     Pick<Union, 'id' | 'metadata'>
-    & { owner: Pick<User, 'id' | 'metadata'> }
+    & { owner: Pick<User, 'id' | 'metadata'>, users: Array<(
+      Pick<UserRole, 'id' | 'isAdmin'>
+      & { user: Pick<User, 'id' | 'metadata'> }
+    )>, pendingApplications: Array<(
+      Pick<Application, 'id' | 'approved'>
+      & { user: Pick<User, 'id' | 'metadata'> }
+    )>, proposals: Array<(
+      Pick<Proposal, 'id' | 'numOptions' | 'metadata'>
+      & { union: Pick<Union, 'votingAddress'>, options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
+    )> }
   )>, _meta?: Maybe<{ block: Pick<_Block_, 'hash'> }> };
 
 export type FetchAllUnionsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1459,7 +1468,16 @@ export type FetchAllUnionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type FetchAllUnionsQuery = { unions: Array<(
     Pick<Union, 'id' | 'metadata'>
-    & { owner: Pick<User, 'id' | 'metadata'> }
+    & { owner: Pick<User, 'id' | 'metadata'>, users: Array<(
+      Pick<UserRole, 'id' | 'isAdmin'>
+      & { user: Pick<User, 'id' | 'metadata'> }
+    )>, pendingApplications: Array<(
+      Pick<Application, 'id' | 'approved'>
+      & { user: Pick<User, 'id' | 'metadata'> }
+    )>, proposals: Array<(
+      Pick<Proposal, 'id' | 'numOptions' | 'metadata'>
+      & { union: Pick<Union, 'votingAddress'>, options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
+    )> }
   )>, _meta?: Maybe<{ block: Pick<_Block_, 'hash'> }> };
 
 export type UnionDetailsQueryVariables = Exact<{
@@ -1469,13 +1487,16 @@ export type UnionDetailsQueryVariables = Exact<{
 
 export type UnionDetailsQuery = { union?: Maybe<(
     Pick<Union, 'id' | 'metadata'>
-    & { pendingApplications: Array<(
+    & { owner: Pick<User, 'id' | 'metadata'>, users: Array<(
+      Pick<UserRole, 'id' | 'isAdmin'>
+      & { user: Pick<User, 'id' | 'metadata'> }
+    )>, pendingApplications: Array<(
       Pick<Application, 'id' | 'approved'>
       & { user: Pick<User, 'id' | 'metadata'> }
     )>, proposals: Array<(
       Pick<Proposal, 'id' | 'numOptions' | 'metadata'>
       & { union: Pick<Union, 'votingAddress'>, options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
-    )>, owner: Pick<User, 'id' | 'metadata'> }
+    )> }
   )> };
 
 export type WatchUnionDetailsQueryVariables = Exact<{
@@ -1485,10 +1506,16 @@ export type WatchUnionDetailsQueryVariables = Exact<{
 
 export type WatchUnionDetailsQuery = { union?: Maybe<(
     Pick<Union, 'id' | 'metadata'>
-    & { proposals: Array<(
+    & { owner: Pick<User, 'id' | 'metadata'>, users: Array<(
+      Pick<UserRole, 'id' | 'isAdmin'>
+      & { user: Pick<User, 'id' | 'metadata'> }
+    )>, pendingApplications: Array<(
+      Pick<Application, 'id' | 'approved'>
+      & { user: Pick<User, 'id' | 'metadata'> }
+    )>, proposals: Array<(
       Pick<Proposal, 'id' | 'numOptions' | 'metadata'>
       & { union: Pick<Union, 'votingAddress'>, options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
-    )>, owner: Pick<User, 'id' | 'metadata'> }
+    )> }
   )>, _meta?: Maybe<{ block: Pick<_Block_, 'hash'> }> };
 
 export type UnionMembersQueryVariables = Exact<{
@@ -1558,7 +1585,16 @@ export type UserDetailFragment = Pick<User, 'id' | 'metadata'>;
 
 export type UnionDetailFragment = (
   Pick<Union, 'id' | 'metadata'>
-  & { owner: Pick<User, 'id' | 'metadata'> }
+  & { owner: Pick<User, 'id' | 'metadata'>, users: Array<(
+    Pick<UserRole, 'id' | 'isAdmin'>
+    & { user: Pick<User, 'id' | 'metadata'> }
+  )>, pendingApplications: Array<(
+    Pick<Application, 'id' | 'approved'>
+    & { user: Pick<User, 'id' | 'metadata'> }
+  )>, proposals: Array<(
+    Pick<Proposal, 'id' | 'numOptions' | 'metadata'>
+    & { union: Pick<Union, 'votingAddress'>, options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
+  )> }
 );
 
 export type ApplicationDetailFragment = (
@@ -1588,16 +1624,6 @@ export const UserRoleDetailFragmentDoc = gql`
   }
 }
     ${UserDetailFragmentDoc}` as unknown as DocumentNode<UserRoleDetailFragment, unknown>;
-export const UnionDetailFragmentDoc = gql`
-    fragment UnionDetail on Union {
-  id
-  metadata
-  owner {
-    id
-    metadata
-  }
-}
-    ` as unknown as DocumentNode<UnionDetailFragment, unknown>;
 export const ApplicationDetailFragmentDoc = gql`
     fragment ApplicationDetail on Application {
   id
@@ -1627,6 +1653,27 @@ export const ProposalDetailFragmentDoc = gql`
   }
 }
     ${ProposalOptionDetailFragmentDoc}` as unknown as DocumentNode<ProposalDetailFragment, unknown>;
+export const UnionDetailFragmentDoc = gql`
+    fragment UnionDetail on Union {
+  id
+  metadata
+  owner {
+    ...UserDetail
+  }
+  users {
+    ...UserRoleDetail
+  }
+  pendingApplications(where: {approved: false}) {
+    ...ApplicationDetail
+  }
+  proposals {
+    ...ProposalDetail
+  }
+}
+    ${UserDetailFragmentDoc}
+${UserRoleDetailFragmentDoc}
+${ApplicationDetailFragmentDoc}
+${ProposalDetailFragmentDoc}` as unknown as DocumentNode<UnionDetailFragment, unknown>;
 export const WatchAllUnionsDocument = gql`
     query WatchAllUnions @live {
   unions(first: 50) {
@@ -1655,24 +1702,13 @@ export const UnionDetailsDocument = gql`
     query UnionDetails($id: ID!) {
   union(id: $id) {
     ...UnionDetail
-    pendingApplications(where: {approved: false}) {
-      ...ApplicationDetail
-    }
-    proposals {
-      ...ProposalDetail
-    }
   }
 }
-    ${UnionDetailFragmentDoc}
-${ApplicationDetailFragmentDoc}
-${ProposalDetailFragmentDoc}` as unknown as DocumentNode<UnionDetailsQuery, UnionDetailsQueryVariables>;
+    ${UnionDetailFragmentDoc}` as unknown as DocumentNode<UnionDetailsQuery, UnionDetailsQueryVariables>;
 export const WatchUnionDetailsDocument = gql`
     query WatchUnionDetails($id: ID!) @live {
   union(id: $id) {
     ...UnionDetail
-    proposals {
-      ...ProposalDetail
-    }
   }
   _meta {
     block {
@@ -1680,8 +1716,7 @@ export const WatchUnionDetailsDocument = gql`
     }
   }
 }
-    ${UnionDetailFragmentDoc}
-${ProposalDetailFragmentDoc}` as unknown as DocumentNode<WatchUnionDetailsQuery, WatchUnionDetailsQueryVariables>;
+    ${UnionDetailFragmentDoc}` as unknown as DocumentNode<WatchUnionDetailsQuery, WatchUnionDetailsQueryVariables>;
 export const UnionMembersDocument = gql`
     query UnionMembers($id: ID!) {
   union(id: $id) {

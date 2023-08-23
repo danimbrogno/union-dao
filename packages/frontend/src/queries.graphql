@@ -23,21 +23,12 @@ query FetchAllUnions {
 query UnionDetails($id: ID!) {
   union(id: $id) {
     ...UnionDetail
-    pendingApplications(where: { approved: false }) {
-      ...ApplicationDetail
-    }
-    proposals {
-      ...ProposalDetail
-    }
   }
 }
 
 query WatchUnionDetails($id: ID!) @live {
   union(id: $id) {
     ...UnionDetail
-    proposals {
-      ...ProposalDetail
-    }
   }
   _meta {
     block {
@@ -124,8 +115,16 @@ fragment UnionDetail on Union {
   id
   metadata
   owner {
-    id
-    metadata
+    ...UserDetail
+  }
+  users {
+    ...UserRoleDetail
+  }
+  pendingApplications(where: { approved: false }) {
+    ...ApplicationDetail
+  }
+  proposals {
+    ...ProposalDetail
   }
 }
 
