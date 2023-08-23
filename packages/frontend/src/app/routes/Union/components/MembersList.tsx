@@ -3,6 +3,7 @@ import { UserMetadata } from 'frontend/app.interface';
 import { useFetchJsonFromCid } from 'frontend/shared/IPFS';
 import { useUnionIdParam } from 'frontend/shared/useUnionIdParam';
 import {
+  UnionDetailsQuery,
   UnionMembersDocument,
   UnionMembersQuery,
   UserRoleDetailFragment,
@@ -23,34 +24,18 @@ const Li = styled.li`
   margin: 0.5em 0;
 `;
 
-const P = styled.p`
-  margin: 0.5em 0;
-`;
-
-export const MembersList = () => {
-  const unionId = useUnionIdParam();
-  const [data, setData] = useState<UnionMembersQuery>();
-  useEffect(() => {
-    const load = async () => {
-      const result = await execute(UnionMembersDocument, {
-        id: numberToHex(parseInt(unionId), { size: 32 }),
-      });
-
-      if (result.data) {
-        setData(result.data);
-      }
-    };
-
-    load();
-  }, [unionId]);
-
-  if (!data) return null;
+export const MembersList = ({
+  unionDetailQuery,
+}: {
+  unionDetailQuery: UnionDetailsQuery;
+}) => {
+  const users = unionDetailQuery.union?.users || [];
 
   return (
     <>
       <H2>Members</H2>
       <MemberList>
-        {(data?.union?.users || []).map((user) => (
+        {users.map((user) => (
           <Li key={user.id}>
             <Member member={user} />
           </Li>

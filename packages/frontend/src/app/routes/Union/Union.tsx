@@ -1,10 +1,5 @@
 import { useConfig } from 'frontend/shared/Config';
-import {
-  UnionDetailsDocument,
-  UnionDetailsQuery,
-  WatchUnionDetailsQuery,
-  execute,
-} from 'graphclient';
+import { UnionDetailsDocument, UnionDetailsQuery, execute } from 'graphclient';
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import QR from 'react-qr-code';
@@ -68,7 +63,7 @@ export const Union = () => {
               <Proposals unionDetailQuery={unionDetailQuery} />
             </Column>
             <Column>
-              <MembersList />
+              <MembersList unionDetailQuery={unionDetailQuery} />
             </Column>
             <Column>
               <PendingApplications
