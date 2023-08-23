@@ -1,9 +1,8 @@
 import Chrome from 'frontend/shared/Chrome/Chrome';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Input } from 'ui/Input';
 import { Textarea } from 'ui/Textarea';
-import { Hex, hexToBigInt } from 'viem';
 import styled from '@emotion/styled';
 import { PrimaryButton } from 'ui/PrimaryButton';
 import { RemoveIcon } from 'ui/RemoveIcon';

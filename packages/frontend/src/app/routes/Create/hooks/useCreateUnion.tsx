@@ -14,15 +14,9 @@ import { ExecutionResult } from 'graphql';
 import { useIPFS } from 'frontend/shared/IPFS';
 
 export const useCreateUnion = ({
-  name,
-  logo,
-  description,
   commitment,
   onCreated,
 }: {
-  name: string;
-  logo: string;
-  description: string;
   commitment: bigint;
   onCreated: (data: WatchAllUnionsQuery, createdUnionId: string) => void;
 }) => {

@@ -45,23 +45,33 @@ export type Scalars = {
 };
 
 export type Application = {
-  id: Scalars['Bytes'];
+  id: Scalars['String'];
   union: Union;
   user: User;
   approved: Scalars['Boolean'];
 };
 
 export type Application_filter = {
-  id?: InputMaybe<Scalars['Bytes']>;
-  id_not?: InputMaybe<Scalars['Bytes']>;
-  id_gt?: InputMaybe<Scalars['Bytes']>;
-  id_lt?: InputMaybe<Scalars['Bytes']>;
-  id_gte?: InputMaybe<Scalars['Bytes']>;
-  id_lte?: InputMaybe<Scalars['Bytes']>;
-  id_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  id_contains?: InputMaybe<Scalars['Bytes']>;
-  id_not_contains?: InputMaybe<Scalars['Bytes']>;
+  id?: InputMaybe<Scalars['String']>;
+  id_not?: InputMaybe<Scalars['String']>;
+  id_gt?: InputMaybe<Scalars['String']>;
+  id_lt?: InputMaybe<Scalars['String']>;
+  id_gte?: InputMaybe<Scalars['String']>;
+  id_lte?: InputMaybe<Scalars['String']>;
+  id_in?: InputMaybe<Array<Scalars['String']>>;
+  id_not_in?: InputMaybe<Array<Scalars['String']>>;
+  id_contains?: InputMaybe<Scalars['String']>;
+  id_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_not_contains?: InputMaybe<Scalars['String']>;
+  id_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_starts_with?: InputMaybe<Scalars['String']>;
+  id_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_starts_with?: InputMaybe<Scalars['String']>;
+  id_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_ends_with?: InputMaybe<Scalars['String']>;
+  id_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']>;
+  id_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   union?: InputMaybe<Scalars['String']>;
   union_not?: InputMaybe<Scalars['String']>;
   union_gt?: InputMaybe<Scalars['String']>;
@@ -141,7 +151,7 @@ export type OrderDirection =
   | 'desc';
 
 export type Proposal = {
-  id: Scalars['Bytes'];
+  id: Scalars['String'];
   union: Union;
   owner: User;
   numOptions: Scalars['Int'];
@@ -159,22 +169,32 @@ export type ProposaloptionsArgs = {
 };
 
 export type ProposalOption = {
-  id: Scalars['Bytes'];
+  id: Scalars['String'];
   proposal: Proposal;
   votes: Scalars['Int'];
 };
 
 export type ProposalOption_filter = {
-  id?: InputMaybe<Scalars['Bytes']>;
-  id_not?: InputMaybe<Scalars['Bytes']>;
-  id_gt?: InputMaybe<Scalars['Bytes']>;
-  id_lt?: InputMaybe<Scalars['Bytes']>;
-  id_gte?: InputMaybe<Scalars['Bytes']>;
-  id_lte?: InputMaybe<Scalars['Bytes']>;
-  id_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  id_contains?: InputMaybe<Scalars['Bytes']>;
-  id_not_contains?: InputMaybe<Scalars['Bytes']>;
+  id?: InputMaybe<Scalars['String']>;
+  id_not?: InputMaybe<Scalars['String']>;
+  id_gt?: InputMaybe<Scalars['String']>;
+  id_lt?: InputMaybe<Scalars['String']>;
+  id_gte?: InputMaybe<Scalars['String']>;
+  id_lte?: InputMaybe<Scalars['String']>;
+  id_in?: InputMaybe<Array<Scalars['String']>>;
+  id_not_in?: InputMaybe<Array<Scalars['String']>>;
+  id_contains?: InputMaybe<Scalars['String']>;
+  id_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_not_contains?: InputMaybe<Scalars['String']>;
+  id_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_starts_with?: InputMaybe<Scalars['String']>;
+  id_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_starts_with?: InputMaybe<Scalars['String']>;
+  id_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_ends_with?: InputMaybe<Scalars['String']>;
+  id_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']>;
+  id_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   proposal?: InputMaybe<Scalars['String']>;
   proposal_not?: InputMaybe<Scalars['String']>;
   proposal_gt?: InputMaybe<Scalars['String']>;
@@ -219,16 +239,26 @@ export type ProposalOption_orderBy =
   | 'votes';
 
 export type Proposal_filter = {
-  id?: InputMaybe<Scalars['Bytes']>;
-  id_not?: InputMaybe<Scalars['Bytes']>;
-  id_gt?: InputMaybe<Scalars['Bytes']>;
-  id_lt?: InputMaybe<Scalars['Bytes']>;
-  id_gte?: InputMaybe<Scalars['Bytes']>;
-  id_lte?: InputMaybe<Scalars['Bytes']>;
-  id_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  id_contains?: InputMaybe<Scalars['Bytes']>;
-  id_not_contains?: InputMaybe<Scalars['Bytes']>;
+  id?: InputMaybe<Scalars['String']>;
+  id_not?: InputMaybe<Scalars['String']>;
+  id_gt?: InputMaybe<Scalars['String']>;
+  id_lt?: InputMaybe<Scalars['String']>;
+  id_gte?: InputMaybe<Scalars['String']>;
+  id_lte?: InputMaybe<Scalars['String']>;
+  id_in?: InputMaybe<Array<Scalars['String']>>;
+  id_not_in?: InputMaybe<Array<Scalars['String']>>;
+  id_contains?: InputMaybe<Scalars['String']>;
+  id_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_not_contains?: InputMaybe<Scalars['String']>;
+  id_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_starts_with?: InputMaybe<Scalars['String']>;
+  id_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_starts_with?: InputMaybe<Scalars['String']>;
+  id_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_ends_with?: InputMaybe<Scalars['String']>;
+  id_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']>;
+  id_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   union?: InputMaybe<Scalars['String']>;
   union_not?: InputMaybe<Scalars['String']>;
   union_gt?: InputMaybe<Scalars['String']>;
@@ -580,7 +610,7 @@ export type Subscription_metaArgs = {
 };
 
 export type Union = {
-  id: Scalars['Bytes'];
+  id: Scalars['String'];
   metadata: Scalars['String'];
   owner: User;
   votingAddress: Scalars['Bytes'];
@@ -617,16 +647,26 @@ export type UnionproposalsArgs = {
 };
 
 export type Union_filter = {
-  id?: InputMaybe<Scalars['Bytes']>;
-  id_not?: InputMaybe<Scalars['Bytes']>;
-  id_gt?: InputMaybe<Scalars['Bytes']>;
-  id_lt?: InputMaybe<Scalars['Bytes']>;
-  id_gte?: InputMaybe<Scalars['Bytes']>;
-  id_lte?: InputMaybe<Scalars['Bytes']>;
-  id_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  id_contains?: InputMaybe<Scalars['Bytes']>;
-  id_not_contains?: InputMaybe<Scalars['Bytes']>;
+  id?: InputMaybe<Scalars['String']>;
+  id_not?: InputMaybe<Scalars['String']>;
+  id_gt?: InputMaybe<Scalars['String']>;
+  id_lt?: InputMaybe<Scalars['String']>;
+  id_gte?: InputMaybe<Scalars['String']>;
+  id_lte?: InputMaybe<Scalars['String']>;
+  id_in?: InputMaybe<Array<Scalars['String']>>;
+  id_not_in?: InputMaybe<Array<Scalars['String']>>;
+  id_contains?: InputMaybe<Scalars['String']>;
+  id_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_not_contains?: InputMaybe<Scalars['String']>;
+  id_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_starts_with?: InputMaybe<Scalars['String']>;
+  id_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_starts_with?: InputMaybe<Scalars['String']>;
+  id_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_ends_with?: InputMaybe<Scalars['String']>;
+  id_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']>;
+  id_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   metadata?: InputMaybe<Scalars['String']>;
   metadata_not?: InputMaybe<Scalars['String']>;
   metadata_gt?: InputMaybe<Scalars['String']>;
@@ -699,7 +739,7 @@ export type Union_orderBy =
   | 'proposals';
 
 export type User = {
-  id: Scalars['Bytes'];
+  id: Scalars['String'];
   metadata?: Maybe<Scalars['String']>;
   roles: Array<UserRole>;
   proposals: Array<Proposal>;
@@ -734,7 +774,7 @@ export type UserunionsArgs = {
 };
 
 export type UserRole = {
-  id: Scalars['Bytes'];
+  id: Scalars['String'];
   union: Union;
   user: User;
   isMember: Scalars['Boolean'];
@@ -742,16 +782,26 @@ export type UserRole = {
 };
 
 export type UserRole_filter = {
-  id?: InputMaybe<Scalars['Bytes']>;
-  id_not?: InputMaybe<Scalars['Bytes']>;
-  id_gt?: InputMaybe<Scalars['Bytes']>;
-  id_lt?: InputMaybe<Scalars['Bytes']>;
-  id_gte?: InputMaybe<Scalars['Bytes']>;
-  id_lte?: InputMaybe<Scalars['Bytes']>;
-  id_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  id_contains?: InputMaybe<Scalars['Bytes']>;
-  id_not_contains?: InputMaybe<Scalars['Bytes']>;
+  id?: InputMaybe<Scalars['String']>;
+  id_not?: InputMaybe<Scalars['String']>;
+  id_gt?: InputMaybe<Scalars['String']>;
+  id_lt?: InputMaybe<Scalars['String']>;
+  id_gte?: InputMaybe<Scalars['String']>;
+  id_lte?: InputMaybe<Scalars['String']>;
+  id_in?: InputMaybe<Array<Scalars['String']>>;
+  id_not_in?: InputMaybe<Array<Scalars['String']>>;
+  id_contains?: InputMaybe<Scalars['String']>;
+  id_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_not_contains?: InputMaybe<Scalars['String']>;
+  id_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_starts_with?: InputMaybe<Scalars['String']>;
+  id_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_starts_with?: InputMaybe<Scalars['String']>;
+  id_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_ends_with?: InputMaybe<Scalars['String']>;
+  id_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']>;
+  id_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   union?: InputMaybe<Scalars['String']>;
   union_not?: InputMaybe<Scalars['String']>;
   union_gt?: InputMaybe<Scalars['String']>;
@@ -821,16 +871,26 @@ export type UserRole_orderBy =
   | 'isAdmin';
 
 export type User_filter = {
-  id?: InputMaybe<Scalars['Bytes']>;
-  id_not?: InputMaybe<Scalars['Bytes']>;
-  id_gt?: InputMaybe<Scalars['Bytes']>;
-  id_lt?: InputMaybe<Scalars['Bytes']>;
-  id_gte?: InputMaybe<Scalars['Bytes']>;
-  id_lte?: InputMaybe<Scalars['Bytes']>;
-  id_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  id_contains?: InputMaybe<Scalars['Bytes']>;
-  id_not_contains?: InputMaybe<Scalars['Bytes']>;
+  id?: InputMaybe<Scalars['String']>;
+  id_not?: InputMaybe<Scalars['String']>;
+  id_gt?: InputMaybe<Scalars['String']>;
+  id_lt?: InputMaybe<Scalars['String']>;
+  id_gte?: InputMaybe<Scalars['String']>;
+  id_lte?: InputMaybe<Scalars['String']>;
+  id_in?: InputMaybe<Array<Scalars['String']>>;
+  id_not_in?: InputMaybe<Array<Scalars['String']>>;
+  id_contains?: InputMaybe<Scalars['String']>;
+  id_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_not_contains?: InputMaybe<Scalars['String']>;
+  id_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  id_starts_with?: InputMaybe<Scalars['String']>;
+  id_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_starts_with?: InputMaybe<Scalars['String']>;
+  id_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id_ends_with?: InputMaybe<Scalars['String']>;
+  id_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  id_not_ends_with?: InputMaybe<Scalars['String']>;
+  id_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   metadata?: InputMaybe<Scalars['String']>;
   metadata_not?: InputMaybe<Scalars['String']>;
   metadata_gt?: InputMaybe<Scalars['String']>;
@@ -1067,7 +1127,7 @@ export type derivedFromDirectiveArgs = {
 export type derivedFromDirectiveResolver<Result, Parent, ContextType = MeshContext, Args = derivedFromDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type ApplicationResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Application'] = ResolversParentTypes['Application']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   union?: Resolver<ResolversTypes['Union'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   approved?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -1087,7 +1147,7 @@ export interface BytesScalarConfig extends GraphQLScalarTypeConfig<ResolversType
 }
 
 export type ProposalResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Proposal'] = ResolversParentTypes['Proposal']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   union?: Resolver<ResolversTypes['Union'], ParentType, ContextType>;
   owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   numOptions?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -1097,7 +1157,7 @@ export type ProposalResolvers<ContextType = MeshContext, ParentType extends Reso
 }>;
 
 export type ProposalOptionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['ProposalOption'] = ResolversParentTypes['ProposalOption']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   proposal?: Resolver<ResolversTypes['Proposal'], ParentType, ContextType>;
   votes?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1136,7 +1196,7 @@ export type SubscriptionResolvers<ContextType = MeshContext, ParentType extends 
 }>;
 
 export type UnionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Union'] = ResolversParentTypes['Union']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   metadata?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   owner?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   votingAddress?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
@@ -1147,7 +1207,7 @@ export type UnionResolvers<ContextType = MeshContext, ParentType extends Resolve
 }>;
 
 export type UserResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   roles?: Resolver<Array<ResolversTypes['UserRole']>, ParentType, ContextType, RequireFields<UserrolesArgs, 'skip' | 'first'>>;
   proposals?: Resolver<Array<ResolversTypes['Proposal']>, ParentType, ContextType, RequireFields<UserproposalsArgs, 'skip' | 'first'>>;
@@ -1156,7 +1216,7 @@ export type UserResolvers<ContextType = MeshContext, ParentType extends Resolver
 }>;
 
 export type UserRoleResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['UserRole'] = ResolversParentTypes['UserRole']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   union?: Resolver<ResolversTypes['Union'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   isMember?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -1429,7 +1489,7 @@ export type WatchUnionDetailsQuery = { union?: Maybe<(
       Pick<Proposal, 'id' | 'numOptions' | 'metadata'>
       & { union: Pick<Union, 'votingAddress'>, options: Array<Pick<ProposalOption, 'id' | 'votes'>> }
     )>, owner: Pick<User, 'id' | 'metadata'> }
-  )> };
+  )>, _meta?: Maybe<{ block: Pick<_Block_, 'hash'> }> };
 
 export type UnionMembersQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1470,7 +1530,7 @@ export type WatchProposalDetailsQuery = { proposal?: Maybe<Pick<Proposal, 'id'>>
 
 export type IsUserAdminOfUnionQueryVariables = Exact<{
   id: Scalars['ID'];
-  unionId: Scalars['Bytes'];
+  unionId: Scalars['String'];
 }>;
 
 
@@ -1488,6 +1548,11 @@ export type GetUserUnionsQuery = { user?: Maybe<(
     Pick<User, 'id' | 'metadata'>
     & { roles: Array<{ union: Pick<Union, 'id' | 'metadata'> }> }
   )> };
+
+export type UserRoleDetailFragment = (
+  Pick<UserRole, 'id' | 'isAdmin'>
+  & { user: Pick<User, 'id' | 'metadata'> }
+);
 
 export type UserDetailFragment = Pick<User, 'id' | 'metadata'>;
 
@@ -1514,6 +1579,15 @@ export const UserDetailFragmentDoc = gql`
   metadata
 }
     ` as unknown as DocumentNode<UserDetailFragment, unknown>;
+export const UserRoleDetailFragmentDoc = gql`
+    fragment UserRoleDetail on UserRole {
+  id
+  isAdmin
+  user {
+    ...UserDetail
+  }
+}
+    ${UserDetailFragmentDoc}` as unknown as DocumentNode<UserRoleDetailFragment, unknown>;
 export const UnionDetailFragmentDoc = gql`
     fragment UnionDetail on Union {
   id
@@ -1600,6 +1674,11 @@ export const WatchUnionDetailsDocument = gql`
       ...ProposalDetail
     }
   }
+  _meta {
+    block {
+      hash
+    }
+  }
 }
     ${UnionDetailFragmentDoc}
 ${ProposalDetailFragmentDoc}` as unknown as DocumentNode<WatchUnionDetailsQuery, WatchUnionDetailsQueryVariables>;
@@ -1608,15 +1687,11 @@ export const UnionMembersDocument = gql`
   union(id: $id) {
     id
     users {
-      id
-      isAdmin
-      user {
-        ...UserDetail
-      }
+      ...UserRoleDetail
     }
   }
 }
-    ${UserDetailFragmentDoc}` as unknown as DocumentNode<UnionMembersQuery, UnionMembersQueryVariables>;
+    ${UserRoleDetailFragmentDoc}` as unknown as DocumentNode<UnionMembersQuery, UnionMembersQueryVariables>;
 export const WatchForProposalCreationDocument = gql`
     query WatchForProposalCreation($id: ID!) @live {
   proposal(id: $id) {
@@ -1649,7 +1724,7 @@ export const WatchProposalDetailsDocument = gql`
 }
     ` as unknown as DocumentNode<WatchProposalDetailsQuery, WatchProposalDetailsQueryVariables>;
 export const IsUserAdminOfUnionDocument = gql`
-    query IsUserAdminOfUnion($id: ID!, $unionId: Bytes!) {
+    query IsUserAdminOfUnion($id: ID!, $unionId: String!) {
   user(id: $id) {
     id
     roles(where: {isAdmin: true, union_: {id: $unionId}}) {

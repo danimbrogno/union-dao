@@ -1,22 +1,26 @@
 import { ApplicationDetailFragment } from 'graphclient';
-import { useUnionUserContext } from '../shared/UnionUserContext';
+import { useUnionUserContext } from '../../../shared/UnionUserContext';
 import { useContractWrite } from 'wagmi';
 import { unionFacetABI } from 'shared';
 import { useConfig } from 'frontend/shared/Config';
 import { Hex, getAddress, hexToBigInt } from 'viem';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
+import { useFetchJsonFromCid } from 'frontend/shared/IPFS';
+import { UserMetadata } from 'frontend/app.interface';
+import { useUnionIdParam } from 'frontend/shared/useUnionIdParam';
 
-export const PendingApplication = (props: ApplicationDetailFragment) => {
+export const PendingApplication = ({
+  application,
+}: {
+  application: ApplicationDetailFragment;
+}) => {
   const { isAdmin } = useUnionUserContext();
+  const unionId = useUnionIdParam();
   const [admin, setAdmin] = useState(false);
-  const { id } = useParams<'id'>();
-
-  if (!id) {
-    throw new Error('Missing ID');
-  }
-
-  const unionId = hexToBigInt(id as Hex);
+  const { data: metadata } = useFetchJsonFromCid<UserMetadata>(
+    application.user.metadata || undefined
+  );
 
   const {
     addresses: { diamond },
@@ -30,7 +34,7 @@ export const PendingApplication = (props: ApplicationDetailFragment) => {
 
   const handleApprove = () => {
     write({
-      args: [BigInt(unionId), props.user.id, admin],
+      args: [BigInt(unionId), application.user.id as Hex, admin],
     });
   };
 
@@ -44,7 +48,7 @@ export const PendingApplication = (props: ApplicationDetailFragment) => {
         <p>
           <label>
             <input
-              id={`${props.id}-input`}
+              id={`${application.id}-input`}
               checked={admin}
               onClick={handleToggleAdmin}
               type="checkbox"
@@ -58,8 +62,8 @@ export const PendingApplication = (props: ApplicationDetailFragment) => {
   }
 
   return (
-    <div key={props.id}>
-      {props.user.id}
+    <div>
+      {application.user.id}
       {approveButton}
     </div>
   );

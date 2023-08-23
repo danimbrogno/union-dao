@@ -39,17 +39,18 @@ query WatchUnionDetails($id: ID!) @live {
       ...ProposalDetail
     }
   }
+  _meta {
+    block {
+      hash
+    }
+  }
 }
 
 query UnionMembers($id: ID!) {
   union(id: $id) {
     id
     users {
-      id
-      isAdmin
-      user {
-        ...UserDetail
-      }
+      ...UserRoleDetail
     }
   }
 }
@@ -82,7 +83,7 @@ query WatchProposalDetails($id: ID!) @live {
   }
 }
 
-query IsUserAdminOfUnion($id: ID!, $unionId: Bytes!) {
+query IsUserAdminOfUnion($id: ID!, $unionId: String!) {
   user(id: $id) {
     id
     roles(where: { isAdmin: true, union_: { id: $unionId } }) {
@@ -103,6 +104,14 @@ query GetUserUnions($id: ID!) {
         metadata
       }
     }
+  }
+}
+
+fragment UserRoleDetail on UserRole {
+  id
+  isAdmin
+  user {
+    ...UserDetail
   }
 }
 

@@ -8,7 +8,7 @@ import { IPFS } from './shared/IPFS';
 import { Proposal } from './routes/Union/routes/Proposals/Proposal/Proposal';
 import { Identity } from './shared/Identity';
 import { WagmiProvider } from './shared/WagmiProvider';
-import { Join } from './routes/Union/routes/Join';
+import { Join } from './routes/Union/routes/Join/Join';
 import { Global, ThemeProvider, css } from '@emotion/react';
 import { theme } from './app.theme';
 import { Membership } from './routes/Membership/Membership';

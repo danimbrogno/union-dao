@@ -4,6 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useFetchJsonFromCid } from 'frontend/shared/IPFS';
 import { ProposalMetadata } from 'frontend/app.interface';
 import { Hex, hexToNumber } from 'viem';
+import { useUnionIdParam } from 'frontend/shared/useUnionIdParam';
 
 const Link = styled(RouterLink)`
   /* color: inherit;
@@ -27,12 +28,12 @@ const P = styled.p`
 `;
 
 export const Proposals = ({
-  id,
   unionDetailQuery,
 }: {
-  id: string;
   unionDetailQuery: UnionDetailsQuery;
 }) => {
+  const unionId = useUnionIdParam();
+
   if (!unionDetailQuery.union) return null;
 
   const { proposals } = unionDetailQuery.union;
@@ -43,7 +44,7 @@ export const Proposals = ({
     content = (
       <>
         <P>No proposals created yet.</P>
-        <Link to={`/union/${id}/proposal/create`}>
+        <Link to={`/union/${unionId}/proposal/create`}>
           Create the first proposal now.
         </Link>
       </>
@@ -51,7 +52,9 @@ export const Proposals = ({
   } else {
     content = (
       <div css={{ marginTop: 20 }}>
-        <Link to={`/union/${id}/proposal/create`}>Create a new proposal</Link>
+        <Link to={`/union/${unionId}/proposal/create`}>
+          Create a new proposal
+        </Link>
       </div>
     );
   }

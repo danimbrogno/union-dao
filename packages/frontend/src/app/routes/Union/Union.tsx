@@ -3,7 +3,7 @@ import { UnionDetailsDocument, UnionDetailsQuery, execute } from 'graphclient';
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import QR from 'react-qr-code';
-import { PendingApplication } from './components/PendingApplication';
+import { PendingApplication } from './components/PendingMembers/components/PendingApplication';
 import { UserUnionContext } from './shared/UnionUserContext';
 import { MembersList } from './components/MembersList';
 import Chrome from 'frontend/shared/Chrome/Chrome';
@@ -12,6 +12,7 @@ import { Header } from './components/Header';
 import { Proposals } from './components/Proposals';
 import { useUnionIdParam } from 'frontend/shared/useUnionIdParam';
 import { numberToHex } from 'viem';
+import { PendingMembers } from './components/PendingMembers/PendingMembers';
 
 const UnionPage = styled.div`
   display: flex;
@@ -26,7 +27,7 @@ const Columns = styled.div`
 `;
 
 const Column = styled.div`
-  flex: 1;
+  flex: 1 0 100%;
 `;
 
 export const Union = () => {
@@ -56,21 +57,16 @@ export const Union = () => {
             <Header unionDetailQuery={unionDetailQuery} />
             <Columns>
               <Column>
-                <Proposals id={unionId} unionDetailQuery={unionDetailQuery} />
+                <Proposals unionDetailQuery={unionDetailQuery} />
               </Column>
               <Column>
                 <MembersList />
               </Column>
+              <Column>
+                <PendingMembers unionDetailQuery={unionDetailQuery} />
+              </Column>
             </Columns>
 
-            <h2>Pending Members</h2>
-            <ul>
-              {unionDetailQuery.union.pendingApplications.map((application) => (
-                <li key={application.id}>
-                  <PendingApplication {...application} />
-                </li>
-              ))}
-            </ul>
             <h2>Join URL</h2>
             <p>
               <Link to={`/union/${unionId}/join`}>{joinUrl}</Link>

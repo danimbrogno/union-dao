@@ -85,15 +85,10 @@ export const Create = () => {
     formState: { isValid, isSubmitting },
   } = useForm<Inputs>();
   const identity = useIdentity();
-  const name = watch('name', '');
   const logo = watch('logo', '');
-  const description = watch('description', '');
   const navigate = useNavigate();
   const { ipfs, gatewayUrl } = useIPFS();
   const { onSubmit, error } = useCreateUnion({
-    name,
-    logo,
-    description,
     commitment: identity.getCommitment(),
     onCreated: (data: WatchAllUnionsQuery, createdUnionId?: string) => {
       reset();
