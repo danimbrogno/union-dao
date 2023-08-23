@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { useForm } from 'react-hook-form';
 import { useIPFS } from '../../shared/IPFS';
 import { useDropzone } from 'react-dropzone';
-import { useIdentity } from '../../shared/Identity';
+import { useGetIdentity } from '../../shared/Identity';
 import Chrome from 'frontend/shared/Chrome/Chrome';
 import { useNavigate } from 'react-router-dom';
 import { WatchAllUnionsQuery } from 'graphclient';
@@ -22,6 +22,7 @@ const StyledForm = styled.form`
   margin: auto;
   gap: 1.5rem;
   max-width: 480px;
+  width: 100%;
 `;
 
 const StyledHeader = styled.h1`
@@ -84,12 +85,14 @@ export const Create = () => {
     reset,
     formState: { isValid, isSubmitting },
   } = useForm<Inputs>();
-  const identity = useIdentity();
+
   const logo = watch('logo', '');
+  const password = watch('password', '');
+  const getIdentity = useGetIdentity();
   const navigate = useNavigate();
   const { ipfs, gatewayUrl } = useIPFS();
   const { onSubmit, error } = useCreateUnion({
-    commitment: identity.getCommitment(),
+    commitment: getIdentity(password).getCommitment(),
     onCreated: (data: WatchAllUnionsQuery, createdUnionId?: string) => {
       reset();
       setTimeout(() => navigate(`/union/${createdUnionId}`));
@@ -149,6 +152,11 @@ export const Create = () => {
           type="input"
           placeholder="Your Name (e.g. John Smith)"
           {...register('ownerName', { required: true })}
+        />
+        <Input
+          type="password"
+          placeholder="Your Password (Don't forget this!)"
+          {...register('password', { required: true })}
         />
         <Input
           type="input"

@@ -1,5 +1,5 @@
 import { useConfig } from 'frontend/shared/Config';
-import { useIdentity } from 'frontend/shared/Identity';
+import { useGetIdentity } from 'frontend/shared/Identity';
 import useSemaphore from 'frontend/shared/useSemaphoreEthers';
 import { useCallback, useEffect, useState } from 'react';
 import { proposalFacetABI } from 'shared';
@@ -12,6 +12,7 @@ import {
   execute,
 } from 'graphclient';
 import { ExecutionResult } from 'graphql';
+import { Inputs } from '../Proposal.interface';
 export const useVote = ({
   votingContractAddress,
   unionId,
@@ -25,7 +26,7 @@ export const useVote = ({
 }) => {
   const [error, setError] = useState('');
 
-  const identity = useIdentity();
+  const getIdentity = useGetIdentity();
 
   const watchUntilBlockHash = useCallback(
     async (blockHash: string, _unionId: Hex, _proposalId: Hex) => {
@@ -71,9 +72,8 @@ export const useVote = ({
     },
     onSuccess(data) {
       const _unionId = data.logs[1].topics[1];
-      //'0x0000000000000000000000000000000000000000000000000000000000000000'
       const _proposalId = data.logs[1].topics[2];
-      //  '0x0000000000000000000000000000000000000000000000000000000000000001'
+
       if (!_unionId || !_proposalId) {
         throw new Error('Could not get union id or proposal id');
       }
@@ -88,13 +88,18 @@ export const useVote = ({
     refreshGroup(proposalId);
   }, [proposalId, refreshGroup]);
 
-  const doVote = useCallback(
-    async (optionId: number) => {
+  const onVote = useCallback(
+    async ({ password, selectedOption }: Inputs) => {
       if (!group) {
         throw new Error('group not set');
       }
 
-      generateProof(identity, group, proposalId, BigInt(optionId))
+      generateProof(
+        getIdentity(password),
+        group,
+        proposalId,
+        BigInt(selectedOption)
+      )
         .then((fullProof) => {
           write({
             args: [
@@ -118,7 +123,9 @@ export const useVote = ({
         .catch((err) => {
           switch (err.toString()) {
             case 'Error: The identity is not part of the group':
-              setError('Sorry you are not approved to vote on this proposal.');
+              setError(
+                'Sorry your password is incorrect or you are not approved to vote on this proposal.'
+              );
               break;
             default:
               setError(err.toString());
@@ -126,8 +133,8 @@ export const useVote = ({
           }
         });
     },
-    [identity, unionId, proposalId, write, group]
+    [getIdentity, unionId, proposalId, write, group]
   );
 
-  return { doVote, isReady: group ? true : false, error };
+  return { onVote, isReady: group ? true : false, error };
 };

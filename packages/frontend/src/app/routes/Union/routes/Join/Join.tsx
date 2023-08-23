@@ -54,6 +54,11 @@ export const Join = () => {
               placeholder="Your Name"
               {...register('name', { required: true })}
             />
+            <Input
+              type="password"
+              placeholder="Your Password (Don't forget this!)"
+              {...register('password', { required: true })}
+            />
           </label>
         </div>
         <PrimaryButton disabled={!isValid || isSubmitting} type="submit">

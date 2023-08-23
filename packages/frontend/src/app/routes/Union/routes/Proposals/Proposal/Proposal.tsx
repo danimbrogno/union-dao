@@ -9,8 +9,11 @@ import { useState } from 'react';
 import { ProposalOption } from './components/ProposalOption';
 import { useProposalIdParam } from 'frontend/shared/useProposalIdParam';
 import { useUnionIdParam } from 'frontend/shared/useUnionIdParam';
+import { Input } from 'ui/Input';
+import { useForm } from 'react-hook-form';
+import { Inputs } from './Proposal.interface';
 
-const VotePage = styled.div`
+const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -31,39 +34,48 @@ const StyledP = styled.p``;
 export const Proposal = () => {
   const unionId = useUnionIdParam();
   const proposalId = useProposalIdParam();
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    reset,
+    formState: { isValid, isSubmitting },
+  } = useForm<Inputs>();
   const { proposal, refetch } = useProposalDetails({
     unionId,
     proposalId,
   });
 
+  const selectedOption = watch('selectedOption');
+
   const { data: metadata } = useFetchJsonFromCid<ProposalMetadata>(
     proposal?.metadata
   );
 
-  const { doVote, error, isReady } = useVote({
+  const { onVote, error, isReady } = useVote({
     proposalId,
     unionId,
     votingContractAddress: proposal?.union.votingAddress,
     onVoted: () => {
+      reset();
       refetch();
     },
   });
 
-  const handleVote = () => {
-    if (selectedOption !== null) {
-      doVote(selectedOption);
-    }
-  };
-
   const hasTitleAndDesc =
     metadata?.title && metadata?.description ? true : false;
+
+  const disabled =
+    !isValid ||
+    isSubmitting ||
+    isReady === false ||
+    selectedOption === undefined;
 
   if (proposal) {
     return (
       <Chrome>
-        <VotePage>
+        <StyledForm onSubmit={handleSubmit(onVote)}>
           <StyledH1>{metadata?.title || metadata?.description}</StyledH1>
           {hasTitleAndDesc && (
             <ProposalDescription>{metadata?.description}</ProposalDescription>
@@ -75,20 +87,22 @@ export const Proposal = () => {
               <ProposalOption
                 key={index}
                 index={index}
-                onClick={setSelectedOption}
+                onClick={(opt) => setValue('selectedOption', opt)}
                 option={option}
                 metadata={metadata?.options?.[index]}
                 selected={selectedOption === index}
               />
             ))}
           </StyledUl>
-          <PrimaryButton
-            disabled={selectedOption === null || isReady === false}
-            onClick={handleVote}
-          >
+          <Input
+            type="password"
+            placeholder="Your Password (Don't forget this!)"
+            {...register('password', { required: true })}
+          />
+          <PrimaryButton disabled={disabled} type="submit">
             Vote
           </PrimaryButton>
-        </VotePage>
+        </StyledForm>
       </Chrome>
     );
   }

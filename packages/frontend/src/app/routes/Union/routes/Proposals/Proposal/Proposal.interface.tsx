@@ -1,5 +1,4 @@
 export type Inputs = {
-  name: string;
-  imageCID: string;
+  selectedOption: number;
   password: string;
 };

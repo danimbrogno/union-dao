@@ -6,13 +6,11 @@ import { Create as ProposalCreate } from './routes/Union/routes/Proposals/Create
 import { Union } from './routes/Union/Union';
 import { IPFS } from './shared/IPFS';
 import { Proposal } from './routes/Union/routes/Proposals/Proposal/Proposal';
-import { Identity } from './shared/Identity';
 import { WagmiProvider } from './shared/WagmiProvider';
 import { Join } from './routes/Union/routes/Join/Join';
 import { Global, ThemeProvider, css } from '@emotion/react';
 import { theme } from './app.theme';
 import { Membership } from './routes/Membership/Membership';
-import { hexToString, stringToHex } from 'viem';
 
 const styles = css`
   /* Global CSS Reset */
@@ -71,23 +69,21 @@ export function App() {
         <Config>
           <IPFS>
             <WagmiProvider>
-              <Identity>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/create" element={<Create />} />
-                  <Route path="/membership" element={<Membership />} />
-                  <Route path="/union/:unionId" element={<Union />} />
-                  <Route path="/union/:unionId/join" element={<Join />} />
-                  <Route
-                    path="/union/:unionId/proposal/create"
-                    element={<ProposalCreate />}
-                  />
-                  <Route
-                    path="/union/:unionId/proposal/:proposalId"
-                    element={<Proposal />}
-                  />
-                </Routes>
-              </Identity>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/create" element={<Create />} />
+                <Route path="/membership" element={<Membership />} />
+                <Route path="/union/:unionId" element={<Union />} />
+                <Route path="/union/:unionId/join" element={<Join />} />
+                <Route
+                  path="/union/:unionId/proposal/create"
+                  element={<ProposalCreate />}
+                />
+                <Route
+                  path="/union/:unionId/proposal/:proposalId"
+                  element={<Proposal />}
+                />
+              </Routes>
             </WagmiProvider>
           </IPFS>
         </Config>

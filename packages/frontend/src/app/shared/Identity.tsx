@@ -2,6 +2,7 @@ import { Identity as ID } from '@semaphore-protocol/identity';
 import {
   PropsWithChildren,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -87,12 +88,10 @@ export const Identity = ({ children }: PropsWithChildren) => {
   return <Context.Provider value={{ identity }}>{children}</Context.Provider>;
 };
 
-export const useIdentity = () => {
-  const { identity } = useContext(Context);
-
-  const val = useMemo(() => {
-    return new ID(identity);
-  }, [identity]);
+export const useGetIdentity = () => {
+  const val = useCallback((password: string) => {
+    return new ID(password);
+  }, []);
 
   return val;
 };

@@ -3,4 +3,5 @@ export type Inputs = {
   logo: string;
   description: string;
   ownerName: string;
+  password: string;
 };

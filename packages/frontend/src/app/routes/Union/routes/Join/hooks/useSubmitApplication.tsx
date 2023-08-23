@@ -5,7 +5,7 @@ import { unionFacetABI } from 'shared';
 import { Hex, getAddress, hexToNumber } from 'viem';
 import { useContractWrite, useWaitForTransaction } from 'wagmi';
 import { Inputs } from '../Join.interface';
-import { useIdentity } from 'frontend/shared/Identity';
+import { useGetIdentity } from 'frontend/shared/Identity';
 import { useUnionIdParam } from 'frontend/shared/useUnionIdParam';
 import { useCallback } from 'react';
 import {
@@ -25,7 +25,7 @@ export const useSubmitApplication = ({
     addresses: { diamond },
   } = useConfig();
 
-  const identity = useIdentity();
+  const getIdentity = useGetIdentity();
   const unionId = useUnionIdParam();
 
   const watchUntilBlockHash = useCallback(
@@ -63,13 +63,17 @@ export const useSubmitApplication = ({
     },
   });
 
-  const onSubmit: SubmitHandler<Inputs> = ({ name }) => {
+  const onSubmit: SubmitHandler<Inputs> = ({ name, password }) => {
     ipfs
       .add(JSON.stringify({ name }))
       .then((result) => ipfs.pin.add(result.cid))
       .then((result) =>
         write({
-          args: [BigInt(unionId), identity.getCommitment(), result.toString()],
+          args: [
+            BigInt(unionId),
+            getIdentity(password).getCommitment(),
+            result.toString(),
+          ],
         })
       );
   };
