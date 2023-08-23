@@ -12,6 +12,7 @@ import { AddIcon } from 'ui/AddIcon';
 import { useCreateProposal } from './hooks/useCreateProposal';
 import { Inputs } from './Create.interface';
 import { WatchForProposalCreationQuery } from 'graphclient';
+import { useUnionIdParam } from 'frontend/shared/useUnionIdParam';
 
 const StyledForm = styled.form`
   flex: 1;
@@ -45,14 +46,8 @@ const Remove = styled.div`
 `;
 
 export const Create = () => {
-  const { id } = useParams<'id'>();
+  const unionId = useUnionIdParam();
   const navigate = useNavigate();
-
-  if (!id) {
-    throw new Error('Missing ID');
-  }
-
-  const unionId = hexToBigInt(id as Hex);
 
   const {
     register,
@@ -70,10 +65,12 @@ export const Create = () => {
 
   const { onSubmit } = useCreateProposal({
     unionId,
-    onCreated: (data: WatchForProposalCreationQuery, proposalId: string) => {
+    onCreated: (_: WatchForProposalCreationQuery, proposalId: string) => {
       reset();
       setTimeout(() => {
-        navigate(`/union/${unionId}/proposal/${proposalId}`);
+        navigate(
+          `/union/${unionId}/proposal/${parseInt(proposalId, 16).toString()}`
+        );
       });
     },
   });

@@ -21,7 +21,7 @@ export const useCreateProposal = ({
     result: WatchForProposalCreationQuery,
     createdProposalId: string
   ) => void;
-  unionId: bigint;
+  unionId: string;
 }) => {
   const {
     addresses: { diamond },
@@ -70,7 +70,7 @@ export const useCreateProposal = ({
       .then((result) => ipfs.pin.add(result.cid))
       .then((result) =>
         write({
-          args: [unionId, options.length, result.toString()],
+          args: [BigInt(unionId), options.length, result.toString()],
         })
       );
   };
