@@ -23,7 +23,7 @@ contract UnionFacet is IUnionFacet {
         _;
     }
 
-    event UnionCreated(bytes32 indexed index, bytes32 indexed name, string logo, string description, address voting);
+    event UnionCreated(bytes32 indexed index, address indexed owner, string metadataCID, address voting);
     event MemberAdded(bytes32 indexed index, address indexed member);
     event MemberRemoved(bytes32 indexed index, address indexed member);
     event AdminAdded(bytes32 indexed index, address indexed admin);
@@ -32,19 +32,20 @@ contract UnionFacet is IUnionFacet {
     event ApplicationApproved(bytes32 indexed index, address indexed member);
     event UserMetadataUpdated(address indexed member, string metadataCID);
 
-    function createUnion(bytes32 _name, string calldata _logo, string calldata _description, uint256 _identity)
+    function createUnion(string calldata _unionMetadataCID, string calldata _ownerMetadataCID, uint256 _identity)
         external
         override
         returns (uint256)
     {
         LibUnion.UnionStorage storage ds = LibUnion.unionStorage();
         uint256 _index = ds.index.current();
-        ds.unions[_index].name = _name;
+        ds.unions[_index].metadata = _unionMetadataCID;
         ds.unions[_index].voting = address(new SemaphoreVoting(ISemaphoreVerifier(ds.verifier)));
         this.addAdmin(_index, msg.sender, _identity);
         this.addMember(_index, msg.sender, _identity);
         ds.index.increment();
-        emit UnionCreated(bytes32(_index), _name, _logo, _description, ds.unions[_index].voting);
+        emit UnionCreated(bytes32(_index), msg.sender, _unionMetadataCID, ds.unions[_index].voting);
+        emit UserMetadataUpdated(msg.sender, _ownerMetadataCID);
         return _index;
     }
 
@@ -85,11 +86,11 @@ contract UnionFacet is IUnionFacet {
     }
 
     function isMember(uint256 _index, address _address) public view returns (bool) {
-        return LibUnion.unionStorage().unions[_index].members[_address];
+        return LibUnion.isMember(_index, _address);
     }
 
     function isAdmin(uint256 _index, address _address) public view returns (bool) {
-        return LibUnion.unionStorage().unions[_index].admins[_address];
+        return LibUnion.isAdmin(_index, _address);
     }
 
     function addAdmin(uint256 _index, address _address, uint256 _identity) public {
@@ -114,7 +115,7 @@ contract UnionFacet is IUnionFacet {
     //     emit MemberRemoved(bytes32(_index), _address);
     // }
 
-    function getUnionName(uint256 _index) external view override returns (bytes32) {
-        return LibUnion.unionStorage().unions[_index].name;
+    function getUnionMetadata(uint256 _index) external view override returns (string memory) {
+        return LibUnion.unionStorage().unions[_index].metadata;
     }
 }

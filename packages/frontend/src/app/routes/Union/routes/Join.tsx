@@ -4,7 +4,7 @@ import { useIdentity } from 'frontend/shared/Identity';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { unionFacetABI } from 'shared';
-import { Hex, getAddress, hexToBigInt, stringToHex } from 'viem';
+import { Hex, getAddress, hexToBigInt } from 'viem';
 import { useContractWrite } from 'wagmi';
 
 type Inputs = {

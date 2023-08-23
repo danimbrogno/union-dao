@@ -86,13 +86,13 @@ export const Create = () => {
   } = useForm<Inputs>();
   const identity = useIdentity();
   const name = watch('name', '');
-  const imageCID = watch('imageCID', '');
+  const logo = watch('logo', '');
   const description = watch('description', '');
   const navigate = useNavigate();
   const { ipfs, gatewayUrl } = useIPFS();
   const { onSubmit, error } = useCreateUnion({
     name,
-    imageCID,
+    logo,
     description,
     commitment: identity.getCommitment(),
     onCreated: (data: WatchAllUnionsQuery, createdUnionId?: string) => {
@@ -106,7 +106,7 @@ export const Create = () => {
       const buffer = await acceptedFiles[0].arrayBuffer();
       const result = await ipfs.add(buffer);
       await ipfs.pin.add(result.cid);
-      setValue('imageCID', result.cid.toString());
+      setValue('logo', result.cid.toString());
     },
     [ipfs, setValue]
   );
@@ -114,15 +114,15 @@ export const Create = () => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const handleClearImage = () => {
-    setValue('imageCID', '');
+    setValue('logo', '');
   };
 
   let dropzone: React.ReactNode = null;
 
-  if (imageCID) {
+  if (logo) {
     dropzone = (
       <StyledActiveImage>
-        <StyledImage src={gatewayUrl(imageCID)} alt="logo" />
+        <StyledImage src={gatewayUrl(logo)} alt="logo" />
         <StyledClearButton onClick={handleClearImage}>
           <CloseIcon />
         </StyledClearButton>
@@ -152,12 +152,17 @@ export const Create = () => {
         {dropzone}
         <Input
           type="input"
-          placeholder="Name"
+          placeholder="Your Name (e.g. John Smith)"
+          {...register('ownerName', { required: true })}
+        />
+        <Input
+          type="input"
+          placeholder="Union Name (e.g. International Workers Union)"
           {...register('name', { required: true })}
         />
         <Textarea
           rows={4}
-          placeholder="Description"
+          placeholder="Description (A brief introduction to your organization)"
           {...register('description')}
         />
         <PrimaryButton

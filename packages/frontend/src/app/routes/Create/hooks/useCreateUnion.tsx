@@ -1,12 +1,8 @@
 import { SubmitHandler } from 'react-hook-form';
 import { Inputs } from '../Create.interface';
 import { useCallback } from 'react';
-import {
-  useContractWrite,
-  usePrepareContractWrite,
-  useWaitForTransaction,
-} from 'wagmi';
-import { getAddress, stringToHex } from 'viem';
+import { useContractWrite, useWaitForTransaction } from 'wagmi';
+import { getAddress } from 'viem';
 import { unionFacetABI } from 'shared';
 import { useConfig } from 'frontend/shared/Config';
 import {
@@ -15,16 +11,17 @@ import {
   execute,
 } from 'graphclient';
 import { ExecutionResult } from 'graphql';
+import { useIPFS } from 'frontend/shared/IPFS';
 
 export const useCreateUnion = ({
   name,
-  imageCID,
+  logo,
   description,
   commitment,
   onCreated,
 }: {
   name: string;
-  imageCID: string;
+  logo: string;
   description: string;
   commitment: bigint;
   onCreated: (data: WatchAllUnionsQuery, createdUnionId: string) => void;
@@ -33,13 +30,7 @@ export const useCreateUnion = ({
     addresses: { diamond },
   } = useConfig();
 
-  const { config } = usePrepareContractWrite({
-    address: getAddress(diamond),
-    abi: unionFacetABI,
-    functionName: 'createUnion',
-    args: [stringToHex(name, { size: 32 }), imageCID, description, commitment],
-    enabled: name !== '' ? true : false,
-  });
+  const { ipfs } = useIPFS();
 
   const watchUntilBlockHash = useCallback(
     async (blockHash: string, createdUnionId: string) => {
@@ -59,7 +50,11 @@ export const useCreateUnion = ({
     [onCreated]
   );
 
-  const { write, data } = useContractWrite(config);
+  const { write, data } = useContractWrite({
+    address: getAddress(diamond),
+    abi: unionFacetABI,
+    functionName: 'createUnion',
+  });
 
   const { error } = useWaitForTransaction({
     hash: data?.hash,
@@ -73,7 +68,28 @@ export const useCreateUnion = ({
     },
   });
 
-  const onSubmit: SubmitHandler<Inputs> = () => write?.();
+  const onSubmit: SubmitHandler<Inputs> = ({
+    name,
+    description,
+    logo,
+    ownerName,
+  }) => {
+    Promise.all([
+      ipfs.add(JSON.stringify({ name, description, logo })),
+      ipfs.add(JSON.stringify({ name: ownerName })),
+    ])
+      .then(([unionResult, ownerResult]) =>
+        Promise.all([
+          ipfs.pin.add(unionResult.cid),
+          ipfs.pin.add(ownerResult.cid),
+        ])
+      )
+      .then(([unionResult, ownerResult]) =>
+        write?.({
+          args: [unionResult.toString(), ownerResult.toString(), commitment],
+        })
+      );
+  };
 
   return { onSubmit, error };
 };

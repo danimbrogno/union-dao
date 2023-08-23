@@ -7,3 +7,13 @@ export type ProposalMetadata = {
 export type ProposalMetadataOption = {
   description?: string;
 };
+
+export type UnionMetadata = {
+  name?: string;
+  description?: string;
+  logo?: string;
+};
+
+export type UserMetadata = {
+  name?: string;
+};

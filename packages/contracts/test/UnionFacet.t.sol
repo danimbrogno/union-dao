@@ -26,24 +26,24 @@ contract TestUnionFacet is AppHarness {
 
     function testCreateUnion() public {
         UnionFacet sut = UnionFacet(address(_diamond));
-        uint256 unionId = sut.createUnion("My Union", "", "", 0);
+        uint256 unionId = sut.createUnion("My Union", "", 0);
 
-        uint256 unionId2 = sut.createUnion("My Second Union", "", "", 0);
-        bytes32 name = sut.getUnionName(unionId);
+        uint256 unionId2 = sut.createUnion("My Second Union", "", 0);
+        string memory metadata = sut.getUnionMetadata(unionId);
         bool isMember = sut.isMember(unionId, address(this));
         bool isAdmin = sut.isAdmin(unionId, address(this));
 
         assertEq(isMember, true);
         assertEq(isAdmin, true);
         assertEq(unionId, 0);
-        assertEq(name, "My Union");
+        assertEq(metadata, "My Union");
         assertEq(unionId2, 1);
     }
 
     function testAddMember() public {
         UnionFacet sut = UnionFacet(address(_diamond));
 
-        uint256 unionId = sut.createUnion("My Union", "", "", 0);
+        uint256 unionId = sut.createUnion("My Union", "", 0);
         sut.addMember(unionId, users[0], 1);
         bool isMember = sut.isMember(unionId, users[0]);
         bool isNotMember = sut.isMember(unionId, users[1]);
@@ -54,7 +54,7 @@ contract TestUnionFacet is AppHarness {
     function testAddAdmin() public {
         UnionFacet sut = UnionFacet(address(_diamond));
 
-        uint256 unionId = sut.createUnion("My Union", "", "", 0);
+        uint256 unionId = sut.createUnion("My Union", "", 0);
         sut.addAdmin(unionId, users[0], 1);
         bool isAdmin = sut.isAdmin(unionId, users[0]);
         bool isNotAdmin = sut.isAdmin(unionId, users[1]);
@@ -65,7 +65,7 @@ contract TestUnionFacet is AppHarness {
     function testSubmitApplication() public {
         UnionFacet sut = UnionFacet(address(_diamond));
         vm.prank(users[0]);
-        uint256 unionId = sut.createUnion("My Union", "", "", 0);
+        uint256 unionId = sut.createUnion("", "", 0);
         vm.prank(users[1]);
         sut.submitApplication(unionId, 1, "");
         console.log(users[0]);

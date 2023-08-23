@@ -1,8 +1,7 @@
 type Union @entity {
   id: Bytes!
-  name: String!
-  logo: String!
-  description: String!
+  metadata: String!
+  owner: User!
   votingAddress: Bytes!
   pendingApplications: [Application!]! @derivedFrom(field: "union")
   users: [UserRole!]! @derivedFrom(field: "union")
@@ -28,18 +27,21 @@ type User @entity {
   id: Bytes!
   metadata: String
   roles: [UserRole!]! @derivedFrom(field: "user")
+  proposals: [Proposal!]! @derivedFrom(field: "owner")
+  unions: [Union!]! @derivedFrom(field: "owner")
 }
 
 type Proposal @entity {
   id: Bytes!
   union: Union!
+  owner: User!
   numOptions: Int!
   metadata: String!
   options: [ProposalOption!]! @derivedFrom(field: "proposal")
 }
 
 type ProposalOption @entity {
-  id: String!
+  id: Bytes!
   proposal: Proposal!
   votes: Int!
 }

@@ -7,6 +7,8 @@ import {
 } from 'graphclient';
 import { useAccount } from 'wagmi';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useFetchJsonFromCid } from 'frontend/shared/IPFS';
+import { UnionMetadata } from 'frontend/app.interface';
 
 const StyledSelect = styled.select`
   color: ${(props) => props.theme.colors.white};
@@ -17,9 +19,9 @@ const StyledSelect = styled.select`
   border-radius: 5px;
 `;
 
-const ProjectSelector = () => {
+export const ProjectSelector = () => {
   const { address } = useAccount();
-  const { id } = useParams<'id'>();
+  const { unionId } = useParams<'unionId'>();
   const navigate = useNavigate();
 
   const [userUnionsQuery, setUserUnionsQuery] = useState<GetUserUnionsQuery>();
@@ -34,7 +36,11 @@ const ProjectSelector = () => {
   }, [address]);
 
   const handleUnionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    navigate(`/union/${event.currentTarget.value}`);
+    if (event.currentTarget.value !== '') {
+      navigate(`/union/${event.currentTarget.value}`);
+    } else {
+      navigate('/');
+    }
   };
 
   const roles = userUnionsQuery?.user?.roles;
@@ -44,17 +50,22 @@ const ProjectSelector = () => {
   }
 
   return (
-    <StyledSelect value={id} onChange={handleUnionChange}>
+    <StyledSelect value={unionId} onChange={handleUnionChange}>
       <option key="null" value="">
         Select a Union
       </option>
       {roles.map(({ union }) => (
-        <option key={union.id} value={union.id}>
-          {union.name}
-        </option>
+        <Option union={union} />
       ))}
     </StyledSelect>
   );
 };
 
-export default ProjectSelector;
+const Option = ({
+  union: { metadata, id },
+}: {
+  union: { metadata: string; id: string };
+}) => {
+  const { data } = useFetchJsonFromCid<UnionMetadata>(metadata);
+  return <option value={parseInt(id, 16)}>{data?.name}</option>;
+};

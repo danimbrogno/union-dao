@@ -11,8 +11,8 @@ dataSources:
     network: base-testnet
     source:
       abi: UnionFacet
-      address: "0xeF31027350Be2c7439C1b0BE022d49421488b72C"
-      startBlock: 8164209
+      address: "0xe039608E695D21aB11675EBBA00261A0e750526c"
+      startBlock: 8164227
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -27,7 +27,7 @@ dataSources:
         - name: UnionFacet
           file: ../contracts/out/UnionFacet.sol/UnionFacet.json
       eventHandlers:
-        - event: UnionCreated(indexed bytes32,indexed bytes32,string,string,address)
+        - event: UnionCreated(indexed bytes32,indexed address,string,address)
           handler: handleUnionCreated
         - event: MemberAdded(indexed bytes32,indexed address)
           handler: handleMemberAdded
@@ -49,8 +49,8 @@ dataSources:
     network: base-testnet
     source:
       abi: ProposalFacet
-      address: "0xeF31027350Be2c7439C1b0BE022d49421488b72C"
-      startBlock: 8164209
+      address: "0xe039608E695D21aB11675EBBA00261A0e750526c"
+      startBlock: 8164227
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -63,7 +63,8 @@ dataSources:
         - name: ProposalFacet
           file: ../contracts/out/ProposalFacet.sol/ProposalFacet.json
       eventHandlers:
-        - event: ProposalCreated(indexed bytes32,indexed bytes32,uint16,string)
+        - event: ProposalCreated(indexed bytes32,indexed bytes32,indexed
+            address,uint16,string)
           handler: handleProposalCreated
         - event: VoteCast(indexed bytes32,indexed bytes32,uint256,uint256)
           handler: handleVoteCast

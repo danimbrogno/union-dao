@@ -54,13 +54,17 @@ export const Proposals = ({
       </div>
     );
   }
+
+  const proposalIdToPid = (a: string) =>
+    parseInt(`0x${a.substring(132, 68)}`, 16);
+
   return (
     <>
       <H2>Proposals</H2>
       <ProposalList>
         {proposals.map((proposal) => (
           <Li key={proposal.id}>
-            <Link to={`/union/${id}/proposal/${proposal.id}`}>
+            <Link to={`/union/${id}/proposal/${proposalIdToPid(proposal.id)}`}>
               <ProposalItem cid={proposal.metadata} />
             </Link>
           </Li>

@@ -17,7 +17,7 @@ library LibUnion {
     using CountersUpgradeable for CountersUpgradeable.Counter;
 
     struct UnionData {
-        bytes32 name;
+        string metadata;
         mapping(address => bool) admins;
         mapping(address => bool) members;
         mapping(address => uint256) pendingApplications;
@@ -59,5 +59,13 @@ library LibUnion {
 
     function getVoting(uint256 _union) public view returns (ISemaphoreVoting) {
         return ISemaphoreVoting(unionStorage().unions[_union].voting);
+    }
+
+    function isMember(uint256 _index, address _address) public view returns (bool) {
+        return LibUnion.unionStorage().unions[_index].members[_address];
+    }
+
+    function isAdmin(uint256 _index, address _address) public view returns (bool) {
+        return LibUnion.unionStorage().unions[_index].admins[_address];
     }
 }

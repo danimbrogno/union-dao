@@ -1,5 +1,6 @@
 export type Inputs = {
   name: string;
-  imageCID: string;
+  logo: string;
   description: string;
+  ownerName: string;
 };

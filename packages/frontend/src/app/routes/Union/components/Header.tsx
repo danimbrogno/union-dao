@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import { useIPFS } from 'frontend/shared/IPFS';
+import { UnionMetadata } from 'frontend/app.interface';
+import { useFetchJsonFromCid, useIPFS } from 'frontend/shared/IPFS';
 import { UnionDetailsQuery } from 'graphclient';
 
 const HeaderContainer = styled.div`
@@ -42,23 +43,24 @@ export const Header = ({
   unionDetailQuery: UnionDetailsQuery;
 }) => {
   const { gatewayUrl } = useIPFS();
+  const { data } = useFetchJsonFromCid<UnionMetadata>(
+    unionDetailQuery.union?.metadata
+  );
+
   if (!unionDetailQuery.union) return null;
 
   return (
     <HeaderContainer>
-      <h1>{unionDetailQuery.union?.name}</h1>
+      {data?.name && <h1>{data?.name}</h1>}
       <Row>
-        {unionDetailQuery.union.logo && (
+        {data?.logo && (
           <UnionImgContainer>
-            <StyledImg
-              src={gatewayUrl(unionDetailQuery.union.logo)}
-              alt={unionDetailQuery.union.name}
-            />
+            <StyledImg src={gatewayUrl(data.logo)} alt={data.name} />
           </UnionImgContainer>
         )}
-        <StyledDescription>
-          {unionDetailQuery.union.description}
-        </StyledDescription>
+        {data?.description && (
+          <StyledDescription>{data?.description}</StyledDescription>
+        )}
       </Row>
     </HeaderContainer>
   );

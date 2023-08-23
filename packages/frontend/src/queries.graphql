@@ -1,9 +1,6 @@
 query WatchAllUnions @live {
   unions(first: 50) {
-    id
-    name
-    description
-    logo
+    ...UnionDetail
   }
   _meta {
     block {
@@ -14,10 +11,7 @@ query WatchAllUnions @live {
 
 query FetchAllUnions {
   unions(first: 50) {
-    id
-    name
-    description
-    logo
+    ...UnionDetail
   }
   _meta {
     block {
@@ -28,10 +22,7 @@ query FetchAllUnions {
 
 query UnionDetails($id: ID!) {
   union(id: $id) {
-    id
-    name
-    description
-    logo
+    ...UnionDetail
     pendingApplications(where: { approved: false }) {
       ...ApplicationDetail
     }
@@ -41,20 +32,9 @@ query UnionDetails($id: ID!) {
   }
 }
 
-fragment ApplicationDetail on Application {
-  id
-  user {
-    id
-  }
-  approved
-}
-
 query WatchUnionDetails($id: ID!) @live {
   union(id: $id) {
-    id
-    name
-    description
-    logo
+    ...UnionDetail
     proposals {
       ...ProposalDetail
     }
@@ -82,8 +62,7 @@ query UnionMembers($id: ID!) {
       id
       isAdmin
       user {
-        id
-        metadata
+        ...UserDetail
       }
     }
   }
@@ -104,6 +83,7 @@ query ProposalDetails($id: ID!) {
   proposal(id: $id) {
     id
     numOptions
+    metadata
     union {
       votingAddress
     }
@@ -111,7 +91,6 @@ query ProposalDetails($id: ID!) {
       id
       votes
     }
-    metadata
   }
 }
 
@@ -129,11 +108,35 @@ query IsUserAdminOfUnion($id: ID!, $unionId: Bytes!) {
 query GetUserUnions($id: ID!) {
   user(id: $id) {
     id
+    metadata
     roles {
       union {
         id
-        name
+        metadata
       }
     }
   }
+}
+
+fragment UserDetail on User {
+  id
+  metadata
+}
+
+fragment UnionDetail on Union {
+  id
+  metadata
+  owner {
+    id
+    metadata
+  }
+}
+
+fragment ApplicationDetail on Application {
+  id
+  user {
+    id
+    metadata
+  }
+  approved
 }

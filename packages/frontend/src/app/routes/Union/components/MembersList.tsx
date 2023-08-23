@@ -1,13 +1,16 @@
+import { useUnionIdParam } from 'frontend/shared/useUnionIdParam';
 import { UnionMembersDocument, UnionMembersQuery, execute } from 'graphclient';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { numberToHex } from 'viem';
 
 export const MembersList = () => {
-  const { id } = useParams<'id'>();
+  const unionId = useUnionIdParam();
   const [data, setData] = useState<UnionMembersQuery>();
   useEffect(() => {
     const load = async () => {
-      const result = await execute(UnionMembersDocument, { id });
+      const result = await execute(UnionMembersDocument, {
+        id: numberToHex(parseInt(unionId), { size: 32 }),
+      });
 
       if (result.data) {
         setData(result.data);
@@ -15,7 +18,7 @@ export const MembersList = () => {
     };
 
     load();
-  }, [id]);
+  }, [unionId]);
 
   if (!data) return null;
 

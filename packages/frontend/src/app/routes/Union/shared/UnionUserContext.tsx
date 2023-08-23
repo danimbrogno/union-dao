@@ -14,6 +14,8 @@ import {
 } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
+import { useUnionIdParam } from 'frontend/shared/useUnionIdParam';
+import { numberToHex } from 'viem';
 
 export interface Context {
   isAdmin: boolean;
@@ -26,18 +28,15 @@ const context = createContext<Context>({
 export const UserUnionContext = ({ children }: PropsWithChildren) => {
   const { address } = useAccount();
 
-  const { id: unionId } = useParams<'id'>();
+  const unionId = useUnionIdParam();
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  if (!unionId) {
-    throw new Error('Missing Union ID');
-  }
 
   const fetchUnionDetail = useCallback(async () => {
     console.log(unionId);
     execute(IsUserAdminOfUnionDocument, {
       id: address,
-      unionId,
+      unionId: numberToHex(parseInt(unionId), { size: 32 }),
     })
       .then((result: ExecutionResult<IsUserAdminOfUnionQuery>) => {
         console.log(result.data);

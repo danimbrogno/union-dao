@@ -12,6 +12,7 @@ import { Join } from './routes/Union/routes/Join';
 import { Global, ThemeProvider, css } from '@emotion/react';
 import { theme } from './app.theme';
 import { Membership } from './routes/Membership/Membership';
+import { hexToString, stringToHex } from 'viem';
 
 const styles = css`
   /* Global CSS Reset */
@@ -75,14 +76,14 @@ export function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/create" element={<Create />} />
                   <Route path="/membership" element={<Membership />} />
-                  <Route path="/union/:id" element={<Union />} />
-                  <Route path="/union/:id/join" element={<Join />} />
+                  <Route path="/union/:unionId" element={<Union />} />
+                  <Route path="/union/:unionId/join" element={<Join />} />
                   <Route
-                    path="/union/:id/proposal/create"
+                    path="/union/:unionId/proposal/create"
                     element={<ProposalCreate />}
                   />
                   <Route
-                    path="/union/:id/proposal/:proposalId"
+                    path="/union/:unionId/proposal/:proposalId"
                     element={<Proposal />}
                   />
                 </Routes>

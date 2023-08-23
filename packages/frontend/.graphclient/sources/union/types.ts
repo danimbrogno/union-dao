@@ -95,9 +95,7 @@ export type Application_orderBy =
   | 'id'
   | 'union'
   | 'union__id'
-  | 'union__name'
-  | 'union__logo'
-  | 'union__description'
+  | 'union__metadata'
   | 'union__votingAddress'
   | 'user'
   | 'user__id'
@@ -122,6 +120,7 @@ export type OrderDirection =
 export type Proposal = {
   id: Scalars['Bytes'];
   union: Union;
+  owner: User;
   numOptions: Scalars['Int'];
   metadata: Scalars['String'];
   options: Array<ProposalOption>;
@@ -137,32 +136,22 @@ export type ProposaloptionsArgs = {
 };
 
 export type ProposalOption = {
-  id: Scalars['String'];
+  id: Scalars['Bytes'];
   proposal: Proposal;
   votes: Scalars['Int'];
 };
 
 export type ProposalOption_filter = {
-  id?: InputMaybe<Scalars['String']>;
-  id_not?: InputMaybe<Scalars['String']>;
-  id_gt?: InputMaybe<Scalars['String']>;
-  id_lt?: InputMaybe<Scalars['String']>;
-  id_gte?: InputMaybe<Scalars['String']>;
-  id_lte?: InputMaybe<Scalars['String']>;
-  id_in?: InputMaybe<Array<Scalars['String']>>;
-  id_not_in?: InputMaybe<Array<Scalars['String']>>;
-  id_contains?: InputMaybe<Scalars['String']>;
-  id_contains_nocase?: InputMaybe<Scalars['String']>;
-  id_not_contains?: InputMaybe<Scalars['String']>;
-  id_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  id_starts_with?: InputMaybe<Scalars['String']>;
-  id_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  id_not_starts_with?: InputMaybe<Scalars['String']>;
-  id_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  id_ends_with?: InputMaybe<Scalars['String']>;
-  id_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  id_not_ends_with?: InputMaybe<Scalars['String']>;
-  id_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Bytes']>;
+  id_not?: InputMaybe<Scalars['Bytes']>;
+  id_gt?: InputMaybe<Scalars['Bytes']>;
+  id_lt?: InputMaybe<Scalars['Bytes']>;
+  id_gte?: InputMaybe<Scalars['Bytes']>;
+  id_lte?: InputMaybe<Scalars['Bytes']>;
+  id_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  id_contains?: InputMaybe<Scalars['Bytes']>;
+  id_not_contains?: InputMaybe<Scalars['Bytes']>;
   proposal?: InputMaybe<Scalars['String']>;
   proposal_not?: InputMaybe<Scalars['String']>;
   proposal_gt?: InputMaybe<Scalars['String']>;
@@ -238,6 +227,27 @@ export type Proposal_filter = {
   union_not_ends_with?: InputMaybe<Scalars['String']>;
   union_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   union_?: InputMaybe<Union_filter>;
+  owner?: InputMaybe<Scalars['String']>;
+  owner_not?: InputMaybe<Scalars['String']>;
+  owner_gt?: InputMaybe<Scalars['String']>;
+  owner_lt?: InputMaybe<Scalars['String']>;
+  owner_gte?: InputMaybe<Scalars['String']>;
+  owner_lte?: InputMaybe<Scalars['String']>;
+  owner_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_not_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_contains?: InputMaybe<Scalars['String']>;
+  owner_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_contains?: InputMaybe<Scalars['String']>;
+  owner_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_starts_with?: InputMaybe<Scalars['String']>;
+  owner_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_starts_with?: InputMaybe<Scalars['String']>;
+  owner_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_ends_with?: InputMaybe<Scalars['String']>;
+  owner_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_?: InputMaybe<User_filter>;
   numOptions?: InputMaybe<Scalars['Int']>;
   numOptions_not?: InputMaybe<Scalars['Int']>;
   numOptions_gt?: InputMaybe<Scalars['Int']>;
@@ -277,10 +287,11 @@ export type Proposal_orderBy =
   | 'id'
   | 'union'
   | 'union__id'
-  | 'union__name'
-  | 'union__logo'
-  | 'union__description'
+  | 'union__metadata'
   | 'union__votingAddress'
+  | 'owner'
+  | 'owner__id'
+  | 'owner__metadata'
   | 'numOptions'
   | 'metadata'
   | 'options';
@@ -547,9 +558,8 @@ export type Subscription_metaArgs = {
 
 export type Union = {
   id: Scalars['Bytes'];
-  name: Scalars['String'];
-  logo: Scalars['String'];
-  description: Scalars['String'];
+  metadata: Scalars['String'];
+  owner: User;
   votingAddress: Scalars['Bytes'];
   pendingApplications: Array<Application>;
   users: Array<UserRole>;
@@ -594,66 +604,47 @@ export type Union_filter = {
   id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
   id_contains?: InputMaybe<Scalars['Bytes']>;
   id_not_contains?: InputMaybe<Scalars['Bytes']>;
-  name?: InputMaybe<Scalars['String']>;
-  name_not?: InputMaybe<Scalars['String']>;
-  name_gt?: InputMaybe<Scalars['String']>;
-  name_lt?: InputMaybe<Scalars['String']>;
-  name_gte?: InputMaybe<Scalars['String']>;
-  name_lte?: InputMaybe<Scalars['String']>;
-  name_in?: InputMaybe<Array<Scalars['String']>>;
-  name_not_in?: InputMaybe<Array<Scalars['String']>>;
-  name_contains?: InputMaybe<Scalars['String']>;
-  name_contains_nocase?: InputMaybe<Scalars['String']>;
-  name_not_contains?: InputMaybe<Scalars['String']>;
-  name_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  name_starts_with?: InputMaybe<Scalars['String']>;
-  name_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  name_not_starts_with?: InputMaybe<Scalars['String']>;
-  name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  name_ends_with?: InputMaybe<Scalars['String']>;
-  name_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  name_not_ends_with?: InputMaybe<Scalars['String']>;
-  name_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  logo?: InputMaybe<Scalars['String']>;
-  logo_not?: InputMaybe<Scalars['String']>;
-  logo_gt?: InputMaybe<Scalars['String']>;
-  logo_lt?: InputMaybe<Scalars['String']>;
-  logo_gte?: InputMaybe<Scalars['String']>;
-  logo_lte?: InputMaybe<Scalars['String']>;
-  logo_in?: InputMaybe<Array<Scalars['String']>>;
-  logo_not_in?: InputMaybe<Array<Scalars['String']>>;
-  logo_contains?: InputMaybe<Scalars['String']>;
-  logo_contains_nocase?: InputMaybe<Scalars['String']>;
-  logo_not_contains?: InputMaybe<Scalars['String']>;
-  logo_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  logo_starts_with?: InputMaybe<Scalars['String']>;
-  logo_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  logo_not_starts_with?: InputMaybe<Scalars['String']>;
-  logo_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  logo_ends_with?: InputMaybe<Scalars['String']>;
-  logo_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  logo_not_ends_with?: InputMaybe<Scalars['String']>;
-  logo_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  description?: InputMaybe<Scalars['String']>;
-  description_not?: InputMaybe<Scalars['String']>;
-  description_gt?: InputMaybe<Scalars['String']>;
-  description_lt?: InputMaybe<Scalars['String']>;
-  description_gte?: InputMaybe<Scalars['String']>;
-  description_lte?: InputMaybe<Scalars['String']>;
-  description_in?: InputMaybe<Array<Scalars['String']>>;
-  description_not_in?: InputMaybe<Array<Scalars['String']>>;
-  description_contains?: InputMaybe<Scalars['String']>;
-  description_contains_nocase?: InputMaybe<Scalars['String']>;
-  description_not_contains?: InputMaybe<Scalars['String']>;
-  description_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  description_starts_with?: InputMaybe<Scalars['String']>;
-  description_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  description_not_starts_with?: InputMaybe<Scalars['String']>;
-  description_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  description_ends_with?: InputMaybe<Scalars['String']>;
-  description_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  description_not_ends_with?: InputMaybe<Scalars['String']>;
-  description_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata?: InputMaybe<Scalars['String']>;
+  metadata_not?: InputMaybe<Scalars['String']>;
+  metadata_gt?: InputMaybe<Scalars['String']>;
+  metadata_lt?: InputMaybe<Scalars['String']>;
+  metadata_gte?: InputMaybe<Scalars['String']>;
+  metadata_lte?: InputMaybe<Scalars['String']>;
+  metadata_in?: InputMaybe<Array<Scalars['String']>>;
+  metadata_not_in?: InputMaybe<Array<Scalars['String']>>;
+  metadata_contains?: InputMaybe<Scalars['String']>;
+  metadata_contains_nocase?: InputMaybe<Scalars['String']>;
+  metadata_not_contains?: InputMaybe<Scalars['String']>;
+  metadata_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  metadata_starts_with?: InputMaybe<Scalars['String']>;
+  metadata_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata_not_starts_with?: InputMaybe<Scalars['String']>;
+  metadata_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata_ends_with?: InputMaybe<Scalars['String']>;
+  metadata_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  metadata_not_ends_with?: InputMaybe<Scalars['String']>;
+  metadata_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner?: InputMaybe<Scalars['String']>;
+  owner_not?: InputMaybe<Scalars['String']>;
+  owner_gt?: InputMaybe<Scalars['String']>;
+  owner_lt?: InputMaybe<Scalars['String']>;
+  owner_gte?: InputMaybe<Scalars['String']>;
+  owner_lte?: InputMaybe<Scalars['String']>;
+  owner_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_not_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_contains?: InputMaybe<Scalars['String']>;
+  owner_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_contains?: InputMaybe<Scalars['String']>;
+  owner_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_starts_with?: InputMaybe<Scalars['String']>;
+  owner_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_starts_with?: InputMaybe<Scalars['String']>;
+  owner_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_ends_with?: InputMaybe<Scalars['String']>;
+  owner_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_?: InputMaybe<User_filter>;
   votingAddress?: InputMaybe<Scalars['Bytes']>;
   votingAddress_not?: InputMaybe<Scalars['Bytes']>;
   votingAddress_gt?: InputMaybe<Scalars['Bytes']>;
@@ -675,9 +666,10 @@ export type Union_filter = {
 
 export type Union_orderBy =
   | 'id'
-  | 'name'
-  | 'logo'
-  | 'description'
+  | 'metadata'
+  | 'owner'
+  | 'owner__id'
+  | 'owner__metadata'
   | 'votingAddress'
   | 'pendingApplications'
   | 'users'
@@ -687,6 +679,8 @@ export type User = {
   id: Scalars['Bytes'];
   metadata?: Maybe<Scalars['String']>;
   roles: Array<UserRole>;
+  proposals: Array<Proposal>;
+  unions: Array<Union>;
 };
 
 
@@ -696,6 +690,24 @@ export type UserrolesArgs = {
   orderBy?: InputMaybe<UserRole_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   where?: InputMaybe<UserRole_filter>;
+};
+
+
+export type UserproposalsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Proposal_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Proposal_filter>;
+};
+
+
+export type UserunionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Union_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Union_filter>;
 };
 
 export type UserRole = {
@@ -777,9 +789,7 @@ export type UserRole_orderBy =
   | 'id'
   | 'union'
   | 'union__id'
-  | 'union__name'
-  | 'union__logo'
-  | 'union__description'
+  | 'union__metadata'
   | 'union__votingAddress'
   | 'user'
   | 'user__id'
@@ -819,6 +829,8 @@ export type User_filter = {
   metadata_not_ends_with?: InputMaybe<Scalars['String']>;
   metadata_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
   roles_?: InputMaybe<UserRole_filter>;
+  proposals_?: InputMaybe<Proposal_filter>;
+  unions_?: InputMaybe<Union_filter>;
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<User_filter>>>;
@@ -828,7 +840,9 @@ export type User_filter = {
 export type User_orderBy =
   | 'id'
   | 'metadata'
-  | 'roles';
+  | 'roles'
+  | 'proposals'
+  | 'unions';
 
 export type _Block_ = {
   /** The hash of the block */

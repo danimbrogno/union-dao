@@ -21,7 +21,7 @@ import {
   UserRole,
 } from '../generated/schema';
 
-import { log, Bytes } from '@graphprotocol/graph-ts';
+import { log, Bytes, BigInt } from '@graphprotocol/graph-ts';
 
 export function handleUnionCreated(ev: UnionCreated): void {
   log.info('Enters handleUnionCreated handler', []);
@@ -34,9 +34,8 @@ export function handleUnionCreated(ev: UnionCreated): void {
     log.info('handleUnionCreated: creating new union', []);
     union = new Union(unionId);
 
-    union.name = ev.params.name.toString();
-    union.description = ev.params.description.toString();
-    union.logo = ev.params.logo.toString();
+    union.metadata = ev.params.metadataCID;
+    union.owner = ev.params.owner;
     union.votingAddress = ev.params.voting;
     union.save();
     log.info('handleUnionCreated: union saved', []);
@@ -138,7 +137,10 @@ export function handleAdminRemoved(ev: AdminRemoved): void {
 export function handleProposalCreated(ev: ProposalCreated): void {
   log.info('Enters handleProposalCreated handler', []);
   log.info('handleProposalCreated: {}', [ev.params.index.toString()]);
-  const proposalId = ev.params.index;
+
+  const proposalId = Bytes.fromHexString(
+    ev.params.union.toHex() + ev.params.index.toHex()
+  );
   let proposal = Proposal.load(proposalId);
 
   if (!proposal) {
@@ -146,16 +148,19 @@ export function handleProposalCreated(ev: ProposalCreated): void {
     log.info('handleProposalCreated: creating new proposal', []);
     proposal = new Proposal(proposalId);
     proposal.union = ev.params.union;
+    proposal.owner = ev.params.owner;
     proposal.numOptions = ev.params.numOptions;
     proposal.metadata = ev.params.metadataCID;
 
     for (let i = 0; i < ev.params.numOptions; i++) {
-      const optionId =
-        ev.params.union.toString() +
-        '-' +
-        ev.params.index.toString() +
-        '-' +
-        i.toString();
+      let index = new BigInt(i);
+      log.info('Index = {}', [index.toString()]);
+      const optionId = Bytes.fromHexString(
+        ev.params.union.toHex() +
+          ev.params.index.toHex() +
+          Bytes.fromBigInt(index).toHex()
+      );
+      log.info('OptionId = {}', [optionId.toString()]);
 
       const option = new ProposalOption(optionId);
       option.votes = 0;
@@ -173,12 +178,11 @@ export function handleVoteCast(ev: VoteCast): void {
   log.info('Enters handleVoteCast handler', []);
   log.info('handleVoteCast: {}', [ev.params.index.toString()]);
 
-  const optionId =
-    ev.params.union.toString() +
-    '-' +
-    ev.params.index.toString() +
-    '-' +
-    ev.params.option.toString();
+  const optionId = Bytes.fromHexString(
+    ev.params.union.toHex() +
+      ev.params.index.toHex() +
+      Bytes.fromBigInt(ev.params.option).toHex()
+  );
 
   let option = ProposalOption.load(optionId);
 
