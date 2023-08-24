@@ -57,7 +57,7 @@ export const ProjectSelector = () => {
         Select a Union
       </option>
       {roles.map(({ union }) => (
-        <Option union={union} />
+        <Option key={union.id} union={union} />
       ))}
     </StyledSelect>
   );

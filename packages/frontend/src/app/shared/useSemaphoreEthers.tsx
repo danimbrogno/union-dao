@@ -15,26 +15,30 @@ export default function useSemaphore(
   const { ethereum } = useConfig();
   const refreshGroup = useCallback(
     async (groupId: string): Promise<void> => {
-      if (!contractAddress) {
+      if (!contractAddress || groupId === undefined) {
         return;
       }
 
-      const semaphore = new SemaphoreEthers(ethereum.rpcUrl, {
-        address: contractAddress,
-        startBlock: ethereum.startBlock,
-      });
+      try {
+        const semaphore = new SemaphoreEthers(ethereum.rpcUrl, {
+          address: contractAddress,
+          startBlock: ethereum.startBlock,
+        });
 
-      const [_members, _group] = await Promise.all([
-        semaphore.getGroupMembers(groupId),
-        semaphore.getGroup(groupId),
-      ]);
-      const group = new Group(
-        _group.id,
-        parseInt(_group.merkleTree.depth as any),
-        _members
-      );
+        const [_members, _group] = await Promise.all([
+          semaphore.getGroupMembers(groupId),
+          semaphore.getGroup(groupId),
+        ]);
+        const group = new Group(
+          _group.id,
+          parseInt(_group.merkleTree.depth as any),
+          _members
+        );
 
-      setGroup(group);
+        setGroup(group);
+      } catch (e) {
+        debugger;
+      }
     },
     [contractAddress, ethereum.rpcUrl, ethereum.startBlock]
   );

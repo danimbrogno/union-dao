@@ -172,15 +172,20 @@ export function handleVoteCast(ev: VoteCast): void {
     '.' +
     ev.params.index.toHex() +
     '.' +
-    ev.params.option.toHex();
+    ev.params.option.toString();
+
   let option = ProposalOption.load(optionId);
 
   if (option) {
-    log.info('handleVoteCast: proposal option found', []);
-    log.info('handleVoteCast: updating proposal vote count', []);
+    log.info('handleVoteCast: proposal option found {}', [optionId]);
+    log.info('handleVoteCast: updating proposal vote count', [
+      ev.params.numVotes.toString(),
+    ]);
     option.votes = ev.params.numVotes.toI32();
     option.save();
     log.info('handleVoteCast: proposal option saved', []);
+  } else {
+    log.info('handleVoteCast: proposal option not found {}', [optionId]);
   }
 }
 

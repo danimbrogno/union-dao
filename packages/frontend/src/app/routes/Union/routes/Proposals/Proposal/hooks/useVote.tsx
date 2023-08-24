@@ -94,6 +94,10 @@ export const useVote = ({
         throw new Error('group not set');
       }
 
+      if (selectedOption === undefined) {
+        return;
+      }
+
       generateProof(
         getIdentity(password),
         group,

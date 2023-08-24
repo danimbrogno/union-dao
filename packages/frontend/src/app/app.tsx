@@ -10,7 +10,7 @@ import { WagmiProvider } from './shared/WagmiProvider';
 import { Join } from './routes/Union/routes/Join/Join';
 import { Global, ThemeProvider, css } from '@emotion/react';
 import { theme } from './app.theme';
-import { ThemeProvider as MuiThemeProvider } from '@mui/material';
+import { useState } from 'react';
 
 const styles = css`
   /* Global CSS Reset */
@@ -62,6 +62,7 @@ const styles = css`
 `;
 
 export function App() {
+  const [isScanning, setIsScanning] = useState(false);
   return (
     <>
       <Global styles={styles} />

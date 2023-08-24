@@ -11,9 +11,8 @@ import { useUnionIdParam } from 'frontend/shared/useUnionIdParam';
 import { Input } from 'ui/Input';
 import { useForm } from 'react-hook-form';
 import { Inputs } from './Proposal.interface';
-import { IconButton } from 'ui/IconButton';
 import { useCallback, useState } from 'react';
-import { Reader } from './components/Reader';
+import { QRCodeScannerProvider } from 'frontend/shared/QRCodeScanner';
 
 const StyledForm = styled.form`
   display: flex;
@@ -32,10 +31,6 @@ const StyledH2 = styled.h2``;
 const StyledUl = styled.ul``;
 
 const StyledP = styled.p``;
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
 
 export const Proposal = () => {
   const [scanning, setScanning] = useState(false);
@@ -73,13 +68,13 @@ export const Proposal = () => {
   const hasTitleAndDesc =
     metadata?.title && metadata?.description ? true : false;
 
-  const handleScanRequest = () => {
-    setScanning(true);
-  };
-
-  const onRead = useCallback(
+  const handleScan = useCallback(
     (data: string) => {
-      setValue('password', data);
+      if (data) {
+        setValue('password', data);
+
+        setScanning(false);
+      }
     },
     [setValue]
   );
@@ -89,10 +84,13 @@ export const Proposal = () => {
     isSubmitting ||
     isReady === false ||
     selectedOption === undefined;
-
-  const onDismiss = useCallback(() => {
+  const handleDismiss = useCallback(() => {
     setScanning(false);
   }, [setScanning]);
+
+  const handleStartScan = () => {
+    setScanning((prev) => !prev);
+  };
 
   return (
     <Chrome>
@@ -115,19 +113,27 @@ export const Proposal = () => {
             />
           ))}
         </StyledUl>
-        <Row>
-          <Input
-            type="password"
-            placeholder="Your Password (Don't forget this!)"
-            {...register('password', { required: true })}
-          />
-          <IconButton onClick={handleScanRequest}>Scan</IconButton>
-        </Row>
+        <Input
+          type="password"
+          placeholder="Your Password (Don't forget this!)"
+          {...register('password', { required: true })}
+        />
+        <PrimaryButton
+          type="button"
+          style={{ flex: 0 }}
+          onClick={handleStartScan}
+        >
+          {scanning ? 'Stop Scan' : 'Scan Membership Card'}
+        </PrimaryButton>
         <PrimaryButton disabled={disabled} type="submit">
           Vote
         </PrimaryButton>
       </StyledForm>
-      {/* <Reader onDismiss={onDismiss} onRead={onRead} /> */}
+      <QRCodeScannerProvider
+        scanning={scanning}
+        onDismiss={handleDismiss}
+        onScan={handleScan}
+      />
     </Chrome>
   );
 };
